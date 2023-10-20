@@ -1,4 +1,4 @@
-import { GluestackUIProvider, Box, Text } from "@gluestack-ui/themed";
+import { GluestackUIProvider, Box } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
 import Auth from "./Auth";
 import { Session } from "@supabase/supabase-js";

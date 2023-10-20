@@ -4,10 +4,9 @@ import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SwitchCamera, Circle } from "lucide-react-native";
 import { supabase } from "../lib/supabase";
 import * as FileSystem from "expo-file-system";
-import { decode, encode } from "base64-arraybuffer";
+import { decode } from "base64-arraybuffer";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
-import { Buffer } from "buffer";
 
 export default function App() {
   const [cameraReady, setCameraReady] = useState(false);
@@ -51,17 +50,8 @@ export default function App() {
     const base64 = await FileSystem.readAsStringAsync(url, {
       encoding: 'base64'
     });
-    // const bufferThing = new Buffer.Blob([binaryString]);
-    // console.log(base64)
-    // const formData = new FormData()
-    // formData.append('file', photo)
-
-    // const arrayBuffer = decode(`data:image/jpeg;base64${base64}`)
     const arrayBuffer = decode(base64)
-    // const arrayBuffer = encode(base64)
-
     const fileName = `${uuidv4()}.jpeg`;
-    // const file = new File([blob], fileName)
     try {
       const { data, error } = await supabase.storage
         .from("posts")
