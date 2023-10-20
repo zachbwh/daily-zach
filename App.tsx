@@ -4,6 +4,7 @@ import Auth from "./Auth";
 import { Session } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
+import Camera from "./Camera";
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -27,7 +28,7 @@ export default function App() {
         alignItems="center"
       >
         {!session && <Auth />}
-        {session && <Text>Test2</Text>}
+        {session && <Camera />}
       </Box>
     </GluestackUIProvider>
   );

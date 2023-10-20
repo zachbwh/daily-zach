@@ -13,19 +13,24 @@
     "@gluestack-ui/themed": "^1.0.1",
     "@react-native-async-storage/async-storage": "1.18.2",
     "@supabase/supabase-js": "^2.38.0",
+    "base64-arraybuffer": "^1.0.2",
     "expo": "~49.0.11",
+    "expo-camera": "~13.4.4",
+    "expo-file-system": "~15.4.4",
     "expo-status-bar": "~1.6.0",
     "lucide-react-native": "^0.284.0",
     "react": "18.2.0",
     "react-native": "0.72.5",
     "react-native-elements": "^3.4.3",
+    "react-native-get-random-values": "^1.9.0",
     "react-native-svg": "13.9.0",
     "react-native-url-polyfill": "^2.0.0",
-    "expo-camera": "~13.4.4"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~18.2.14",
+    "@types/uuid": "^9.0.5",
     "typescript": "^5.1.3"
   },
   "private": true
