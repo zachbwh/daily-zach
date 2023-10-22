@@ -5,6 +5,7 @@ import { Session } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 import Camera from "./Camera";
+import PostGrid from "./PostGrid";
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -28,7 +29,8 @@ export default function App() {
         alignItems="center"
       >
         {!session && <Auth />}
-        {session && <Camera />}
+        {/* {session && <Camera />} */}
+        {session && <PostGrid />}
       </Box>
     </GluestackUIProvider>
   );
