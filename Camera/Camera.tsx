@@ -1,18 +1,23 @@
-import { Camera, CameraCapturedPicture, CameraType } from "expo-camera";
+import {
+  Camera as ExpoCamera,
+  CameraCapturedPicture,
+  CameraType,
+} from "expo-camera";
 import { useRef, useState } from "react";
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { SwitchCamera, Circle } from "lucide-react-native";
+import { SwitchCamera, Circle, Image } from "lucide-react-native";
 import { supabase } from "../lib/supabase";
 import * as FileSystem from "expo-file-system";
 import { decode } from "base64-arraybuffer";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
+import React from "react";
 
-export default function App() {
+const Camera: React.FC = () => {
   const [cameraReady, setCameraReady] = useState(false);
-  let cameraRef = useRef<Camera>();
+  let cameraRef = useRef<ExpoCamera>();
   const [type, setType] = useState(CameraType.front);
-  const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [permission, requestPermission] = ExpoCamera.useCameraPermissions();
 
   if (!permission) {
     // Camera permissions are still loading
@@ -48,10 +53,11 @@ export default function App() {
     const url = picture.uri;
     console.log(url);
     const base64 = await FileSystem.readAsStringAsync(url, {
-      encoding: 'base64'
+      encoding: "base64",
     });
-    const arrayBuffer = decode(base64)
-    const fileName = `${uuidv4()}.jpeg`;
+    const arrayBuffer = decode(base64);
+    const postId = uuidv4();
+    const fileName = `${postId}.jpeg`;
     try {
       const { data, error } = await supabase.storage
         .from("posts")
@@ -61,18 +67,43 @@ export default function App() {
       if (error) {
         console.error("failed to upload image");
         // Handle error
-      } else {
-        console.log("uploaded image", data);
-        // Handle success
+        return;
       }
+      console.log("uploaded image", data);
+
+      const { data: publicUrlData } = supabase.storage
+        .from("posts")
+        .getPublicUrl(fileName);
+
+        console.log("fetched public url", publicUrlData);
+      
+
+      const postData = {
+        id: postId,
+        image_url: publicUrlData.publicUrl,
+      };
+      const { error: insertError, data: insertData } = await supabase
+        .from("posts")
+        .insert(postData);
+      if (insertError) {
+        console.error("failed to upload image post data", {
+          insertError,
+          postData,
+        });
+        // Handle error
+        return;
+      }
+      console.log("inserted post into db", data);
     } catch (e) {
       console.error("blah", e);
     }
   }
 
+  const viewPosts = () => {};
+
   return (
     <View style={styles.container}>
-      <Camera
+      <ExpoCamera
         style={styles.camera}
         type={type}
         ratio="16:9"
@@ -84,6 +115,9 @@ export default function App() {
         }}
       >
         <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={viewPosts}>
+            <Image style={styles.button} />
+          </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={takePicture}>
             <Circle style={styles.button} />
           </TouchableOpacity>
@@ -91,10 +125,12 @@ export default function App() {
             <SwitchCamera style={styles.button} />
           </TouchableOpacity>
         </View>
-      </Camera>
+      </ExpoCamera>
     </View>
   );
-}
+};
+
+export default Camera;
 
 const styles = StyleSheet.create({
   container: {
