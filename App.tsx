@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 import Camera from "./Camera";
 import PostGrid from "./PostGrid";
+import { SafeAreaView, StyleSheet, StatusBar } from "react-native";
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -21,17 +22,19 @@ export default function App() {
   }, []);
 
   return (
-    <GluestackUIProvider config={config}>
-      <Box
-        width="100%"
-        height="100%"
-        justifyContent="center"
-        alignItems="center"
-      >
+    <SafeAreaView style={styles.safeContainer}>
+      <GluestackUIProvider config={config}>
         {!session && <Auth />}
         {/* {session && <Camera />} */}
         {session && <PostGrid />}
-      </Box>
-    </GluestackUIProvider>
+      </GluestackUIProvider>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  safeContainer: {
+    flex: 1,
+    marginTop: StatusBar.currentHeight,
+  },
+});

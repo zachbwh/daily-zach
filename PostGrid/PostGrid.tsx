@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from "react-native";
+import { Heading } from "@gluestack-ui/themed";
 
 type Post = {
   id: string;
@@ -22,28 +23,52 @@ const PostGrid: FC = () => {
 
   return (
     <View style={styles.container}>
-      {posts?.map((post, index) => (
-        <Image key={index} source={{uri: post.image_url}} style={styles.imagePreview} />
-      ))}
+      <Heading style={styles.heading}>
+        Posts
+      </Heading>
+      <View style={styles.imageGrid}>
+        {posts?.map((post, index) => (
+          <View style={styles.imageContainer}>
+            <Image
+            key={index}
+            source={{ uri: post.image_url }}
+            style={styles.imagePreview}
+          />
+          </View>
+        ))}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    margin: 12,
+    marginTop: 32
+  },
+  heading: {
+    paddingHorizontal: 4,
+    marginBottom: 32,
+    fontSize: 40,
+    lineHeight: 40
+  },
+  imageGrid: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    width: 'auto',
-    margin: 'auto'
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    width: "auto",
+    margin: "auto",
+  },
+  imageContainer: {
+    width: '25%',
+    aspectRatio: 9/16,
+    padding: 4
   },
   imagePreview: {
-    width: 90,
-    height: 160,
-    borderRadius: 16,
-    margin: 4
+    height: '100%',
+    borderRadius: 16
   },
 });
 

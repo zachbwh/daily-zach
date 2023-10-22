@@ -11,6 +11,7 @@ import {
   ButtonText,
   HStack,
   ButtonSpinner,
+  Box,
 } from "@gluestack-ui/themed";
 import { EyeIcon, EyeOffIcon } from "lucide-react-native";
 import { FC, useCallback, useState } from "react";
@@ -59,83 +60,87 @@ const Auth: FC = () => {
     }
   }, [email, password, authMode]);
   return (
-    <FormControl
-      p="$4"
-      borderWidth="$1"
-      borderRadius="$lg"
-      borderColor="$borderLight300"
-      width="$3/4"
-      sx={{
-        _dark: {
-          borderWidth: "$1",
-          borderRadius: "$lg",
-          borderColor: "$borderDark800",
-        },
-      }}
-    >
-      <VStack space="xl">
-        <Heading color="$text900" lineHeight="$md">
-          {authMode === "login" ? "Login" : "Signup"}
-        </Heading>
-        <VStack space="xs">
-          <Text color="$text500" lineHeight="$xs">
-            Email
-          </Text>
-          <Input>
-            <InputField
-              type="text"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoComplete="email"
-              value={email}
-              onChangeText={setEmail}
-            />
-          </Input>
-        </VStack>
-        <VStack space="xs">
-          <Text color="$text500" lineHeight="$xs">
-            Password
-          </Text>
-          <Input>
-            <InputField
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChangeText={setPassword}
-            />
-            <InputSlot pr="$3" onPress={togglePasswordVisible}>
-              {/* EyeIcon, EyeOffIcon are both imported from 'lucide-react-native' */}
-              <InputIcon
-                as={showPassword ? EyeIcon : EyeOffIcon}
-                color="$darkBlue500"
+    <Box flex={1} justifyContent="center" alignItems="center">
+      <FormControl
+        p="$4"
+        borderWidth="$1"
+        borderRadius="$lg"
+        borderColor="$borderLight300"
+        width="$3/4"
+        sx={{
+          _dark: {
+            borderWidth: "$1",
+            borderRadius: "$lg",
+            borderColor: "$borderDark800",
+          },
+        }}
+      >
+        <VStack space="xl">
+          <Heading color="$text900" lineHeight="$md">
+            {authMode === "login" ? "Login" : "Signup"}
+          </Heading>
+          <VStack space="xs">
+            <Text color="$text500" lineHeight="$xs">
+              Email
+            </Text>
+            <Input>
+              <InputField
+                type="text"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoComplete="email"
+                value={email}
+                onChangeText={setEmail}
               />
-            </InputSlot>
-          </Input>
+            </Input>
+          </VStack>
+          <VStack space="xs">
+            <Text color="$text500" lineHeight="$xs">
+              Password
+            </Text>
+            <Input>
+              <InputField
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChangeText={setPassword}
+              />
+              <InputSlot pr="$3" onPress={togglePasswordVisible}>
+                {/* EyeIcon, EyeOffIcon are both imported from 'lucide-react-native' */}
+                <InputIcon
+                  as={showPassword ? EyeIcon : EyeOffIcon}
+                  color="$darkBlue500"
+                />
+              </InputSlot>
+            </Input>
+          </VStack>
+          <HStack>
+            <Button
+              action="secondary"
+              isDisabled={loading}
+              onPress={() => {
+                setAuthMode(authMode === "login" ? "signup" : "login");
+              }}
+            >
+              <ButtonText>
+                Switch to {authMode === "login" ? "Signup" : "Login"}
+              </ButtonText>
+            </Button>
+            <Button
+              ml="auto"
+              isDisabled={loading}
+              onPress={() => {
+                submit();
+              }}
+            >
+              {loading && <ButtonSpinner mr="$1" />}
+              <ButtonText color="$white">
+                {authMode === "login" ? "Login" : "Signup"}
+              </ButtonText>
+            </Button>
+          </HStack>
         </VStack>
-        <HStack>
-          <Button
-            action="secondary"
-            isDisabled={loading}
-            onPress={() => {
-              setAuthMode(authMode === "login" ? "signup" : "login");
-            }}
-          >
-            <ButtonText>
-              Switch to {authMode === "login" ? "Signup" : "Login"}
-            </ButtonText>
-          </Button>
-          <Button
-            ml="auto"
-            isDisabled={loading}
-            onPress={() => {
-              submit();
-            }}
-          >
-            {loading && <ButtonSpinner mr="$1" />}
-            <ButtonText color="$white">{authMode === "login" ? "Login" : "Signup"}</ButtonText>
-          </Button>
-        </HStack>
-      </VStack>
-    </FormControl>
+      </FormControl>
+    </Box>
   );
 };
 
