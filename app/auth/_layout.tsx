@@ -15,7 +15,7 @@ import {
 } from "@gluestack-ui/themed";
 import { EyeIcon, EyeOffIcon } from "lucide-react-native";
 import { FC, useCallback, useState } from "react";
-import { supabase } from "../lib/supabase";
+import { supabase } from "../../lib/supabase";
 import { Alert } from "react-native";
 
 const Auth: FC = () => {
