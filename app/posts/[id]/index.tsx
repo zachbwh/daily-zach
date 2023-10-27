@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from "react";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "../../../lib/supabase";
 import { Image, StyleSheet, View } from "react-native";
 import { Heading } from "@gluestack-ui/themed";
-import { Stack, useLocalSearchParams, usePathname } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 
 type Post = {
   id: string;
@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
   container: {
     margin: 12,
     marginTop: 32,
+    flex: 1
   },
   heading: {
     paddingHorizontal: 4,
@@ -48,22 +49,14 @@ const styles = StyleSheet.create({
     fontSize: 40,
     lineHeight: 40,
   },
-  imageGrid: {
-    flex: 1,
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    width: "auto",
-    margin: "auto",
-  },
   imageContainer: {
-    width: "25%",
-    aspectRatio: 9 / 16,
-    padding: 4,
+    width: '100%',
+    margin: 'auto',
+    alignItems: 'center'
   },
   imagePreview: {
-    height: "100%",
+    aspectRatio: 9 / 16,
+    width: "50%",
     borderRadius: 16,
   },
 });
