@@ -21,7 +21,6 @@ export default function App() {
     <View>
       <Text>Test</Text>
       <Link href="/posts">Posts</Link>
-      <Link href="/posts/test">Posts 2</Link>
       <Link href="/camera">Camera</Link>
     </View>
   );
