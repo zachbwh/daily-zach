@@ -105,7 +105,6 @@ const Auth: FC = () => {
                 onChangeText={setPassword}
               />
               <InputSlot pr="$3" onPress={togglePasswordVisible}>
-                {/* EyeIcon, EyeOffIcon are both imported from 'lucide-react-native' */}
                 <InputIcon
                   as={showPassword ? EyeIcon : EyeOffIcon}
                   color="$darkBlue500"
@@ -128,9 +127,7 @@ const Auth: FC = () => {
             <Button
               ml="auto"
               isDisabled={loading}
-              onPress={() => {
-                submit();
-              }}
+              onPress={submit}
             >
               {loading && <ButtonSpinner mr="$1" />}
               <ButtonText color="$white">
