@@ -44,7 +44,7 @@ const Camera: React.FC = () => {
 
   async function takePicture() {
     if (cameraReady && cameraRef.current) {
-      const pic = await cameraRef.current.takePictureAsync();
+      const pic = await cameraRef.current.takePictureAsync({ quality: 0.5 });
       uploadImage(pic);
     }
   }
@@ -75,8 +75,7 @@ const Camera: React.FC = () => {
         .from("posts")
         .getPublicUrl(fileName);
 
-        console.log("fetched public url", publicUrlData);
-      
+      console.log("fetched public url", publicUrlData);
 
       const postData = {
         id: postId,
