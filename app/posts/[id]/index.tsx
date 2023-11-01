@@ -1,15 +1,22 @@
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "../../../lib/supabase";
-import { Image, StyleSheet, View } from "react-native";
 import {
-  Heading,
+  Animated,
+  Image,
+  Keyboard,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
+} from "react-native";
+import {
   Text,
   Input,
-  InputField,
-  Button,
-  ButtonText,
+  InputIcon,
+  InputSlot,
 } from "@gluestack-ui/themed";
 import { Stack, useLocalSearchParams } from "expo-router";
+import { SendHorizontal } from "lucide-react-native";
 
 type Post = {
   id: string;
@@ -40,6 +47,28 @@ const Post: FC = () => {
       });
   }, []);
 
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      Animated.timing(shrinkAnimation, {
+        toValue: 0.6,
+        duration: 250,
+        useNativeDriver: true,
+      }).start();
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      Animated.timing(shrinkAnimation, {
+        toValue: 1,
+        duration: 250,
+        useNativeDriver: true,
+      }).start();
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
   const [comments, setComments] = useState<Comment[]>([]);
   useEffect(() => {
     supabase
@@ -55,61 +84,93 @@ const Post: FC = () => {
 
   const [inputText, setInputText] = useState("");
 
-  const submit = useCallback(async () => {
-    const commentData: Omit<Comment, "id" | "user_id" | "created_at"> = {
-      post_id: postId as string,
-      parent_id: null,
-      text: inputText,
-    };
-    setComments([
-      ...comments,
-      {
-        id: "temp",
-        user_id: "temp",
-        created_at: new Date().toISOString(),
-        ...commentData,
-      },
-    ]);
-    setInputText("")
-    const { error: insertError, data: insertData } = await supabase
-      .from("comments")
-      .insert(commentData);
-    if (insertError) {
-      console.error("failed to upload comment data", {
-        insertError,
-        commentData,
-      });
-      // Handle error
-      return;
-    }
-    console.log("inserted comment into db", insertData);
-  }, [inputText, comments]);
+  const submit = useCallback(
+    async (text: string) => {
+      const commentData: Omit<Comment, "id" | "user_id" | "created_at"> = {
+        post_id: postId as string,
+        parent_id: null,
+        text,
+      };
+      setComments([
+        ...comments,
+        {
+          id: "temp",
+          user_id: "temp",
+          created_at: new Date().toISOString(),
+          ...commentData,
+        },
+      ]);
+      setInputText("");
+      inputRef.current?.clear();
+
+      const { error: insertError, data: insertData } = await supabase
+        .from("comments")
+        .insert(commentData);
+      if (insertError) {
+        console.error("failed to upload comment data", {
+          insertError,
+          commentData,
+        });
+        // Handle error
+        return;
+      }
+      console.log("inserted comment into db", insertData);
+    },
+    [comments]
+  );
+
+  const inputRef = useRef<TextInput>(null);
+
+  const shrinkAnimation = useRef(new Animated.Value(1)).current;
+
+  const [imageContainerHeight, setImageContainerHeight] = useState(380);
 
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: "Cat" }} />
-      <Heading style={styles.heading}>Posts 2</Heading>
       {post && (
-        <View style={styles.imageContainer}>
+        <Animated.View
+          style={{
+            ...styles.imageContainer,
+            transform: [
+              { translateY: -1 * (imageContainerHeight / 2) },
+              { scale: shrinkAnimation },
+              { translateY: imageContainerHeight / 2 },
+            ],
+          }}
+          onLayout={(event) => {
+            const { height } = event.nativeEvent.layout;
+            setImageContainerHeight(height);
+          }}
+        >
           <Image source={{ uri: post.image_url }} style={styles.imagePreview} />
-        </View>
+        </Animated.View>
       )}
-      <View style={styles.commentsContainer}>
+      <ScrollView style={styles.commentsContainer}>
         {comments &&
           comments.map((comment, index) => {
             return <Text key={index}>{comment.text}</Text>;
           })}
-      </View>
+      </ScrollView>
       <Input>
-        <InputField type="text" value={inputText} onChangeText={setInputText} />
-        <Button
-          ml="auto"
+        <TextInput
+          ref={inputRef}
+          onSubmitEditing={({ nativeEvent: { text } }) => {
+            submit(text);
+          }}
+          onChangeText={(text) => {
+            setInputText(text);
+          }}
+          style={styles.textInput}
+        />
+        <InputSlot
+          pr="$3"
           onPress={() => {
-            submit();
+            submit(inputText);
           }}
         >
-          <ButtonText color="$white">Send</ButtonText>
-        </Button>
+          <InputIcon as={SendHorizontal} color="$darkBlue500" />
+        </InputSlot>
       </Input>
     </View>
   );
@@ -139,6 +200,12 @@ const styles = StyleSheet.create({
   },
   commentsContainer: {
     flex: 1,
+  },
+  textInput: {
+    height: "auto",
+    width: "100%",
+    flex: 1,
+    padding: 12,
   },
 });
 
