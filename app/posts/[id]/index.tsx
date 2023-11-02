@@ -55,10 +55,12 @@ const Post: FC = () => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
       LayoutAnimation.easeInEaseOut();
       setKeyboardOpen(true);
+      scrollRef.current?.scrollToEnd()
     });
     const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
       LayoutAnimation.easeInEaseOut();
       setKeyboardOpen(false);
+      scrollRef.current?.scrollToEnd()
     });
 
     return () => {
@@ -118,6 +120,7 @@ const Post: FC = () => {
   );
 
   const inputRef = useRef<TextInput>(null);
+  const scrollRef = useRef<ScrollView>(null);
 
   return (
     <View style={styles.container}>
@@ -131,7 +134,7 @@ const Post: FC = () => {
           <Image source={{ uri: post.image_url }} style={styles.imagePreview} />
         </View>
       )}
-      <ScrollView style={styles.commentsContainer}>
+      <ScrollView style={styles.commentsContainer} ref={scrollRef}>
         {comments &&
           comments.map((comment, index) => {
             return <Text key={index}>{comment.text}</Text>;
