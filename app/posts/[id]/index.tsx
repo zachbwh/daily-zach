@@ -38,8 +38,53 @@ const Post: FC = () => {
       });
   }, []);
 
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
+  const [comments, setComments] = useState<Comment[]>([]);
+  useEffect(() => {
+    supabase
+      .from("comments")
+      .select("id, post_id, user_id, parent_id, created_at, text")
+      .eq("post_id", postId)
+      .then((data) => {
+        if (data.data) {
+          setComments(data.data as Comment[]);
+        }
+      });
+  }, []);
 
+  const submitComment = useCallback(
+    async (text: string) => {
+      const commentData: Omit<Comment, "id" | "user_id" | "created_at"> = {
+        post_id: postId as string,
+        parent_id: null,
+        text,
+      };
+      setComments([
+        ...comments,
+        {
+          id: "temp",
+          user_id: "temp",
+          created_at: new Date().toISOString(),
+          ...commentData,
+        },
+      ]);
+      const { error: insertError, data: insertData } = await supabase
+        .from("comments")
+        .insert(commentData);
+      if (insertError) {
+        console.error("failed to upload comment data", {
+          insertError,
+          commentData,
+        });
+        // Handle error
+        return;
+      }
+      console.log("inserted comment into db", insertData);
+    },
+    [comments]
+  );
+
+  const scrollRef = useRef<ScrollView>(null);
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
   useEffect(() => {
     LayoutAnimation.easeInEaseOut();
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
@@ -59,53 +104,7 @@ const Post: FC = () => {
     };
   }, []);
 
-  const [comments, setComments] = useState<Comment[]>([]);
-  useEffect(() => {
-    supabase
-      .from("comments")
-      .select("id, post_id, user_id, parent_id, created_at, text")
-      .eq("post_id", postId)
-      .then((data) => {
-        if (data.data) {
-          setComments(data.data as Comment[]);
-        }
-      });
-  }, []);
 
-  const submit = useCallback(
-    async (text: string) => {
-      const commentData: Omit<Comment, "id" | "user_id" | "created_at"> = {
-        post_id: postId as string,
-        parent_id: null,
-        text,
-      };
-      setComments([
-        ...comments,
-        {
-          id: "temp",
-          user_id: "temp",
-          created_at: new Date().toISOString(),
-          ...commentData,
-        },
-      ]);
-
-      const { error: insertError, data: insertData } = await supabase
-        .from("comments")
-        .insert(commentData);
-      if (insertError) {
-        console.error("failed to upload comment data", {
-          insertError,
-          commentData,
-        });
-        // Handle error
-        return;
-      }
-      console.log("inserted comment into db", insertData);
-    },
-    [comments]
-  );
-
-  const scrollRef = useRef<ScrollView>(null);
 
   return (
     <View style={styles.container}>
@@ -113,7 +112,7 @@ const Post: FC = () => {
         <ImagePreview keyboardOpen={keyboardOpen} imageUrl={post.image_url} />
       )}
       <Comments scrollRef={scrollRef} comments={comments} />
-      <CommentInput submitComment={submit} />
+      <CommentInput submitComment={submitComment} />
     </View>
   );
 };
