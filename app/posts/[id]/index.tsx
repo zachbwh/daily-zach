@@ -1,31 +1,21 @@
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "../../../lib/supabase";
 import {
-  Image,
   Keyboard,
   LayoutAnimation,
   NativeModules,
   ScrollView,
   StyleSheet,
-  TextInput,
   View,
 } from "react-native";
-import { Text, Input, InputIcon, InputSlot } from "@gluestack-ui/themed";
-import { Stack, useLocalSearchParams } from "expo-router";
-import { SendHorizontal } from "lucide-react-native";
+import { useLocalSearchParams } from "expo-router";
+import ImagePreview from "./ImagePreview";
+import { default as Comments, Comment } from "./Comments";
+import CommentInput from "./CommentInput";
 
 type Post = {
   id: string;
   image_url: string;
-};
-
-type Comment = {
-  id: string;
-  post_id: string;
-  user_id: string;
-  parent_id: string | null;
-  created_at: string;
-  text: string;
 };
 
 const { UIManager } = NativeModules;
@@ -51,16 +41,16 @@ const Post: FC = () => {
   const [keyboardOpen, setKeyboardOpen] = useState(false);
 
   useEffect(() => {
-    LayoutAnimation.easeInEaseOut()
+    LayoutAnimation.easeInEaseOut();
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
       LayoutAnimation.easeInEaseOut();
       setKeyboardOpen(true);
-      scrollRef.current?.scrollToEnd()
+      scrollRef.current?.scrollToEnd();
     });
     const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
       LayoutAnimation.easeInEaseOut();
       setKeyboardOpen(false);
-      scrollRef.current?.scrollToEnd()
+      scrollRef.current?.scrollToEnd();
     });
 
     return () => {
@@ -82,8 +72,6 @@ const Post: FC = () => {
       });
   }, []);
 
-  const [inputText, setInputText] = useState("");
-
   const submit = useCallback(
     async (text: string) => {
       const commentData: Omit<Comment, "id" | "user_id" | "created_at"> = {
@@ -100,8 +88,6 @@ const Post: FC = () => {
           ...commentData,
         },
       ]);
-      setInputText("");
-      inputRef.current?.clear();
 
       const { error: insertError, data: insertData } = await supabase
         .from("comments")
@@ -119,47 +105,15 @@ const Post: FC = () => {
     [comments]
   );
 
-  const inputRef = useRef<TextInput>(null);
   const scrollRef = useRef<ScrollView>(null);
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: "Cat" }} />
       {post && (
-        <View
-          style={[styles.imageContainer, {
-            height: (keyboardOpen ? 0.6 : 1) * styles.imageContainer.height
-          }]}
-        >
-          <Image source={{ uri: post.image_url }} style={styles.imagePreview} />
-        </View>
+        <ImagePreview keyboardOpen={keyboardOpen} imageUrl={post.image_url} />
       )}
-      <ScrollView style={styles.commentsContainer} ref={scrollRef}>
-        {comments &&
-          comments.map((comment, index) => {
-            return <Text key={index}>{comment.text}</Text>;
-          })}
-      </ScrollView>
-      <Input>
-        <TextInput
-          ref={inputRef}
-          onSubmitEditing={({ nativeEvent: { text } }) => {
-            submit(text);
-          }}
-          onChangeText={(text) => {
-            setInputText(text);
-          }}
-          style={styles.textInput}
-        />
-        <InputSlot
-          pr="$3"
-          onPress={() => {
-            submit(inputText);
-          }}
-        >
-          <InputIcon as={SendHorizontal} color="$darkBlue500" />
-        </InputSlot>
-      </Input>
+      <Comments scrollRef={scrollRef} comments={comments} />
+      <CommentInput submitComment={submit} />
     </View>
   );
 };
@@ -169,32 +123,6 @@ const styles = StyleSheet.create({
     margin: 12,
     marginTop: 32,
     flex: 1,
-  },
-  heading: {
-    paddingHorizontal: 4,
-    marginBottom: 32,
-    fontSize: 40,
-    lineHeight: 40,
-  },
-  imageContainer: {
-    width: "100%",
-    margin: "auto",
-    alignItems: "center",
-    height: 300
-  },
-  imagePreview: {
-    aspectRatio: 9 / 16,
-    height: "100%",
-    borderRadius: 16,
-  },
-  commentsContainer: {
-    flex: 1,
-  },
-  textInput: {
-    height: "auto",
-    width: "100%",
-    flex: 1,
-    padding: 12,
   },
 });
 
