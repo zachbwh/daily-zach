@@ -1,20 +1,16 @@
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "../../../lib/supabase";
 import {
-  Animated,
   Image,
   Keyboard,
+  LayoutAnimation,
+  NativeModules,
   ScrollView,
   StyleSheet,
   TextInput,
   View,
 } from "react-native";
-import {
-  Text,
-  Input,
-  InputIcon,
-  InputSlot,
-} from "@gluestack-ui/themed";
+import { Text, Input, InputIcon, InputSlot } from "@gluestack-ui/themed";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { SendHorizontal } from "lucide-react-native";
 
@@ -32,6 +28,11 @@ type Comment = {
   text: string;
 };
 
+const { UIManager } = NativeModules;
+
+UIManager.setLayoutAnimationEnabledExperimental &&
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+
 const Post: FC = () => {
   const [post, setPost] = useState<Post>();
   const { id: postId } = useLocalSearchParams();
@@ -47,20 +48,17 @@ const Post: FC = () => {
       });
   }, []);
 
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+
   useEffect(() => {
+    LayoutAnimation.easeInEaseOut()
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-      Animated.timing(shrinkAnimation, {
-        toValue: 0.6,
-        duration: 250,
-        useNativeDriver: true,
-      }).start();
+      LayoutAnimation.easeInEaseOut();
+      setKeyboardOpen(true);
     });
     const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-      Animated.timing(shrinkAnimation, {
-        toValue: 1,
-        duration: 250,
-        useNativeDriver: true,
-      }).start();
+      LayoutAnimation.easeInEaseOut();
+      setKeyboardOpen(false);
     });
 
     return () => {
@@ -121,30 +119,17 @@ const Post: FC = () => {
 
   const inputRef = useRef<TextInput>(null);
 
-  const shrinkAnimation = useRef(new Animated.Value(1)).current;
-
-  const [imageContainerHeight, setImageContainerHeight] = useState(380);
-
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: "Cat" }} />
       {post && (
-        <Animated.View
-          style={{
-            ...styles.imageContainer,
-            transform: [
-              { translateY: -1 * (imageContainerHeight / 2) },
-              { scale: shrinkAnimation },
-              { translateY: imageContainerHeight / 2 },
-            ],
-          }}
-          onLayout={(event) => {
-            const { height } = event.nativeEvent.layout;
-            setImageContainerHeight(height);
-          }}
+        <View
+          style={[styles.imageContainer, {
+            height: (keyboardOpen ? 0.6 : 1) * styles.imageContainer.height
+          }]}
         >
           <Image source={{ uri: post.image_url }} style={styles.imagePreview} />
-        </Animated.View>
+        </View>
       )}
       <ScrollView style={styles.commentsContainer}>
         {comments &&
@@ -192,10 +177,11 @@ const styles = StyleSheet.create({
     width: "100%",
     margin: "auto",
     alignItems: "center",
+    height: 300
   },
   imagePreview: {
     aspectRatio: 9 / 16,
-    width: "50%",
+    height: "100%",
     borderRadius: 16,
   },
   commentsContainer: {
