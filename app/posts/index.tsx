@@ -2,11 +2,12 @@ import { FC, useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { Image, StyleSheet, View } from "react-native";
 import { Heading, Pressable } from "@gluestack-ui/themed";
-import { Link, Stack } from "expo-router";
+import { Link } from "expo-router";
 
 type Post = {
   id: string;
   image_url: string;
+  inserted_at: string;
 };
 
 const PostGrid: FC<{ children: React.ReactElement }> = ({ children }) => {
@@ -15,14 +16,12 @@ const PostGrid: FC<{ children: React.ReactElement }> = ({ children }) => {
   useEffect(() => {
     supabase
       .from("posts")
-      .select("id, image_url")
+      .select("id, image_url, inserted_at")
+      .order("inserted_at", { ascending: false })
       .then((data) => {
-        // console.log(data.data);
         setPosts(data.data as Post[]);
       });
   }, []);
-
-  console.log("NOT CHILD")
 
   return (
     <View style={styles.container}>
@@ -31,9 +30,6 @@ const PostGrid: FC<{ children: React.ReactElement }> = ({ children }) => {
         {posts?.map((post, index) => {
           return (
             <Link
-              // href={post.id}
-              // href={`/posts/${post.id}`}
-              // href={`/fakeRoute`}
               href={{ pathname: "/posts/[id]", params: { id: post.id } }}
               asChild
               style={styles.imageContainer}
@@ -60,7 +56,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     paddingHorizontal: 4,
-    marginBottom: 32,
+    marginBottom: 16,
     fontSize: 40,
     lineHeight: 40,
   },

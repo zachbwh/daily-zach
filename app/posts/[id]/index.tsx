@@ -32,6 +32,7 @@ const Post: FC = () => {
       .from("posts")
       .select("id, image_url, inserted_at")
       .eq("id", postId)
+      .limit(1)
       .then((data) => {
         if (data.data) {
           setPost(data.data[0] as Post);
@@ -45,6 +46,7 @@ const Post: FC = () => {
       .from("comments")
       .select("id, post_id, user_id, parent_id, created_at, text")
       .eq("post_id", postId)
+      .order("created_at", { ascending: false })
       .then((data) => {
         if (data.data) {
           setComments(data.data as Comment[]);
