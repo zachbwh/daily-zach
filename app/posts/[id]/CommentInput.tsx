@@ -12,8 +12,10 @@ const CommentInput: FC<CommentInputProps> = ({ submitComment }) => {
   const inputRef = useRef<TextInput>(null);
 
   const submit = (text: string) => {
-    inputRef.current?.clear();
-    submitComment(text);
+    if (text) {
+      inputRef.current?.clear();
+      submitComment(text);
+    }
   };
 
   return (
@@ -24,7 +26,6 @@ const CommentInput: FC<CommentInputProps> = ({ submitComment }) => {
           submit(text);
         }}
         onChangeText={(text) => {
-          console.log(text);
           setInputText(text);
         }}
         style={styles.textInput}
