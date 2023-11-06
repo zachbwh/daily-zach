@@ -1,13 +1,13 @@
 import { FC } from "react";
-import { Slot } from "expo-router";
-
-type Post = {
-  id: string;
-  image_url: string;
-};
+import { Slot, Stack } from "expo-router";
 
 const Post: FC = () => {
-  return <Slot />
+  return (
+    <>
+      <Stack.Screen options={{ title: "Zach" }}></Stack.Screen>
+      <Slot />
+    </>
+  );
 };
 
 export default Post;

@@ -8,7 +8,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 import ImagePreview from "./ImagePreview";
 import { default as Comments, Comment } from "./Comments";
 import CommentInput from "./CommentInput";
@@ -16,6 +16,7 @@ import CommentInput from "./CommentInput";
 type Post = {
   id: string;
   image_url: string;
+  inserted_at: string
 };
 
 const { UIManager } = NativeModules;
@@ -29,7 +30,7 @@ const Post: FC = () => {
   useEffect(() => {
     supabase
       .from("posts")
-      .select("id, image_url")
+      .select("id, image_url, inserted_at")
       .eq("id", postId)
       .then((data) => {
         if (data.data) {
