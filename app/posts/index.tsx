@@ -28,7 +28,7 @@ const PostGrid: FC<{ children: React.ReactElement }> = ({ children }) => {
     if (posts) {
       return posts.reduce<Record<string, Post[]>>((prev, current) => {
         const date = new Date(current.inserted_at);
-        const formattedDate = format(date, "io MMMM yy");
+        const formattedDate = format(date, "do MMMM ''yy");
 
         if (!prev[formattedDate]) {
           prev[formattedDate] = [current];
@@ -46,7 +46,6 @@ const PostGrid: FC<{ children: React.ReactElement }> = ({ children }) => {
       return { title: index, data: [{ posts }] };
     });
   }, [groupedPosts]);
-  console.log(groupedPosts);
 
   return (
     <SectionList
@@ -89,7 +88,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     paddingHorizontal: 4,
-    fontSize: 40,
+    fontSize: 35,
     lineHeight: 40,
   },
   imageGrid: {
