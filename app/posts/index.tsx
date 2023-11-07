@@ -1,8 +1,9 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { supabase } from "../../lib/supabase";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, SectionList, StyleSheet, View } from "react-native";
 import { Heading, Pressable } from "@gluestack-ui/themed";
 import { Link } from "expo-router";
+import { format } from "date-fns";
 
 type Post = {
   id: string;
@@ -23,29 +24,61 @@ const PostGrid: FC<{ children: React.ReactElement }> = ({ children }) => {
       });
   }, []);
 
+  const groupedPosts = useMemo(() => {
+    if (posts) {
+      return posts.reduce<Record<string, Post[]>>((prev, current) => {
+        const date = new Date(current.inserted_at);
+        const formattedDate = format(date, "io MMMM yy");
+
+        if (!prev[formattedDate]) {
+          prev[formattedDate] = [current];
+        } else {
+          prev[formattedDate].push(current);
+        }
+        return prev;
+      }, {});
+    }
+    return {};
+  }, [posts]);
+  const sectionedData = useMemo(() => {
+    return Object.keys(groupedPosts).map((index) => {
+      const posts = groupedPosts[index];
+      return { title: index, data: [{ posts }] };
+    });
+  }, [groupedPosts]);
+  console.log(groupedPosts);
+
   return (
-    <View style={styles.container}>
-      <Heading style={styles.heading}>Posts</Heading>
-      <View style={styles.imageGrid}>
-        {posts?.map((post, index) => {
-          return (
-            <Link
-              href={{ pathname: "/posts/[id]", params: { id: post.id } }}
-              asChild
-              style={styles.imageContainer}
-              key={index}
-            >
-              <Pressable>
-                <Image
-                  source={{ uri: post.image_url }}
-                  style={styles.imagePreview}
-                />
-              </Pressable>
-            </Link>
-          );
-        })}
-      </View>
-    </View>
+    <SectionList
+      style={styles.container}
+      sections={sectionedData}
+      stickySectionHeadersEnabled={true}
+      renderItem={({ item }) => {
+        return (
+          <View style={styles.imageGrid}>
+            {item.posts.map((post) => {
+              return (
+                <Link
+                  href={{ pathname: "/posts/[id]", params: { id: post.id } }}
+                  asChild
+                  style={styles.imageContainer}
+                >
+                  <Pressable>
+                    <Image
+                      source={{ uri: post.image_url }}
+                      style={styles.imagePreview}
+                    />
+                  </Pressable>
+                </Link>
+              );
+            })}
+          </View>
+        );
+      }}
+      renderSectionHeader={({ section: { title } }) => (
+        <Heading style={styles.heading}>{title}</Heading>
+      )}
+    />
   );
 };
 
@@ -56,7 +89,6 @@ const styles = StyleSheet.create({
   },
   heading: {
     paddingHorizontal: 4,
-    marginBottom: 16,
     fontSize: 40,
     lineHeight: 40,
   },
@@ -68,6 +100,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     width: "auto",
     margin: "auto",
+    marginVertical: 16
   },
   imageContainer: {
     width: "25%",
