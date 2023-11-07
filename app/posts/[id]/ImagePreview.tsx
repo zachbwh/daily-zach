@@ -17,7 +17,7 @@ const ImagePreview: FC<ImagePreviewProps> = ({ keyboardOpen, imageUrl }) => {
       style={[
         styles.imageContainer,
         {
-          height: (keyboardOpen ? 0.6 : 1) * styles.imageContainer.height,
+          height: (keyboardOpen ? 0.7 : 1) * styles.imageContainer.height,
         },
       ]}
     >
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     height: 300,
   },
   imagePreview: {
-    aspectRatio: 9 / 16,
+    aspectRatio: 3 / 4,
     height: "100%",
     borderRadius: 16,
   },

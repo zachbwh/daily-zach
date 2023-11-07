@@ -105,7 +105,7 @@ const Camera: React.FC = () => {
       <ExpoCamera
         style={styles.camera}
         type={type}
-        ratio="16:9"
+        ratio="4:3"
         onCameraReady={() => {
           setCameraReady(true);
         }}
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
     flexGrow: 1,
-    aspectRatio: 9 / 16,
+    aspectRatio: 3 / 4,
     borderRadius: 80,
     overflow: "hidden",
   },

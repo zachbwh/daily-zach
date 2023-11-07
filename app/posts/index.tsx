@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: "25%",
-    aspectRatio: 9 / 16,
+    aspectRatio: 3 / 4,
     padding: 4,
   },
   imagePreview: {
