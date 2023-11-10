@@ -5,7 +5,7 @@ import { supabase } from "../../lib/supabase";
 import { Link } from "expo-router";
 import { Platform, StatusBar, SafeAreaView, StyleSheet } from "react-native";
 
-export default function App() {
+const App: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
@@ -33,3 +33,5 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
 });
+
+export default App
