@@ -3,7 +3,7 @@ import { config } from "@gluestack-ui/config";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { Slot } from "expo-router";
 
-const Layout: React.FC<{ children: React.ReactElement }> = ({ children }) => {
+const Layout: React.FC = () => {
   return (
     <SafeAreaView style={styles.safeContainer}>
       <GluestackUIProvider config={config}>
