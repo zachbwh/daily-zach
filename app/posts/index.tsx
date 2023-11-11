@@ -17,7 +17,7 @@ type SectionPost = {
 
 const PostSectionList = SectionList<SectionPost>
 
-const PostGrid: FC<{ children: React.ReactElement }> = ({ children }) => {
+const PostGrid: FC = () => {
   const [posts, setPosts] = useState<Post[]>();
 
   useEffect(() => {
