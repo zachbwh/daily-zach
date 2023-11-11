@@ -1,7 +1,7 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import { supabase } from "../../lib/supabase";
-import { Image, SectionList, StyleSheet, View } from "react-native";
-import { Heading, Pressable } from "@gluestack-ui/themed";
+import { StyleSheet, SectionList } from "react-native";
+import { Heading, Pressable, View, Image } from "@gluestack-ui/themed";
 import { Link } from "expo-router";
 import { format } from "date-fns";
 
@@ -10,6 +10,12 @@ type Post = {
   image_url: string;
   inserted_at: string;
 };
+
+type SectionPost = {
+  posts: Post[];
+}
+
+const PostSectionList = SectionList<SectionPost>
 
 const PostGrid: FC<{ children: React.ReactElement }> = ({ children }) => {
   const [posts, setPosts] = useState<Post[]>();
@@ -48,7 +54,7 @@ const PostGrid: FC<{ children: React.ReactElement }> = ({ children }) => {
   }, [groupedPosts]);
 
   return (
-    <SectionList
+    <PostSectionList
       style={styles.container}
       sections={sectionedData}
       stickySectionHeadersEnabled={true}
@@ -66,6 +72,7 @@ const PostGrid: FC<{ children: React.ReactElement }> = ({ children }) => {
                     <Image
                       source={{ uri: post.image_url }}
                       style={styles.imagePreview}
+                      alt=""
                     />
                   </Pressable>
                 </Link>
@@ -83,8 +90,8 @@ const PostGrid: FC<{ children: React.ReactElement }> = ({ children }) => {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 12,
-    marginTop: 32,
+    padding: 12,
+    backgroundColor: "#000000"
   },
   heading: {
     paddingHorizontal: 4,

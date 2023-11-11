@@ -1,12 +1,12 @@
-import { Text } from "@gluestack-ui/themed";
+import { Text, View } from "@gluestack-ui/themed";
 import { Session } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { Link } from "expo-router";
-import { Platform, StatusBar, SafeAreaView, StyleSheet } from "react-native";
+import { Platform, StatusBar, StyleSheet } from "react-native";
 
 const App: React.FC = () => {
-  const [session, setSession] = useState<Session | null>(null);
+  const [, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -19,13 +19,17 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.safeContainer}>
+    <View style={styles.safeContainer} backgroundColor="black">
       <Text>Test</Text>
-      <Link href="/posts">Posts</Link>
-      <Link href="/camera">Camera</Link>
-    </SafeAreaView>
+      <Link href="/posts">
+        <Text>Posts</Text>
+      </Link>
+      <Link href="/camera">
+        <Text>Camera</Text>
+      </Link>
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   safeContainer: {
@@ -34,4 +38,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App
+export default App;

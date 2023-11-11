@@ -1,20 +1,20 @@
-import { Platform, SafeAreaView, StatusBar, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import React from "react";
 import { Slot } from "expo-router";
+import { View } from "@gluestack-ui/themed";
 
 const Layout: React.FC = () => {
   return (
-    <SafeAreaView style={styles.safeContainer}>
+    <View style={styles.container} backgroundColor="black" >
       <Slot />
-    </SafeAreaView>
+    </View>
   );
 };
 
 export default Layout;
 
 const styles = StyleSheet.create({
-  safeContainer: {
+  container: {
     flex: 1,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
 });
