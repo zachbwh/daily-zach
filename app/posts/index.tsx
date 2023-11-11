@@ -90,6 +90,7 @@ const PostGrid: FC = () => {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 0,
     padding: 12,
     backgroundColor: "#000000"
   },
@@ -97,6 +98,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     fontSize: 35,
     lineHeight: 40,
+    backgroundColor: "black"
   },
   imageGrid: {
     flex: 1,
