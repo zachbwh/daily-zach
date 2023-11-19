@@ -1,47 +1,14 @@
-import {
-  Camera as ExpoCamera,
-  CameraCapturedPicture,
-  CameraType,
-} from "expo-camera";
-import { useRef, useState } from "react";
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Circle } from "lucide-react-native";
+import { CameraCapturedPicture } from "expo-camera";
+import { StyleSheet } from "react-native";
 import { supabase } from "../../lib/supabase";
 import * as FileSystem from "expo-file-system";
 import { decode } from "base64-arraybuffer";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import React from "react";
+import ViewFinder from "./viewfinder";
 
 const Camera: React.FC = () => {
-  const [cameraReady, setCameraReady] = useState(false);
-  let cameraRef = useRef<ExpoCamera>();
-  const [permission, requestPermission] = ExpoCamera.useCameraPermissions();
-
-  if (!permission) {
-    // Camera permissions are still loading
-    return <View />;
-  }
-
-  if (!permission.granted) {
-    // Camera permissions are not granted yet
-    return (
-      <View style={styles.container}>
-        <Text style={{ textAlign: "center" }}>
-          We need your permission to show the camera
-        </Text>
-        <Button onPress={requestPermission} title="grant permission" />
-      </View>
-    );
-  }
-
-  async function takePicture() {
-    if (cameraReady && cameraRef.current) {
-      const pic = await cameraRef.current.takePictureAsync({ quality: 0.5 });
-      uploadImage(pic);
-    }
-  }
-
   async function uploadImage(picture: CameraCapturedPicture) {
     const url = picture.uri;
     console.log(url);
@@ -91,28 +58,7 @@ const Camera: React.FC = () => {
     }
   }
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.cameraContainer}>
-        <ExpoCamera
-          style={styles.camera}
-          type={CameraType.front}
-          ratio="4:3"
-          onCameraReady={() => {
-            setCameraReady(true);
-          }}
-          ref={(c) => {
-            if (c) cameraRef.current = c;
-          }}
-        />
-      </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={takePicture}>
-          <Circle style={styles.button} />
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+  return <ViewFinder onPictureCaptured={uploadImage} />;
 };
 
 export default Camera;
@@ -124,7 +70,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexGrow: 1,
     padding: 8,
-    backgroundColor: 'black'
+    backgroundColor: "black",
   },
   camera: {
     flex: 1,
@@ -134,7 +80,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     overflow: "hidden",
     aspectRatio: 3 / 4,
-    width: "100%"
+    width: "100%",
   },
   buttonContainer: {
     flex: 1,
