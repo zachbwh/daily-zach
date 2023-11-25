@@ -27,6 +27,9 @@ const App: React.FC = () => {
       <Link href="/camera">
         <Text>Camera</Text>
       </Link>
+      <Link href="/auth">
+        <Text>Auth</Text>
+      </Link>
     </View>
   );
 };
