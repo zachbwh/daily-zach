@@ -16,13 +16,16 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "io.zachhuxford.dailyzach"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "io.zachhuxford.dailyzach",
+      "googleServicesJson": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
