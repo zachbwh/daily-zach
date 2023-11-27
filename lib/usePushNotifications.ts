@@ -1,16 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Platform } from "react-native";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
+import { supabase } from "./supabase";
 
 export interface PushNotificationsState {
   expoPushToken?: Notifications.ExpoPushToken;
-  notification?: Notifications.Notification
+  notification?: Notifications.Notification;
 }
 
+type PushNotification = {
+  subscription_token: string;
+};
+
 export const usePushNotifications = (): PushNotificationsState => {
-  const [expoPushToken, setExpoPushToken] = useState<Notifications.ExpoPushToken>();
+  const [expoPushToken, setExpoPushToken] =
+    useState<Notifications.ExpoPushToken>();
   const [notification, setNotification] =
     useState<Notifications.Notification>();
   const notificationListener = useRef<Notifications.Subscription>();
@@ -64,14 +70,15 @@ export const usePushNotifications = (): PushNotificationsState => {
   }
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      token && setExpoPushToken(token as unknown as Notifications.ExpoPushToken)
+    registerForPushNotificationsAsync().then(
+      (token) =>
+        token &&
+        setExpoPushToken(token as unknown as Notifications.ExpoPushToken)
     );
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
-
-        console.log(notification)
+        console.log(notification);
         setNotification(notification);
 
         // Notifications.scheduleNotificationAsync({
@@ -99,6 +106,45 @@ export const usePushNotifications = (): PushNotificationsState => {
       }
     };
   }, []);
+
+  const [pushNotifications, setPushNotifications] =
+    useState<PushNotification[]>();
+  useEffect(() => {
+    supabase
+      .from("push_notification_subscribers")
+      .select("subscription_token")
+      .then((data) => {
+        if (data.data) {
+          setPushNotifications(data.data as PushNotification[]);
+        }
+      });
+  }, []);
+
+  const insertPushNotificationToken = useCallback(async () => {
+    if (
+      pushNotifications &&
+      expoPushToken &&
+      !pushNotifications
+        .map((pushNotifications) => pushNotifications.subscription_token)
+        .includes(expoPushToken as unknown as string)
+    ) {
+      const { error: insertError, data: insertData } = await supabase
+        .from("push_notification_subscribers")
+        .insert({ subscription_token: expoPushToken });
+      if (insertError) {
+        console.error("failed to upload push token data", {
+          insertError,
+        });
+        // Handle error
+        return;
+      }
+      console.log("inserted push token into db", insertData);
+    }
+  }, [pushNotifications, expoPushToken]);
+
+  useEffect(() => {
+    void insertPushNotificationToken();
+  }, [pushNotifications, expoPushToken]);
 
   return { expoPushToken, notification };
 };
