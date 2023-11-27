@@ -2,19 +2,40 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
 
-console.log("Hello from Functions!")
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 Deno.serve(async (req) => {
-  const { name } = await req.json()
+  const { name } = await req.json();
   const data = {
     message: `Hello ${name}!`,
-  }
+  };
 
-  return new Response(
-    JSON.stringify(data),
-    { headers: { "Content-Type": "application/json" } },
-  )
-})
+  const authHeader = req.headers.get("Authorization")!;
+  const supabaseClient = createClient(
+    // Supabase API URL - env var exported by default when deployed.
+    Deno.env.get("SUPABASE_URL") ?? "",
+    // Supabase API ANON KEY - env var exported by default when deployed.
+    Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+    // Set the Auth context of the user that called the function.
+    // This way your row-level-security (RLS) policies are applied.
+    { global: { headers: { Authorization: authHeader } } }
+  );
+
+  try {
+    const { data, error } = await supabaseClient.from("push_notification_subscribers").select("id, expo_push_token, users!inner(email)").eq('users.email', 'zachbwh@gmail.com');
+    console.log({ data, error });
+
+    return new Response(JSON.stringify({ data, error }), {
+      headers: { "Content-Type": "application/json" },
+      status: 200,
+    });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      headers: { "Content-Type": "application/json" },
+      status: 400,
+    });
+  }
+});
 
 /* To invoke locally:
 
