@@ -8,7 +8,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import ImagePreview from "./ImagePreview";
 import { default as Comments, Comment } from "./Comments";
 import CommentInput from "./CommentInput";
