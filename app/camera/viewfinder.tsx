@@ -37,7 +37,7 @@ import {
   
     async function takePicture() {
       if (cameraReady && cameraRef.current) {
-        const pic = await cameraRef.current.takePictureAsync({ quality: 0.5 });
+        const pic = await cameraRef.current.takePictureAsync({ quality: 1 });
         onPictureCaptured(pic);
       }
     }

@@ -7,18 +7,31 @@ import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import React from "react";
 import ViewFinder from "./viewfinder";
+import { FlipType, manipulateAsync, SaveFormat } from "expo-image-manipulator";
 
 const Camera: React.FC = () => {
   async function uploadImage(picture: CameraCapturedPicture) {
     const url = picture.uri;
     console.log(url);
-    const base64 = await FileSystem.readAsStringAsync(url, {
-      encoding: "base64",
-    });
-    const arrayBuffer = decode(base64);
+
     const postId = uuidv4();
     const fileName = `${postId}.jpeg`;
     try {
+      const manipResult = await manipulateAsync(
+        url,
+        [
+          { resize: { height: 1200, width: 900 } },
+          { flip: FlipType.Horizontal },
+        ],
+        { format: SaveFormat.JPEG, compress: 0.5 }
+      );
+
+      const base64 = await FileSystem.readAsStringAsync(manipResult.uri, {
+        encoding: "base64",
+      });
+
+      const arrayBuffer = decode(base64 || "");
+
       const { data, error } = await supabase.storage
         .from("posts")
         .upload(fileName, arrayBuffer, {
