@@ -1,9 +1,10 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import { supabase } from "../../lib/supabase";
-import { StyleSheet, SectionList } from "react-native";
+import { StyleSheet, SectionList, TouchableOpacity } from "react-native";
 import { Heading, Pressable, View, Image } from "@gluestack-ui/themed";
 import { Link } from "expo-router";
 import { format } from "date-fns";
+import { AlarmClock } from "lucide-react-native";
 
 type Post = {
   id: string;
@@ -53,38 +54,60 @@ const PostGrid: FC = () => {
     });
   }, [groupedPosts]);
 
+  async function requestPost() {
+    const { error: insertError, data: insertData } = await supabase
+        .from("post_requests")
+        .insert({});
+      if (insertError) {
+        console.error("failed to insert post request data", {
+          insertError,
+          insertData,
+        });
+        // Handle error
+        return;
+      }
+      console.log("inserted post request into db", insertData);
+  }
+
   return (
-    <PostSectionList
-      style={styles.container}
-      sections={sectionedData}
-      stickySectionHeadersEnabled={true}
-      renderItem={({ item }) => {
-        return (
-          <View style={styles.imageGrid}>
-            {item.posts.map((post) => {
-              return (
-                <Link
-                  href={{ pathname: "/posts/[id]", params: { id: post.id } }}
-                  asChild
-                  style={styles.imageContainer}
-                >
-                  <Pressable>
-                    <Image
-                      source={{ uri: post.image_url }}
-                      style={styles.imagePreview}
-                      alt=""
-                    />
-                  </Pressable>
-                </Link>
-              );
-            })}
-          </View>
-        );
-      }}
-      renderSectionHeader={({ section: { title } }) => (
-        <Heading style={styles.heading}>{title}</Heading>
-      )}
-    />
+    <View style={styles.container}>
+      <PostSectionList
+        style={styles.listContainer}
+        sections={sectionedData}
+        stickySectionHeadersEnabled={true}
+        renderItem={({ item }) => {
+          return (
+            <View style={styles.imageGrid}>
+              {item.posts.map((post) => {
+                return (
+                  <Link
+                    href={{ pathname: "/posts/[id]", params: { id: post.id } }}
+                    asChild
+                    style={styles.imageContainer}
+                  >
+                    <Pressable>
+                      <Image
+                        source={{ uri: post.image_url }}
+                        style={styles.imagePreview}
+                        alt=""
+                      />
+                    </Pressable>
+                  </Link>
+                );
+              })}
+            </View>
+          );
+        }}
+        renderSectionHeader={({ section: { title } }) => (
+          <Heading style={styles.heading}>{title}</Heading>
+        )}
+      />
+      <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={requestPost}>
+            <AlarmClock style={styles.button} />
+          </TouchableOpacity>
+        </View>
+    </View>
   );
 };
 
@@ -92,6 +115,10 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 0,
     padding: 12,
+    backgroundColor: "#000000",
+    flex: 1
+  },
+  listContainer: {
     backgroundColor: "#000000"
   },
   heading: {
@@ -118,6 +145,20 @@ const styles = StyleSheet.create({
   imagePreview: {
     height: "100%",
     borderRadius: 16,
+  },
+  buttonContainer: {
+    flex: 1,
+    flexGrow: 0,
+    margin: 24,
+    width: "100%",
+    height: 100,
+    backgroundColor: "black"
+  },
+  button: {
+    flex: 1,
+    alignItems: "center",
+    color: "white",
+    height: 50
   },
 });
 
