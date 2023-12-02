@@ -5,25 +5,39 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 Deno.serve(async (req) => {
-  const { name } = await req.json();
-  const data = {
-    message: `Hello ${name}!`,
-  };
+  console.log("hello");
 
-  const authHeader = req.headers.get("Authorization")!;
   const supabaseClient = createClient(
     // Supabase API URL - env var exported by default when deployed.
     Deno.env.get("SUPABASE_URL") ?? "",
-    // Supabase API ANON KEY - env var exported by default when deployed.
-    Deno.env.get("SUPABASE_ANON_KEY") ?? "",
-    // Set the Auth context of the user that called the function.
-    // This way your row-level-security (RLS) policies are applied.
-    { global: { headers: { Authorization: authHeader } } }
+    // Supabase SERVICE ROLE KEY - Bypasses row level security
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
   );
 
   try {
-    const { data, error } = await supabaseClient.from("push_notification_subscribers").select("id, expo_push_token, users!inner(email)").eq('users.email', 'zachbwh@gmail.com');
+    const { data, error } = await supabaseClient
+      .from("push_notification_subscribers")
+      .select("subscription_token")
+      // Zach's user id lol
+      .eq("user_id", "e35767c0-8e3b-4b15-ae2b-a48044a43cd0");
+
     console.log({ data, error });
+    data?.forEach((token) => {
+      fetch("https://exp.host/--/api/v2/push/send", {
+        method: "POST",
+        body: JSON.stringify({
+          to: token.subscription_token,
+          title: "Time for a daily Zach!",
+          body: "Cyrus wants to see you :)",
+        }),
+        headers: {
+          host: "exp.host",
+          accept: "application/json",
+          "accept-encoding": "gzip, deflate",
+          "content-type": "application/json",
+        },
+      });
+    });
 
     return new Response(JSON.stringify({ data, error }), {
       headers: { "Content-Type": "application/json" },
