@@ -4,8 +4,19 @@
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+type PostRequest = {
+  id: string,
+  created_at: string
+  requestor_id: string
+  status: string
+}
+
 Deno.serve(async (req) => {
   console.log("hello");
+
+  const body = await req.json()
+  const postRequest = body.record as PostRequest
+  console.log("post request", postRequest)
 
   const supabaseClient = createClient(
     // Supabase API URL - env var exported by default when deployed.
