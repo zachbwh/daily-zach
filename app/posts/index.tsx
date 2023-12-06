@@ -14,9 +14,9 @@ type Post = {
 
 type SectionPost = {
   posts: Post[];
-}
+};
 
-const PostSectionList = SectionList<SectionPost>
+const PostSectionList = SectionList<SectionPost>;
 
 const PostGrid: FC = () => {
   const [posts, setPosts] = useState<Post[]>();
@@ -56,17 +56,17 @@ const PostGrid: FC = () => {
 
   async function requestPost() {
     const { error: insertError, data: insertData } = await supabase
-        .from("post_requests")
-        .insert({});
-      if (insertError) {
-        console.error("failed to insert post request data", {
-          insertError,
-          insertData,
-        });
-        // Handle error
-        return;
-      }
-      console.log("inserted post request into db", insertData);
+      .from("post_requests")
+      .insert({});
+    if (insertError) {
+      console.error("failed to insert post request data", {
+        insertError,
+        insertData,
+      });
+      // Handle error
+      return;
+    }
+    console.log("inserted post request into db", insertData);
   }
 
   return (
@@ -84,6 +84,7 @@ const PostGrid: FC = () => {
                     href={{ pathname: "/posts/[id]", params: { id: post.id } }}
                     asChild
                     style={styles.imageContainer}
+                    key={post.id}
                   >
                     <Pressable>
                       <Image
@@ -103,10 +104,10 @@ const PostGrid: FC = () => {
         )}
       />
       <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={requestPost}>
-            <AlarmClock style={styles.button} />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={styles.button} onPress={requestPost}>
+          <AlarmClock style={styles.button} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -116,16 +117,16 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     padding: 12,
     backgroundColor: "#000000",
-    flex: 1
+    flex: 1,
   },
   listContainer: {
-    backgroundColor: "#000000"
+    backgroundColor: "#000000",
   },
   heading: {
     paddingHorizontal: 4,
     fontSize: 35,
     lineHeight: 40,
-    backgroundColor: "black"
+    backgroundColor: "black",
   },
   imageGrid: {
     flex: 1,
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     width: "auto",
     margin: "auto",
-    marginVertical: 16
+    marginVertical: 16,
   },
   imageContainer: {
     width: "25%",
@@ -152,13 +153,13 @@ const styles = StyleSheet.create({
     margin: 24,
     width: "100%",
     height: 100,
-    backgroundColor: "black"
+    backgroundColor: "black",
   },
   button: {
     flex: 1,
     alignItems: "center",
     color: "white",
-    height: 50
+    height: 50,
   },
 });
 
