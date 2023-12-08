@@ -1,10 +1,12 @@
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { FC } from "react";
 import { supabase } from "../../../lib/supabase";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Button from "./Button";
 import { LogOut, Trash, User } from "lucide-react-native";
+import { useRouter } from "expo-router";
 
 const Account: FC = () => {
+  const router = useRouter()
   return (
     <View style={styles.container}>
       <View style={styles.tile}>
@@ -18,6 +20,13 @@ const Account: FC = () => {
         <Button
           onPress={() => {
             console.log("TEST");
+            supabase.auth.signOut().then(response => {
+              if (response.error) {
+                  console.log("error logging out, please try again")
+              } else {
+                  router.replace("/login")
+              }
+          })
           }}
           label="Logout"
           icon={<LogOut style={styles.icon} />}
