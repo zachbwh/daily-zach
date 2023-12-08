@@ -41,8 +41,6 @@ const Layout: React.FC = () => {
           tabBarIcon: () => <User style={styles.tabBarIcon} />,
         }}
       />
-    <Text>YOOOOO</Text>
-
     </Tabs>
   );
 };
