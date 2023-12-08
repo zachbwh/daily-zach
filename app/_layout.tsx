@@ -1,10 +1,9 @@
 import { GluestackUIProvider } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
 import { SafeAreaView, StyleSheet } from "react-native";
-import { Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { usePushNotifications } from "../lib/usePushNotifications";
-import { Camera, GalleryHorizontalEnd, User } from "lucide-react-native";
+import { Stack } from "expo-router";
 
 const Layout: React.FC = () => {
   const pn = usePushNotifications();
@@ -12,50 +11,27 @@ const Layout: React.FC = () => {
     <SafeAreaView style={styles.safeContainer}>
       <GluestackUIProvider config={config} colorMode="dark">
         <StatusBar style="light" />
-        <Tabs
-          initialRouteName="/posts"
-          screenOptions={{
-            headerStyle: {
-              backgroundColor: "#000000",
-            },
-            headerTintColor: "#fff",
-          }}
-        >
-          <Tabs.Screen
-            name="posts"
+        <Stack>
+          <Stack.Screen
+            name="home"
             options={{
-              tabBarLabel: "Zachs",
-              title: "Zachs",
-              tabBarIcon: () => (
-                <GalleryHorizontalEnd style={styles.tabBarIcon} />
-              ),
+              headerShown: false,
             }}
           />
-
-          <Tabs.Screen
-            name="camera"
+          <Stack.Screen
+            name="index"
             options={{
-              tabBarLabel: "Camera",
-              title: "Camera",
-              tabBarIcon: () => <Camera style={styles.tabBarIcon} />,
-              unmountOnBlur: true,
+              headerShown: false,
             }}
           />
-          <Tabs.Screen
-            name="account"
-            options={{
-              tabBarLabel: "Account",
-              title: "Account",
-              tabBarIcon: () => <User style={styles.tabBarIcon} />,
-            }}
-          />
-          <Tabs.Screen
+          <Stack.Screen
             name="auth"
             options={{
-              href: null,
+              // Set the presentation mode to modal for our modal route.
+              presentation: "modal",
             }}
           />
-        </Tabs>
+        </Stack>
       </GluestackUIProvider>
     </SafeAreaView>
   );
@@ -64,9 +40,6 @@ const Layout: React.FC = () => {
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-  },
-  tabBarIcon: {
-    color: "black",
   },
 });
 

@@ -1,6 +1,6 @@
 import { CameraCapturedPicture } from "expo-camera";
 import { StyleSheet } from "react-native";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "../../../lib/supabase";
 import * as FileSystem from "expo-file-system";
 import { decode } from "base64-arraybuffer";
 import "react-native-get-random-values";
