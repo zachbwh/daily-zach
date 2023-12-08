@@ -25,7 +25,14 @@ const Layout: React.FC = () => {
             }}
           />
           <Stack.Screen
-            name="auth"
+            name="login"
+            options={{
+              // Set the presentation mode to modal for our modal route.
+              presentation: "modal",
+            }}
+          />
+          <Stack.Screen
+            name="signup"
             options={{
               // Set the presentation mode to modal for our modal route.
               presentation: "modal",

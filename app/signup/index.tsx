@@ -17,11 +17,11 @@ import {
   import { FC, useCallback, useState } from "react";
   import { supabase } from "../../lib/supabase";
   import { Alert } from "react-native";
+import { useRouter } from "expo-router";
   
-  const Auth: FC = () => {
+  const Signup: FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [authMode, setAuthMode] = useState<"login" | "signup">("login");
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const togglePasswordVisible = () => {
@@ -29,23 +29,13 @@ import {
         return !showState;
       });
     };
+    const router = useRouter();
   
-    async function signInWithEmail() {
-      setLoading(true);
-      const { error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password,
-      });
-  
-      if (error) Alert.alert(error.message);
-      setLoading(false);
-    }
-  
-    async function signUpWithEmail() {
+    async function signUpWithEmail(email: string, password: string) {
       setLoading(true);
       const { error } = await supabase.auth.signUp({
-        email: email,
-        password: password,
+        email,
+        password,
       });
   
       if (error) Alert.alert(error.message);
@@ -53,12 +43,8 @@ import {
     }
   
     const submit = useCallback(() => {
-      if (authMode === "login") {
-        signInWithEmail();
-      } else {
-        signUpWithEmail();
-      }
-    }, [email, password, authMode]);
+        signUpWithEmail(email, password);
+    }, [email, password]);
     return (
       <Box flex={1} justifyContent="center" alignItems="center">
         <FormControl
@@ -77,7 +63,7 @@ import {
         >
           <VStack space="xl">
             <Heading color="$text900" lineHeight="$md">
-              {authMode === "login" ? "Login" : "Signup"}
+              Signup
             </Heading>
             <VStack space="xs">
               <Text color="$text500" lineHeight="$xs">
@@ -117,11 +103,11 @@ import {
                 action="secondary"
                 isDisabled={loading}
                 onPress={() => {
-                  setAuthMode(authMode === "login" ? "signup" : "login");
+                router.replace("/login");
                 }}
               >
                 <ButtonText>
-                  Switch to {authMode === "login" ? "Signup" : "Login"}
+                  Switch to Login
                 </ButtonText>
               </Button>
               <Button
@@ -131,7 +117,7 @@ import {
               >
                 {loading && <ButtonSpinner mr="$1" />}
                 <ButtonText color="$white">
-                  {authMode === "login" ? "Login" : "Signup"}
+                  Signup
                 </ButtonText>
               </Button>
             </HStack>
@@ -141,5 +127,5 @@ import {
     );
   };
   
-  export default Auth;
+  export default Signup;
   
