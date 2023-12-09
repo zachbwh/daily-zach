@@ -1,51 +1,53 @@
 import {
-    Text,
-    FormControl,
-    VStack,
-    Heading,
-    Input,
-    InputField,
-    InputSlot,
-    InputIcon,
-    Button,
-    ButtonText,
-    HStack,
-    ButtonSpinner,
-    Box,
-  } from "@gluestack-ui/themed";
-  import { EyeIcon, EyeOffIcon } from "lucide-react-native";
-  import { FC, useCallback, useState } from "react";
-  import { supabase } from "../../lib/supabase";
-  import { Alert } from "react-native";
+  Text,
+  FormControl,
+  VStack,
+  Heading,
+  Input,
+  InputField,
+  InputSlot,
+  InputIcon,
+  Button,
+  ButtonText,
+  HStack,
+  ButtonSpinner,
+  Box,
+} from "@gluestack-ui/themed";
+import { EyeIcon, EyeOffIcon } from "lucide-react-native";
+import { FC, useCallback, useState } from "react";
+import { supabase } from "../../lib/supabase";
+import { Alert } from "react-native";
 import { useRouter } from "expo-router";
-  
-  const Signup: FC = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
-    const togglePasswordVisible = () => {
-      setShowPassword((showState) => {
-        return !showState;
-      });
-    };
-    const router = useRouter();
-  
-    async function signUpWithEmail(email: string, password: string) {
-      setLoading(true);
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-  
-      if (error) Alert.alert(error.message);
-      setLoading(false);
-    }
-  
-    const submit = useCallback(() => {
-        signUpWithEmail(email, password);
-    }, [email, password]);
-    return (
+import SafeAndroidView from "../../components/SafeAndroidView";
+
+const Signup: FC = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisible = () => {
+    setShowPassword((showState) => {
+      return !showState;
+    });
+  };
+  const router = useRouter();
+
+  async function signUpWithEmail(email: string, password: string) {
+    setLoading(true);
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (error) Alert.alert(error.message);
+    setLoading(false);
+  }
+
+  const submit = useCallback(() => {
+    signUpWithEmail(email, password);
+  }, [email, password]);
+  return (
+    <SafeAndroidView>
       <Box flex={1} justifyContent="center" alignItems="center">
         <FormControl
           p="$4"
@@ -103,29 +105,21 @@ import { useRouter } from "expo-router";
                 action="secondary"
                 isDisabled={loading}
                 onPress={() => {
-                router.replace("/login");
+                  router.replace("/login");
                 }}
               >
-                <ButtonText>
-                  Switch to Login
-                </ButtonText>
+                <ButtonText>Switch to Login</ButtonText>
               </Button>
-              <Button
-                ml="auto"
-                isDisabled={loading}
-                onPress={submit}
-              >
+              <Button ml="auto" isDisabled={loading} onPress={submit}>
                 {loading && <ButtonSpinner mr="$1" />}
-                <ButtonText color="$white">
-                  Signup
-                </ButtonText>
+                <ButtonText color="$white">Signup</ButtonText>
               </Button>
             </HStack>
           </VStack>
         </FormControl>
       </Box>
-    );
-  };
-  
-  export default Signup;
-  
+    </SafeAndroidView>
+  );
+};
+
+export default Signup;
