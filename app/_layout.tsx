@@ -9,7 +9,16 @@ const Layout: React.FC = () => {
     <SafeAreaView style={styles.safeContainer}>
       <GluestackUIProvider config={config} colorMode="dark">
         <StatusBar style="light" />
-        <Stack>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            headerStyle: {
+              backgroundColor: "#000000",
+            },
+            headerTintColor: "#fff",
+            statusBarColor: "#000000"
+          }}
+        >
           <Stack.Screen
             name="home"
             options={{
