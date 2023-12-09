@@ -11,7 +11,7 @@ const SafeAndroidView: React.FC<{children: React.ReactElement}> = ({children}) =
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+    // paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
   },
 });
 
