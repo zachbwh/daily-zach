@@ -1,6 +1,5 @@
 import {
   VStack,
-  Heading,
   Input,
   InputField,
   InputSlot,
@@ -10,12 +9,13 @@ import {
   HStack,
   ButtonSpinner,
 } from "@gluestack-ui/themed";
-import { EyeIcon, EyeOffIcon } from "lucide-react-native";
+import { EyeIcon, EyeOffIcon, MailIcon } from "lucide-react-native";
 import { FC, useCallback, useState } from "react";
 import { supabase } from "../../lib/supabase";
-import { Alert, View, StyleSheet } from "react-native";
+import { Alert, View, StyleSheet, Text, TextInput } from "react-native";
 import { useRouter } from "expo-router";
 import SafeAndroidView from "../../components/SafeAndroidView";
+import CustomTextInput from "../../components/CustomTextInput";
 
 const Login: FC = () => {
   const [email, setEmail] = useState("");
@@ -49,20 +49,17 @@ const Login: FC = () => {
     <SafeAndroidView>
       <View style={styles.container}>
         <VStack space="xl">
-          <Heading color="$text900" lineHeight="$md">
-            Login
-          </Heading>
-          <Input>
-            <InputField
-              type="text"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoComplete="email"
-              value={email}
-              onChangeText={setEmail}
-              placeholder="Email"
-            />
-          </Input>
+          <Text style={styles.header}>Login</Text>
+          <Text style={styles.subtitle}>Sign in to see some Zachs.</Text>
+          <CustomTextInput
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+            value={email}
+            onChangeText={setEmail}
+            placeholder="Email"
+            icon={<MailIcon style={{color: "white"}} />}
+          />
           <Input>
             <InputField
               type={showPassword ? "text" : "password"}
@@ -103,6 +100,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    paddingTop: 48,
+    backgroundColor: "#000000",
+  },
+  header: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 32,
+  },
+  subtitle: {
+    color: "#CCCCCC",
+    fontWeight: "500",
+    fontSize: 16,
   },
 });
 
