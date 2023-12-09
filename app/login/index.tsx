@@ -1,14 +1,20 @@
-import {
-  ButtonText,
-  ButtonSpinner,
-} from "@gluestack-ui/themed";
+import { ButtonText, ButtonSpinner } from "@gluestack-ui/themed";
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "lucide-react-native";
 import { FC, useCallback, useState } from "react";
 import { supabase } from "../../lib/supabase";
-import { Alert, View, StyleSheet, Text, TouchableOpacity, Button, ActivityIndicator } from "react-native";
+import {
+  Alert,
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Button,
+  ActivityIndicator,
+} from "react-native";
 import { useRouter } from "expo-router";
 import SafeAndroidView from "../../components/SafeAndroidView";
 import CustomTextInput from "../../components/CustomTextInput";
+import CustomButton from "../../components/CustomButton";
 
 const Login: FC = () => {
   const [email, setEmail] = useState("");
@@ -66,15 +72,23 @@ const Login: FC = () => {
             </TouchableOpacity>
           }
         />
-        <Button disabled={loading} onPress={submit} title="Login" />
-        <Button
-          disabled={loading}
-          onPress={() => {
-            router.replace("/signup");
-          }}
-          title="Create an Account"
-        />
-        <ActivityIndicator color="#FFFFFF" />
+        <CustomButton disabled={loading} loading={loading} onPress={submit}>
+          <Text style={styles.primaryButtonText}>Login</Text>
+        </CustomButton>
+        <View style={styles.secondaryActionsWrapper}>
+          <CustomButton
+            type="secondary"
+            wrapperStyle={styles.secondaryButton}
+            onPress={() => {
+              router.replace("/signup");
+            }}
+          >
+            <Text style={styles.secondaryButtonText}>Create an Account</Text>
+          </CustomButton>
+          <CustomButton type="secondary" wrapperStyle={styles.secondaryButton}>
+            <Text style={styles.secondaryButtonText}>Forgot Password?</Text>
+          </CustomButton>
+        </View>
       </View>
     </SafeAndroidView>
   );
@@ -97,6 +111,25 @@ const styles = StyleSheet.create({
     color: "#CCCCCC",
     fontWeight: "500",
     fontSize: 16,
+  },
+  secondaryActionsWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 16,
+    marginLeft: 8,
+    marginRight: 8,
+  },
+  secondaryButton: {
+    flexGrow: 1,
+  },
+  primaryButtonText: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    fontSize: 16
+  },
+  secondaryButtonText: {
+    textDecorationLine: "underline",
+    color: "#AAAAAA",
   },
 });
 
