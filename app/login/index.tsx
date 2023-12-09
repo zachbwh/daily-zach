@@ -1,18 +1,11 @@
 import {
-  VStack,
-  Input,
-  InputField,
-  InputSlot,
-  InputIcon,
-  Button,
   ButtonText,
-  HStack,
   ButtonSpinner,
 } from "@gluestack-ui/themed";
-import { EyeIcon, EyeOffIcon, MailIcon } from "lucide-react-native";
+import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "lucide-react-native";
 import { FC, useCallback, useState } from "react";
 import { supabase } from "../../lib/supabase";
-import { Alert, View, StyleSheet, Text, TextInput } from "react-native";
+import { Alert, View, StyleSheet, Text, TouchableOpacity, Button, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import SafeAndroidView from "../../components/SafeAndroidView";
 import CustomTextInput from "../../components/CustomTextInput";
@@ -22,11 +15,6 @@ const Login: FC = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const togglePasswordVisible = () => {
-    setShowPassword((showState) => {
-      return !showState;
-    });
-  };
   const router = useRouter();
 
   async function loginWithEmail(email: string, password: string) {
@@ -48,49 +36,45 @@ const Login: FC = () => {
   return (
     <SafeAndroidView>
       <View style={styles.container}>
-        <VStack space="xl">
-          <Text style={styles.header}>Login</Text>
-          <Text style={styles.subtitle}>Sign in to see some Zachs.</Text>
-          <CustomTextInput
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoComplete="email"
-            value={email}
-            onChangeText={setEmail}
-            placeholder="Email"
-            icon={<MailIcon style={{color: "white"}} />}
-          />
-          <Input>
-            <InputField
-              type={showPassword ? "text" : "password"}
-              color="black"
-              value={password}
-              onChangeText={setPassword}
-              placeholder="Password"
-            />
-            <InputSlot pr="$3" onPress={togglePasswordVisible}>
-              <InputIcon
-                as={showPassword ? EyeIcon : EyeOffIcon}
-                color="$darkBlue500"
-              />
-            </InputSlot>
-          </Input>
-          <Button width="$full" isDisabled={loading} onPress={submit}>
-            {loading && <ButtonSpinner mr="$1" />}
-            <ButtonText color="$white">Login</ButtonText>
-          </Button>
-          <HStack>
-            <Button
-              action="secondary"
-              isDisabled={loading}
-              onPress={() => {
-                router.replace("/signup");
-              }}
-            >
-              <ButtonText>Create an Account</ButtonText>
-            </Button>
-          </HStack>
-        </VStack>
+        <Text style={styles.header}>Login</Text>
+        <Text style={styles.subtitle}>Sign in to see some Zachs.</Text>
+        <CustomTextInput
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoComplete="email"
+          value={email}
+          onChangeText={setEmail}
+          placeholder="Email"
+          icon={<MailIcon style={{ color: "white" }} />}
+        />
+        <CustomTextInput
+          secureTextEntry={!showPassword}
+          textContentType="password"
+          autoCapitalize="none"
+          autoComplete="password"
+          value={password}
+          onChangeText={setPassword}
+          placeholder="Password"
+          icon={<LockIcon style={{ color: "white" }} />}
+          iconRight={
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              {showPassword ? (
+                <EyeOffIcon style={{ color: "white" }} />
+              ) : (
+                <EyeIcon style={{ color: "white" }} />
+              )}
+            </TouchableOpacity>
+          }
+        />
+        <Button disabled={loading} onPress={submit} title="Login" />
+        <Button
+          disabled={loading}
+          onPress={() => {
+            router.replace("/signup");
+          }}
+          title="Create an Account"
+        />
+        <ActivityIndicator color="#FFFFFF" />
       </View>
     </SafeAndroidView>
   );
@@ -102,6 +86,7 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingTop: 48,
     backgroundColor: "#000000",
+    gap: 16,
   },
   header: {
     color: "white",

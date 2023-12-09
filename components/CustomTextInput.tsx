@@ -1,17 +1,31 @@
-import { StyleProp, StyleSheet, TextInput, TextInputProps, View, ViewStyle } from "react-native";
+import {
+  StyleProp,
+  StyleSheet,
+  TextInput,
+  TextInputProps,
+  View,
+  ViewStyle,
+} from "react-native";
 
-const CustomTextInput: React.FC<TextInputProps & { icon?: JSX.Element, wrapperStyle?: StyleProp<ViewStyle> }> = (
-  props
-) => {
+const CustomTextInput: React.FC<
+  TextInputProps & {
+    icon?: JSX.Element;
+    iconRight?: JSX.Element;
+    wrapperStyle?: StyleProp<ViewStyle>;
+  }
+> = (props) => {
   return (
     <View style={styles.inputWrapper}>
-      {props.icon && (<View style={styles.iconWrapper}>{props.icon}</View>)}
+      {props.icon && <View style={styles.iconWrapper}>{props.icon}</View>}
       <TextInput
         {...props}
         style={styles.input}
         underlineColorAndroid="transparent"
         placeholderTextColor="#AAAAAA"
       />
+      {props.iconRight && (
+        <View style={styles.iconWrapper}>{props.iconRight}</View>
+      )}
     </View>
   );
 };
@@ -26,7 +40,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#888888",
     borderRadius: 8,
-    overflow: "hidden"
+    overflow: "hidden",
   },
   iconWrapper: {
     backgroundColor: "#222222",
@@ -45,9 +59,8 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     color: "#FFFFFF",
     backgroundColor: "#222222",
-    height: "100%"
+    height: "100%",
   },
 });
 
-
-export default CustomTextInput
+export default CustomTextInput;
