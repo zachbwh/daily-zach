@@ -2,11 +2,9 @@ import { GluestackUIProvider } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { usePushNotifications } from "../lib/usePushNotifications";
 import { Stack } from "expo-router";
 
 const Layout: React.FC = () => {
-  const pn = usePushNotifications();
   return (
     <SafeAreaView style={styles.safeContainer}>
       <GluestackUIProvider config={config} colorMode="dark">
