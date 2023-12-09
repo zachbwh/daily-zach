@@ -40,6 +40,8 @@ const Login: FC = () => {
 
     if (error) Alert.alert(error.message);
     setLoading(false);
+
+    if (!error) router.replace("/home/posts")
   }
 
   const submit = useCallback(() => {
@@ -87,6 +89,7 @@ const Login: FC = () => {
             <Input>
               <InputField
                 type={showPassword ? "text" : "password"}
+                color="black"
                 value={password}
                 onChangeText={setPassword}
               />
