@@ -35,7 +35,7 @@ const Signup: FC = () => {
     <SafeAndroidView>
       <View style={styles.container}>
         <Text style={styles.header}>Create an Account</Text>
-        <Text style={styles.subtitle}>Sign in to see some Zachs.</Text>
+        <Text style={styles.subtitle}>Sign up, see some Zachs.</Text>
         <CustomTextInput
           keyboardType="email-address"
           autoCapitalize="none"
