@@ -25,15 +25,17 @@ const CustomButton: React.FC<{
 }) => {
   return (
     <View
-      style={{
-        ...styles.buttonWrapper,
-        ...(type === "primary"
-          ? styles.primaryWrapper
-          : styles.secondaryWrapper),
-        ...wrapperStyle?.valueOf,
-      }}
+      style={[
+        styles.buttonWrapper,
+        type === "primary" ? styles.primaryWrapper : styles.secondaryWrapper,
+        wrapperStyle,
+      ]}
     >
-      <TouchableOpacity disabled={disabled} onPress={onPress} style={styles.pressable}>
+      <TouchableOpacity
+        disabled={disabled}
+        onPress={onPress}
+        style={styles.pressable}
+      >
         {loading ? <ActivityIndicator color="white" /> : children}
       </TouchableOpacity>
     </View>
@@ -65,7 +67,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     height: "100%",
     alignItems: "center",
-  }
+  },
 });
 
 export default CustomButton;

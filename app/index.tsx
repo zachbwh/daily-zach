@@ -12,7 +12,7 @@ const Index: FC = () => {
         console.log("found session, directing to /home!");
         router.replace("/home/posts");
       } else {
-        router.replace("/login");
+        router.replace("/signup");
       }
     });
   }, []);
