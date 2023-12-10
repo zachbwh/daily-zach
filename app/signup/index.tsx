@@ -1,5 +1,5 @@
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "lucide-react-native";
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { Alert, TouchableOpacity, View, StyleSheet, Text } from "react-native";
 import { useRouter } from "expo-router";
@@ -16,7 +16,7 @@ const Signup: FC = () => {
 
   async function signUpWithEmail(email: string, password: string) {
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    const { error, data } = await supabase.auth.signUp({
       email,
       password,
     });
@@ -24,8 +24,10 @@ const Signup: FC = () => {
     if (error) Alert.alert(error.message);
     setLoading(false);
 
+    console.log("signup data: ", data)
+
     // commence onboarding
-    if (!error) router.replace("/home/posts");
+    if (!error) router.replace("/signup/information");
   }
 
   const submit = useCallback(() => {
