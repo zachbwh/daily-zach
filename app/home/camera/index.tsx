@@ -1,4 +1,3 @@
-import { CameraCapturedPicture } from "expo-camera";
 import { StyleSheet } from "react-native";
 import { supabase } from "../../../lib/supabase";
 import * as FileSystem from "expo-file-system";
@@ -6,27 +5,18 @@ import { decode } from "base64-arraybuffer";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import React from "react";
-import ViewFinder from "./viewfinder";
-import { FlipType, manipulateAsync, SaveFormat } from "expo-image-manipulator";
+import ViewFinder from "../../../components/Viewfinder";
+import { ImageResult } from "expo-image-manipulator";
 
 const Camera: React.FC = () => {
-  async function uploadImage(picture: CameraCapturedPicture) {
+  async function uploadImage(picture: ImageResult) {
     const url = picture.uri;
     console.log(url);
 
     const postId = uuidv4();
     const fileName = `${postId}.jpeg`;
     try {
-      const manipResult = await manipulateAsync(
-        url,
-        [
-          { resize: { height: 1200, width: 900 } },
-          { flip: FlipType.Horizontal },
-        ],
-        { format: SaveFormat.JPEG, compress: 0.5 }
-      );
-
-      const base64 = await FileSystem.readAsStringAsync(manipResult.uri, {
+      const base64 = await FileSystem.readAsStringAsync(picture.uri, {
         encoding: "base64",
       });
 

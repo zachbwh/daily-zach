@@ -32,6 +32,7 @@ const Layout: React.FC = () => {
           title: "Camera",
           tabBarIcon: () => <Camera style={styles.tabBarIcon} />,
           unmountOnBlur: true,
+          headerShown: false
         }}
       />
       <Tabs.Screen
