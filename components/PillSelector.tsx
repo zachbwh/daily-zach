@@ -17,6 +17,7 @@ const PillSelector: React.FC<{
             styles.button,
             selectedOption === option ? styles.selected : styles.unselected,
           ]}
+          key={option}
         >
           <Text
             style={[
