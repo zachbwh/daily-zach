@@ -27,7 +27,6 @@ const Information: FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    supabase.auth.getSession().then((resp) => {console.log("session: ", resp.data)})
     setError(null);
   }, [name, vertical]);
 
@@ -50,7 +49,7 @@ const Information: FC = () => {
           console.log(upsertError)
           setError("A problem ocurred, please try again later or contact customer support (Zach).")
         } else {
-          router.replace("/signup/profile_image")
+          router.replace("/signup/profileimage")
         }
 
       } else {

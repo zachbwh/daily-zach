@@ -1,6 +1,5 @@
 import {
   Camera as ExpoCamera,
-  CameraCapturedPicture,
   CameraType,
 } from "expo-camera";
 import { useEffect, useRef, useState } from "react";
@@ -18,7 +17,7 @@ import { ActivityIndicator } from "react-native";
 import { FlipType, ImageResult, SaveFormat, manipulateAsync } from "expo-image-manipulator";
 
 type ViewFinderProps = {
-  onPictureCaptured: (picture: CameraCapturedPicture) => void;
+  onPictureCaptured: (picture: ImageResult) => void;
   dimensionsConfig?: {
     aspectRatio: string;
     height: number,

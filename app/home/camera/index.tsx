@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 import { supabase } from "../../../lib/supabase";
 import * as FileSystem from "expo-file-system";
 import { decode } from "base64-arraybuffer";
@@ -65,40 +64,3 @@ const Camera: React.FC = () => {
 };
 
 export default Camera;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    flexGrow: 1,
-    padding: 8,
-    backgroundColor: "black",
-  },
-  camera: {
-    flex: 1,
-    flexGrow: 1,
-  },
-  cameraContainer: {
-    borderRadius: 20,
-    overflow: "hidden",
-    aspectRatio: 3 / 4,
-    width: "100%",
-  },
-  buttonContainer: {
-    flex: 1,
-    flexGrow: 0,
-    margin: 24,
-    width: "100%",
-  },
-  button: {
-    flex: 1,
-    alignItems: "center",
-    color: "white",
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "white",
-  },
-});
