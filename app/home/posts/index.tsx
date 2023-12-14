@@ -1,7 +1,7 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import { supabase } from "../../../lib/supabase";
-import { StyleSheet, SectionList, TouchableOpacity } from "react-native";
-import { Heading, Pressable, View, Image } from "@gluestack-ui/themed";
+import { StyleSheet, SectionList, TouchableOpacity, Image } from "react-native";
+import { Heading, Pressable, View } from "@gluestack-ui/themed";
 import { Link } from "expo-router";
 import { format } from "date-fns";
 import { AlarmClock } from "lucide-react-native";
@@ -91,6 +91,7 @@ const PostGrid: FC = () => {
                         source={{ uri: post.image_url }}
                         style={styles.imagePreview}
                         alt=""
+                        resizeMethod="resize"
                       />
                     </Pressable>
                   </Link>
