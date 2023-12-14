@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { supabase } from "../../../lib/supabase";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Keyboard } from "react-native";
 import { useRouter } from "expo-router";
 import SafeAndroidView from "../../../components/SafeAndroidView";
 import CustomTextInput from "../../../components/CustomTextInput";
@@ -34,6 +34,7 @@ const Information: FC = () => {
     if (!nameComplete) {
       if (name) {
         setNameComplete(true);
+        Keyboard.dismiss()
       } else {
         setError("Please enter a name");
       }
