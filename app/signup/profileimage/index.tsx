@@ -87,26 +87,26 @@ const ProfileImage: FC = () => {
   return (
     <SafeAndroidView>
       <View style={styles.container}>
-        <Text style={styles.header}>Selfie time!</Text>
-        <Text style={styles.subtitle}>it's only fair</Text>
-        {error && <Text style={styles.error}>{error}</Text>}
-        <CustomButton
-          disabled={loading}
-          loading={loading}
-          onPress={() => {
-            setViewfinderOn(true);
-          }}
-        >
-          <Text style={styles.primaryButtonText}>Twist my arm</Text>
-        </CustomButton>
-        <CustomButton
-          type="secondary"
-          onPress={() => {
-            router.replace("/signup/requestdemo");
-          }}
-        >
-          <Text style={styles.secondaryButtonText}>Maybe later..</Text>
-        </CustomButton>
+          <Text style={styles.header}>Selfie time!</Text>
+          <Text style={styles.subtitle}>it's only fair</Text>
+          {error && <Text style={styles.error}>{error}</Text>}
+          <CustomButton
+            disabled={loading}
+            loading={loading}
+            onPress={() => {
+              setViewfinderOn(true);
+            }}
+          >
+            <Text style={styles.primaryButtonText}>Twist my arm</Text>
+          </CustomButton>
+          <CustomButton
+            type="secondary"
+            onPress={() => {
+              router.replace("/signup/requestdemo");
+            }}
+          >
+            <Text style={styles.secondaryButtonText}>Maybe later..</Text>
+          </CustomButton>
       </View>
     </SafeAndroidView>
   );
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    paddingTop: 48,
+    paddingTop: 120,
     backgroundColor: "#000000",
     gap: 16,
   },
@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
     color: "#CCCCCC",
     fontWeight: "500",
     fontSize: 16,
+    paddingBottom: 48
   },
   primaryButtonText: {
     color: "#FFFFFF",
