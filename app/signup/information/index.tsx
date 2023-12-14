@@ -62,7 +62,7 @@ const Information: FC = () => {
     <SafeAndroidView>
       <View style={styles.container}>
         <Text style={styles.header}>Howdy</Text>
-        <Text style={styles.subtitle}>who are ya</Text>
+        <Text style={styles.subtitle}>who are ya?</Text>
         <CustomTextInput
           autoCapitalize="words"
           autoComplete="name"
@@ -72,7 +72,7 @@ const Information: FC = () => {
         />
         {nameComplete && (
           <>
-            <Text style={styles.subtitle}>how do you know me</Text>
+            <Text style={styles.subtitle}>how do you know me?</Text>
             <PillSelector
               options={Object.values(Vertical)}
               selectOption={(vertical) => setVertical(vertical)}
