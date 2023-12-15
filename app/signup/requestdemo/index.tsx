@@ -27,7 +27,7 @@ const RequestDemo: FC = () => {
         } else {
           clearInterval(intervalRef.current);
         }
-      }, 3000);
+      }, 2000);
       return () => {
         clearInterval(intervalRef.current);
       };
