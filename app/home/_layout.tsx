@@ -25,7 +25,6 @@ const Layout: React.FC = () => {
         name="posts"
         options={{
           tabBarLabel: "Zachs",
-          title: "Zachs",
           tabBarIcon: () => <GalleryHorizontalEnd style={styles.tabBarIcon} />,
           headerShown: false,
         }}

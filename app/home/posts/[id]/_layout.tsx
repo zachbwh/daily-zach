@@ -4,7 +4,7 @@ import { Slot, Stack } from "expo-router";
 const Post: FC = () => {
   return (
     <>
-      <Stack.Screen options={{ title: "Zach" }}></Stack.Screen>
+      <Stack.Screen options={{ headerTitle: "Zach" }}></Stack.Screen>
       <Slot />
     </>
   );

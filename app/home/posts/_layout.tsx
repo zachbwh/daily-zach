@@ -8,7 +8,7 @@ const Posts: FC<{ children: React.ReactElement }> = ({ children }) => {
           backgroundColor: "#000000",
         },
         headerTintColor: "#fff",
-        headerTitle: "Zachs"
+        headerTitle: "Zachs",
       }}
     >
       <Slot />
