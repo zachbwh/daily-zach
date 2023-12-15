@@ -1,0 +1,7 @@
+export enum RequestStatus {
+    CREATED = 'CREATED',
+    DELIVERED = "DELIVERED",
+    ACKNOWLEDGED = "ACKNOWLEDGED",
+    UPLOADING = "UPLOADING",
+    COMPLETED = "COMPLETED"
+}
