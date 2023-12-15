@@ -64,7 +64,7 @@ const Login: FC = () => {
           }
         />
         <CustomButton disabled={loading} loading={loading} onPress={submit}>
-          <Text style={styles.primaryButtonText}>Login</Text>
+          <Text style={buttonStyles.primaryButtonText}>Login</Text>
         </CustomButton>
         <View style={styles.secondaryActionsWrapper}>
           <CustomButton

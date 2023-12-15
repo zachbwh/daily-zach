@@ -77,7 +77,6 @@ export const buttonStyles = StyleSheet.create({
   secondaryButtonText: {
     textDecorationLine: "underline",
     color: "#AAAAAA",
-    flexGrow: 1,
   },
 });
 
