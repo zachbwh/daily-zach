@@ -14,7 +14,12 @@ const Layout: React.FC = () => {
           backgroundColor: "#000000",
         },
         headerTintColor: "#fff",
+        tabBarActiveBackgroundColor: "#000",
+        tabBarInactiveBackgroundColor: "#000",
+        tabBarActiveTintColor: "#fff",
+        tabBarInactiveTintColor: "#fff",
       }}
+      sceneContainerStyle={{ backgroundColor: "black" }}
     >
       <Tabs.Screen
         name="posts"
@@ -32,7 +37,7 @@ const Layout: React.FC = () => {
           title: "Camera",
           tabBarIcon: () => <Camera style={styles.tabBarIcon} />,
           unmountOnBlur: true,
-          headerShown: false
+          headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -54,6 +59,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   tabBarIcon: {
-    color: "black",
+    color: "white",
   },
 });
