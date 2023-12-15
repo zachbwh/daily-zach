@@ -24,7 +24,7 @@ const Signup: FC = () => {
     if (error) Alert.alert(error.message);
     setLoading(false);
 
-    console.log("signup data: ", data)
+    console.log("signup data: ", data);
 
     // commence onboarding
     if (!error) router.replace("/signup/information");
@@ -70,7 +70,9 @@ const Signup: FC = () => {
           <Text style={buttonStyles.primaryButtonText}>Create Account</Text>
         </CustomButton>
         <View style={styles.secondaryActionsWrapper}>
-          <Text style={styles.alreadyHaveAccount}>Already have an account?</Text>
+          <Text style={styles.alreadyHaveAccount}>
+            Already have an account?
+          </Text>
           <CustomButton
             type="secondary"
             wrapperStyle={styles.secondaryButton}
@@ -78,7 +80,9 @@ const Signup: FC = () => {
               router.replace("/login");
             }}
           >
-            <Text style={buttonStyles.secondaryButtonText}>Log in</Text>
+            <Text style={[buttonStyles.secondaryButtonText]}>
+              Log in
+            </Text>
           </CustomButton>
         </View>
       </View>
@@ -106,15 +110,16 @@ const styles = StyleSheet.create({
   },
   secondaryActionsWrapper: {
     flexDirection: "row",
+    alignItems: "center"
   },
   secondaryButton: {
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start'
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
   },
   alreadyHaveAccount: {
     color: "#AAAAAA",
     paddingRight: 4,
-    alignItems: "flex-start"
+    alignItems: "flex-start",
   },
 });
 
