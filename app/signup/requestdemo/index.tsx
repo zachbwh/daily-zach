@@ -3,6 +3,7 @@ import SafeAndroidView from "../../../components/SafeAndroidView";
 import PendingRequest from "../../requests/PendingRequestView";
 import CreateRequest from "../../requests/CreateRequestView";
 import { RequestStatus } from "../../requests/types";
+import { router } from "expo-router";
 
 const requestStatusList = Object.values(RequestStatus);
 
@@ -40,6 +41,9 @@ const RequestDemo: FC = () => {
         <PendingRequest
           headerText="Selfie Request"
           requestStatus={requestStatus}
+          viewPost={async () => {
+            router.replace("/home/posts")
+          }}
         />
       </SafeAndroidView>
     );

@@ -7,13 +7,14 @@ import CustomButton, { buttonStyles } from "../../components/CustomButton";
 const PendingRequest: FC<{
   headerText: string;
   requestStatus: RequestStatus;
-}> = ({ headerText, requestStatus }) => {
+  viewPost: () => Promise<void>;
+}> = ({ headerText, requestStatus, viewPost }) => {
   const loadingZach = requestStatus !== RequestStatus.COMPLETED;
   return (
     <View style={styles.container}>
       <Text style={styles.header}>{headerText}</Text>
       <RequestProgress requestStatus={requestStatus} />
-      <CustomButton disabled={loadingZach} onPress={() => {}}>
+      <CustomButton disabled={loadingZach} onPress={() => { void viewPost()}}>
         {loadingZach ? (
           <>
             <ActivityIndicator color="#FFFFFF" style={{ paddingRight: 8 }} />
