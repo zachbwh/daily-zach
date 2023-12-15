@@ -1,12 +1,12 @@
 import { GluestackUIProvider } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Stack } from "expo-router";
 
 const Layout: React.FC = () => {
   return (
-    <SafeAreaView style={styles.safeContainer}>
+    <View style={styles.safeContainer}>
       <GluestackUIProvider config={config} colorMode="dark">
         <StatusBar style="light" />
         <Stack
@@ -47,7 +47,7 @@ const Layout: React.FC = () => {
           />
         </Stack>
       </GluestackUIProvider>
-    </SafeAreaView>
+    </View>
   );
 };
 
