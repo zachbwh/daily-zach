@@ -26,15 +26,15 @@ const CustomButton: React.FC<{
   return (
     <View
       style={[
-        styles.buttonWrapper,
-        type === "primary" ? styles.primaryWrapper : styles.secondaryWrapper,
+        buttonStyles.buttonWrapper,
+        type === "primary" ? buttonStyles.primaryWrapper : buttonStyles.secondaryWrapper,
         wrapperStyle,
       ]}
     >
       <TouchableOpacity
         disabled={disabled}
         onPress={onPress}
-        style={styles.pressable}
+        style={buttonStyles.pressable}
       >
         {loading ? <ActivityIndicator color="white" /> : children}
       </TouchableOpacity>
@@ -42,7 +42,7 @@ const CustomButton: React.FC<{
   );
 };
 
-const styles = StyleSheet.create({
+export const buttonStyles = StyleSheet.create({
   buttonWrapper: {
     flexDirection: "row",
     justifyContent: "center",
@@ -67,6 +67,17 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     height: "100%",
     alignItems: "center",
+    flexDirection: "row"
+  },
+  primaryButtonText: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  secondaryButtonText: {
+    textDecorationLine: "underline",
+    color: "#AAAAAA",
+    flexGrow: 1,
   },
 });
 

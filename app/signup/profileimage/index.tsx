@@ -3,7 +3,7 @@ import { supabase } from "../../../lib/supabase";
 import { View, StyleSheet, Text } from "react-native";
 import { useRouter } from "expo-router";
 import SafeAndroidView from "../../../components/SafeAndroidView";
-import CustomButton from "../../../components/CustomButton";
+import CustomButton, { buttonStyles } from "../../../components/CustomButton";
 import ViewFinder from "../../../components/Viewfinder";
 import { ImageResult } from "expo-image-manipulator";
 import "react-native-get-random-values";
@@ -97,7 +97,7 @@ const ProfileImage: FC = () => {
               setViewfinderOn(true);
             }}
           >
-            <Text style={styles.primaryButtonText}>Twist my arm</Text>
+            <Text style={buttonStyles.primaryButtonText}>Twist my arm</Text>
           </CustomButton>
           <CustomButton
             type="secondary"
@@ -105,7 +105,7 @@ const ProfileImage: FC = () => {
               router.replace("/signup/requestdemo");
             }}
           >
-            <Text style={styles.secondaryButtonText}>Maybe later..</Text>
+            <Text style={buttonStyles.secondaryButtonText}>Maybe later..</Text>
           </CustomButton>
       </View>
     </SafeAndroidView>
@@ -130,16 +130,6 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontSize: 16,
     paddingBottom: 48
-  },
-  primaryButtonText: {
-    color: "#FFFFFF",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  secondaryButtonText: {
-    textDecorationLine: "underline",
-    color: "#AAAAAA",
-    flexGrow: 1,
   },
   error: {
     color: "#CCCCCC",

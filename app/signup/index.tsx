@@ -5,7 +5,7 @@ import { Alert, TouchableOpacity, View, StyleSheet, Text } from "react-native";
 import { useRouter } from "expo-router";
 import SafeAndroidView from "../../components/SafeAndroidView";
 import CustomTextInput from "../../components/CustomTextInput";
-import CustomButton from "../../components/CustomButton";
+import CustomButton, { buttonStyles } from "../../components/CustomButton";
 
 const Signup: FC = () => {
   const [email, setEmail] = useState("");
@@ -67,7 +67,7 @@ const Signup: FC = () => {
           }
         />
         <CustomButton disabled={loading} loading={loading} onPress={submit}>
-          <Text style={styles.primaryButtonText}>Create Account</Text>
+          <Text style={buttonStyles.primaryButtonText}>Create Account</Text>
         </CustomButton>
         <View style={styles.secondaryActionsWrapper}>
           <Text style={styles.alreadyHaveAccount}>Already have an account?</Text>
@@ -78,7 +78,7 @@ const Signup: FC = () => {
               router.replace("/login");
             }}
           >
-            <Text style={styles.secondaryButtonText}>Log in</Text>
+            <Text style={buttonStyles.secondaryButtonText}>Log in</Text>
           </CustomButton>
         </View>
       </View>
@@ -110,16 +110,6 @@ const styles = StyleSheet.create({
   secondaryButton: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start'
-  },
-  primaryButtonText: {
-    color: "#FFFFFF",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  secondaryButtonText: {
-    textDecorationLine: "underline",
-    color: "#AAAAAA",
-    flexGrow: 1
   },
   alreadyHaveAccount: {
     color: "#AAAAAA",

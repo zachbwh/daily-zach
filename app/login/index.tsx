@@ -5,7 +5,7 @@ import { Alert, View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import SafeAndroidView from "../../components/SafeAndroidView";
 import CustomTextInput from "../../components/CustomTextInput";
-import CustomButton from "../../components/CustomButton";
+import CustomButton, { buttonStyles } from "../../components/CustomButton";
 
 const Login: FC = () => {
   const [email, setEmail] = useState("");
@@ -74,10 +74,10 @@ const Login: FC = () => {
               router.replace("/signup");
             }}
           >
-            <Text style={styles.secondaryButtonText}>Create an Account</Text>
+            <Text style={buttonStyles.secondaryButtonText}>Create an Account</Text>
           </CustomButton>
           <CustomButton type="secondary" wrapperStyle={styles.secondaryButton}>
-            <Text style={styles.secondaryButtonText}>Forgot Password?</Text>
+            <Text style={buttonStyles.secondaryButtonText}>Forgot Password?</Text>
           </CustomButton>
         </View>
       </View>
@@ -112,15 +112,6 @@ const styles = StyleSheet.create({
   },
   secondaryButton: {
     flexGrow: 1,
-  },
-  primaryButtonText: {
-    color: "#FFFFFF",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  secondaryButtonText: {
-    textDecorationLine: "underline",
-    color: "#AAAAAA",
   },
 });
 

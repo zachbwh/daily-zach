@@ -4,7 +4,7 @@ import { View, StyleSheet, Text, Keyboard } from "react-native";
 import { useRouter } from "expo-router";
 import SafeAndroidView from "../../../components/SafeAndroidView";
 import CustomTextInput from "../../../components/CustomTextInput";
-import CustomButton from "../../../components/CustomButton";
+import CustomButton, { buttonStyles } from "../../../components/CustomButton";
 import PillSelector from "../../../components/PillSelector";
 
 enum Vertical {
@@ -82,7 +82,7 @@ const Information: FC = () => {
         )}
         {error && <Text style={styles.error}>{error}</Text>}
         <CustomButton disabled={loading} loading={loading} onPress={submit}>
-          <Text style={styles.primaryButtonText}>Continue</Text>
+          <Text style={buttonStyles.primaryButtonText}>Continue</Text>
         </CustomButton>
       </View>
     </SafeAndroidView>
@@ -105,11 +105,6 @@ const styles = StyleSheet.create({
   subtitle: {
     color: "#CCCCCC",
     fontWeight: "500",
-    fontSize: 16,
-  },
-  primaryButtonText: {
-    color: "#FFFFFF",
-    fontWeight: "bold",
     fontSize: 16,
   },
   error: {
