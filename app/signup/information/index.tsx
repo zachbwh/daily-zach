@@ -30,6 +30,10 @@ const Information: FC = () => {
     setError(null);
   }, [name, vertical]);
 
+  useEffect(() => {
+    Keyboard.dismiss()
+  }, [vertical])
+
   const submit = useCallback(async () => {
     if (!nameComplete) {
       if (name) {
