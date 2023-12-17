@@ -1,7 +1,4 @@
-import {
-  Camera as ExpoCamera,
-  CameraType,
-} from "expo-camera";
+import { Camera as ExpoCamera, CameraType } from "expo-camera";
 import { useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
@@ -10,19 +7,27 @@ import {
   StyleProp,
   View,
   Image,
+  Animated,
+  Easing,
+  Text,
 } from "react-native";
 import { Circle, Check, X } from "lucide-react-native";
 import React from "react";
 import { ActivityIndicator } from "react-native";
-import { FlipType, ImageResult, SaveFormat, manipulateAsync } from "expo-image-manipulator";
+import {
+  FlipType,
+  ImageResult,
+  SaveFormat,
+  manipulateAsync,
+} from "expo-image-manipulator";
 
 type ViewFinderProps = {
-  onPictureCaptured: (picture: ImageResult) => void;
+  onPictureCaptured: (picture: ImageResult) => Promise<void>;
   dimensionsConfig?: {
     aspectRatio: string;
-    height: number,
-    width: number
-  }
+    height: number;
+    width: number;
+  };
   cameraWrapperStyle?: StyleProp<ViewStyle>;
 };
 
@@ -31,11 +36,12 @@ const ViewFinder: React.FC<ViewFinderProps> = ({
   dimensionsConfig = {
     aspectRatio: "4:3",
     height: 1200,
-    width: 900
+    width: 900,
   },
-  cameraWrapperStyle = styles.cameraContainer
+  cameraWrapperStyle = styles.cameraContainer,
 }) => {
   const [cameraReady, setCameraReady] = useState(false);
+  const [pictureConfirmed, setPictureConfirmed] = useState(false);
   const [permissionRequested, setPermissionRequested] = useState(false);
   const [picture, setPicture] = useState<ImageResult | undefined>();
   let cameraRef = useRef<ExpoCamera>();
@@ -48,6 +54,31 @@ const ViewFinder: React.FC<ViewFinderProps> = ({
     }
   }, [permission]);
 
+  const animatedFadeValue = new Animated.Value(0);
+  useEffect(() => {
+    if (pictureConfirmed && picture) {
+      console.log("restart animation for some reason", {pictureConfirmed, picture})
+      Animated.sequence([
+        Animated.timing(animatedFadeValue, {
+          toValue: 1.0,
+          duration: 500,
+          easing: Easing.ease,
+          useNativeDriver: true,
+        }),
+        Animated.timing(animatedFadeValue, {
+          toValue: 1.0,
+          duration: 1500,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        }),
+      ]).start(async () => {
+        await onPictureCaptured(picture);
+        setPicture(undefined);
+        setPictureConfirmed(false);
+      });
+    }
+  }, [pictureConfirmed, picture]);
+
   async function takePicture() {
     if (cameraReady && cameraRef.current) {
       const pic = await cameraRef.current.takePictureAsync({ quality: 1 });
@@ -55,13 +86,18 @@ const ViewFinder: React.FC<ViewFinderProps> = ({
       const manipResult = await manipulateAsync(
         pic.uri,
         [
-          { resize: { height: dimensionsConfig.height, width: dimensionsConfig.width } },
+          {
+            resize: {
+              height: dimensionsConfig.height,
+              width: dimensionsConfig.width,
+            },
+          },
           { flip: FlipType.Horizontal },
         ],
         { format: SaveFormat.JPEG, compress: 0.5 }
       );
-      
-      setPicture(manipResult)
+
+      setPicture(manipResult);
     }
   }
 
@@ -82,23 +118,24 @@ const ViewFinder: React.FC<ViewFinderProps> = ({
               setPicture(undefined);
             }}
           >
-            <X
-              style={styles.button}
-              size={56}
-              absoluteStrokeWidth={true}
-            />
+            <X style={styles.button} size={56} absoluteStrokeWidth={true} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => {
-            onPictureCaptured(picture)
-            setPicture(undefined)
-          }}>
-            <Check
-              style={styles.button}
-              size={56}
-              absoluteStrokeWidth={true}
-            />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              setPictureConfirmed(true);
+            }}
+          >
+            <Check style={styles.button} size={56} absoluteStrokeWidth={true} />
           </TouchableOpacity>
         </View>
+        {pictureConfirmed && (
+          <Animated.View
+            style={[styles.textContainer, { opacity: animatedFadeValue }]}
+          >
+            <Text style={styles.text}>You look great!</Text>
+          </Animated.View>
+        )}
       </View>
     );
   }
@@ -174,9 +211,17 @@ const styles = StyleSheet.create({
     width: 56,
     maxWidth: 56,
   },
+  textContainer: {
+    position: "absolute",
+    backgroundColor: "#000000",
+    height: "100%",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   text: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 48,
+    fontWeight: "300",
     color: "white",
   },
 });
