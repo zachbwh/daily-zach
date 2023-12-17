@@ -52,8 +52,8 @@ const RequestDemo: FC = () => {
     <SafeAndroidView>
       <CreateRequest
         headerText="Request Selfie"
-        subtitleText="Now it's Zach's turn"
-        ctaText="'Ring' Zach"
+        subtitleText={`Now it's Zach's turn.\n\nExcept not really.\n\nThis time is just a demo.\n\n⏰`}
+        ctaText={`"Ring" Zach`}
         onMakeRequest={async () => {
           await setSelfiePending(true);
         }}
