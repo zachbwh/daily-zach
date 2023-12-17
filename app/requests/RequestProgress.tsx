@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef } from "react";
-import { View, StyleSheet, Text, Animated, Easing } from "react-native";
+import { View, StyleSheet, Animated, Easing } from "react-native";
 import { RequestStatus } from "./types";
 
 const statusCopy: Record<RequestStatus, string> = {

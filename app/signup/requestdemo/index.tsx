@@ -4,6 +4,8 @@ import PendingRequest from "../../requests/PendingRequestView";
 import CreateRequest from "../../requests/CreateRequestView";
 import { RequestStatus } from "../../requests/types";
 import { router } from "expo-router";
+import { StyleSheet, View } from "react-native";
+import LottieView from "lottie-react-native";
 
 const requestStatusList = Object.values(RequestStatus);
 
@@ -35,16 +37,41 @@ const RequestDemo: FC = () => {
     }
   }, [selfiePending]);
 
+  const lottieViewRef = useRef<LottieView | null>(null);
+
+  useEffect(() => {
+    if (requestStatus === RequestStatus.COMPLETED && lottieViewRef.current) {
+      console.log("we should be confetting rn");
+      lottieViewRef.current.play();
+    }
+  }, [requestStatus]);
+
   if (selfiePending) {
     return (
       <SafeAndroidView>
-        <PendingRequest
-          headerText="Selfie Request"
-          requestStatus={requestStatus}
-          viewPost={async () => {
-            router.replace("/home/posts")
-          }}
-        />
+        <View style={styles.animationContainer}>
+          <PendingRequest
+            headerText="Selfie Request"
+            requestStatus={requestStatus}
+            viewPost={async () => {
+              router.replace("/home/posts");
+            }}
+          />
+          <LottieView
+            loop={false}
+            ref={lottieViewRef}
+            source={require("./Animation - 1702793477112.json")}
+            resizeMode="cover"
+            style={{
+              position: "absolute",
+              height: "100%",
+              width: "100%",
+              zIndex: 10,
+              flex: 1,
+              pointerEvents: "none",
+            }}
+          />
+        </View>
       </SafeAndroidView>
     );
   }
@@ -61,5 +88,11 @@ const RequestDemo: FC = () => {
     </SafeAndroidView>
   );
 };
+
+const styles = StyleSheet.create({
+  animationContainer: {
+    flex: 1,
+  },
+});
 
 export default RequestDemo;
