@@ -85,7 +85,7 @@ const ProfileImage: FC = () => {
   return (
     <SafeAndroidView>
       <View style={[styles.container, { paddingTop: 120 }]}>
-        <Text style={styles.header}>Selfie time!</Text>
+        <Text style={styles.header}>Snap a selfie for me!</Text>
         <Text style={styles.subtitle}>it's only fair</Text>
         {error && <Text style={styles.error}>{error}</Text>}
         <CustomButton
