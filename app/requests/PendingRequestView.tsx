@@ -14,18 +14,25 @@ const PendingRequest: FC<{
     <View style={styles.container}>
       <Text style={styles.header}>{headerText}</Text>
       <RequestProgress requestStatus={requestStatus} />
-      <CustomButton disabled={loadingZach} onPress={() => { void viewPost()}}>
-        {loadingZach ? (
-          <>
-            <ActivityIndicator color="#FFFFFF" style={{ paddingRight: 8 }} />
-            <Text style={buttonStyles.primaryButtonText}>
-              Waiting for Zach...
-            </Text>
-          </>
-        ) : (
-          <Text style={buttonStyles.primaryButtonText}>See the Zach!</Text>
-        )}
-      </CustomButton>
+      <View style={styles.ctaWrapper}>
+        <CustomButton
+          disabled={loadingZach}
+          onPress={() => {
+            void viewPost();
+          }}
+        >
+          {loadingZach ? (
+            <>
+              <ActivityIndicator color="#FFFFFF" style={{ paddingRight: 8 }} />
+              <Text style={buttonStyles.primaryButtonText}>
+                Waiting for Zach...
+              </Text>
+            </>
+          ) : (
+            <Text style={buttonStyles.primaryButtonText}>See the Zach!</Text>
+          )}
+        </CustomButton>
+      </View>
     </View>
   );
 };
@@ -42,6 +49,11 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 32,
+  },
+  ctaWrapper: {
+    flexGrow: 1,
+    justifyContent: "flex-end",
+    paddingBottom: 48,
   },
 });
 
