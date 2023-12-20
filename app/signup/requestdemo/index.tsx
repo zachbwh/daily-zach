@@ -6,11 +6,14 @@ import { RequestStatus } from "../../requests/types";
 import { router } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import LottieView from "lottie-react-native";
+import RequestComplete from "../../requests/RequestComplete";
 
 const requestStatusList = Object.values(RequestStatus);
+const demoImage = require("./demo-selfie.jpg");
 
 const RequestDemo: FC = () => {
   const [selfiePending, setSelfiePending] = useState(false);
+  const [showSelfie, setShowSelfie] = useState(false);
   const [requestStatus, setRequestStatus] = useState<RequestStatus>(
     RequestStatus.CREATED
   );
@@ -30,7 +33,7 @@ const RequestDemo: FC = () => {
         } else {
           clearInterval(intervalRef.current);
         }
-      }, 2000);
+      }, 1500);
       return () => {
         clearInterval(intervalRef.current);
       };
@@ -46,6 +49,19 @@ const RequestDemo: FC = () => {
     }
   }, [requestStatus]);
 
+  if (showSelfie) {
+    return (
+      <SafeAndroidView>
+        <RequestComplete
+          image={demoImage}
+          onNext={() => {
+            router.replace("/home/posts");
+          }}
+        />
+      </SafeAndroidView>
+    );
+  }
+
   if (selfiePending) {
     return (
       <SafeAndroidView>
@@ -54,7 +70,7 @@ const RequestDemo: FC = () => {
             headerText="Selfie Request"
             requestStatus={requestStatus}
             viewPost={async () => {
-              router.replace("/home/posts");
+              setShowSelfie(true);
             }}
           />
           <LottieView
