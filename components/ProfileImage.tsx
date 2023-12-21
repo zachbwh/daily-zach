@@ -10,9 +10,13 @@ import React from "react";
 
 type ProfileImageProps = {
   imageSource: ImageSourcePropType | null;
+  onPress?: () => void;
 };
 
-const ProfileImage: React.FC<ProfileImageProps> = ({ imageSource }) => {
+const ProfileImage: React.FC<ProfileImageProps> = ({
+  imageSource,
+  onPress,
+}) => {
   let profileImage = (
     <View style={styles.logoContainer}>
       <User style={styles.image} size="80%" />
@@ -23,7 +27,9 @@ const ProfileImage: React.FC<ProfileImageProps> = ({ imageSource }) => {
   }
 
   return (
-    <TouchableOpacity style={styles.container}>{profileImage}</TouchableOpacity>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
+      {profileImage}
+    </TouchableOpacity>
   );
 };
 
