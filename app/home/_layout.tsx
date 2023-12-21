@@ -46,6 +46,7 @@ const Layout: React.FC = () => {
           tabBarLabel: "Account",
           title: "Account",
           tabBarIcon: () => <User style={styles.tabBarIcon} />,
+          headerShown: false,
         }}
       />
     </Tabs>

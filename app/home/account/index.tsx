@@ -62,7 +62,7 @@ const Account: FC = () => {
       <View style={styles.tile}>
         <Button
           onPress={() => {
-            console.log("TEST");
+            router.push("/home/account/profile");
           }}
           label="Manage Profile"
           icon={<User style={styles.icon} />}
@@ -91,6 +91,8 @@ const Account: FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexGrow: 1,
+    backgroundColor: "#000000",
   },
   tile: {
     margin: 8,

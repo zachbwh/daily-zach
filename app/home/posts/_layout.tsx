@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Slot, Stack } from "expo-router";
+import { Stack } from "expo-router";
 const Posts: FC<{ children: React.ReactElement }> = ({ children }) => {
   return (
     <Stack
@@ -10,9 +10,7 @@ const Posts: FC<{ children: React.ReactElement }> = ({ children }) => {
         headerTintColor: "#fff",
         headerTitle: "Zachs",
       }}
-    >
-      <Slot />
-    </Stack>
+    />
   );
 };
 

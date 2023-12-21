@@ -1,20 +1,17 @@
-import { StyleSheet } from "react-native";
-import React from "react";
-import { View } from "@gluestack-ui/themed";
-import { Slot } from "expo-router";
-
-const Layout: React.FC = () => {
+import { FC } from "react";
+import { Stack } from "expo-router";
+const Account: FC<{ children: React.ReactElement }> = ({ children }) => {
   return (
-    <View style={styles.container} backgroundColor="black" >
-        <Slot />
-    </View>
+    <Stack
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "#000000",
+        },
+        headerTintColor: "#fff",
+        headerTitle: "Account",
+      }}
+    />
   );
 };
 
-export default Layout;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+export default Account;

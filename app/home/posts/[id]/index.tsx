@@ -8,7 +8,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 import ImagePreview from "./ImagePreview";
 import { default as Comments, Comment } from "./Comments";
 import CommentInput from "./CommentInput";
@@ -16,7 +16,7 @@ import CommentInput from "./CommentInput";
 type Post = {
   id: string;
   image_url: string;
-  inserted_at: string
+  inserted_at: string;
 };
 
 const { UIManager } = NativeModules;
@@ -107,10 +107,9 @@ const Post: FC = () => {
     };
   }, []);
 
-
-
   return (
     <View style={styles.container}>
+      <Stack.Screen options={{ headerTitle: "Zach" }}></Stack.Screen>
       {post && (
         <ImagePreview keyboardOpen={keyboardOpen} imageUrl={post.image_url} />
       )}
