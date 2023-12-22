@@ -5,20 +5,20 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 type PostRequest = {
-  id: string,
-  created_at: string
-  requestor_id: string
-  status: string
-}
+  id: string;
+  created_at: string;
+  requestor_id: string;
+  status: string;
+};
 
 Deno.serve(async (req) => {
   console.log("hello");
 
-  const body = await req.json()
-  const postRequest = body.record as PostRequest
-  console.log("post request", postRequest)
+  const body = await req.json();
+  const postRequest = body.record as PostRequest;
+  console.log("post request", postRequest);
 
-  const supabaseClient = createClient(
+  const supabaseMachineClient = createClient(
     // Supabase API URL - env var exported by default when deployed.
     Deno.env.get("SUPABASE_URL") ?? "",
     // Supabase SERVICE ROLE KEY - Bypasses row level security
@@ -26,7 +26,13 @@ Deno.serve(async (req) => {
   );
 
   try {
-    const { data, error } = await supabaseClient
+    const { data: userData, error: userError } = await supabaseMachineClient
+      .from("users")
+      .select("display_name")
+      .eq("user_id", postRequest.requestor_id);
+    console.log({ userData, userError });
+
+    const { data, error } = await supabaseMachineClient
       .from("push_notification_subscribers")
       .select("subscription_token")
       // Zach's user id lol
@@ -39,7 +45,11 @@ Deno.serve(async (req) => {
         body: JSON.stringify({
           to: token.subscription_token,
           title: "Time for a daily Zach!",
-          body: "Cyrus wants to see you :)",
+          body: `${userData[0].display_name} wants to see you :)`,
+          data: {
+            type: "POST_REQUEST",
+            request_id: postRequest.id,
+          },
         }),
         headers: {
           host: "exp.host",
