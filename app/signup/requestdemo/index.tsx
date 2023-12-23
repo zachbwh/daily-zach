@@ -73,20 +73,22 @@ const RequestDemo: FC = () => {
               setShowSelfie(true);
             }}
           />
-          <LottieView
-            loop={false}
-            ref={lottieViewRef}
-            source={require("./Animation - 1702793477112.json")}
-            resizeMode="cover"
-            style={{
-              position: "absolute",
-              height: "100%",
-              width: "100%",
-              zIndex: 10,
-              flex: 1,
-              pointerEvents: "none",
-            }}
-          />
+          <View
+            pointerEvents="none"
+            style={{ position: "absolute", height: "100%", width: "100%" }}
+          >
+            <LottieView
+              loop={false}
+              ref={lottieViewRef}
+              source={require("./Animation - 1702793477112.json")}
+              resizeMode="cover"
+              style={{
+                zIndex: 10,
+                flex: 1,
+                pointerEvents: "none",
+              }}
+            />
+          </View>
         </View>
       </SafeAndroidView>
     );
