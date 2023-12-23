@@ -29,13 +29,12 @@ const Profile: FC = () => {
   const submit = useCallback(async () => {
     setLoading(true);
     console.log("submitting information");
-    const { error: upsertError } = await supabase
+    const { data: upsertData, error: upsertError } = await supabase
       .from("users")
-      .upsert({ display_name: name });
+      .update({ display_name: name })
+      .eq("id", user?.id);
     setLoading(false);
-    if (upsertError) {
-      console.log(upsertError);
-    }
+    console.log(upsertData, upsertError);
   }, [name]);
 
   const submitProfileImage = async (picture: ImageResult) => {
@@ -105,7 +104,6 @@ const Profile: FC = () => {
         }
       });
   }, []);
-  console.log(user);
   if (!user) {
     return (
       <View style={styles.loadingContainer}>
