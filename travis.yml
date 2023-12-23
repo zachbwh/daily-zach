@@ -1,0 +1,11 @@
+deploy:
+  provider: s3
+  access_key_id: AKIAIGWRXLWWJ2QAYE4A
+  secret_access_key: $AWS_SECRET_KEY
+  bucket: dailyzach-website
+  skip_cleanup: true
+  region: ap-southeast-2
+  local-dir: website
+  acl: public_read
+  on:
+    repo: zachbwh/daily-zach
