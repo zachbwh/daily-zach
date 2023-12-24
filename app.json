@@ -26,7 +26,21 @@
         "backgroundColor": "#ffffff"
       },
       "package": "io.zachhuxford.dailyzach",
-      "googleServicesJson": "./google-services.json"
+      "googleServicesJson": "./google-services.json",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "dailyzach.zachhuxford.io",
+              "pathPrefix": "/"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
