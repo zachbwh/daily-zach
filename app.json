@@ -17,7 +17,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "io.zachhuxford.dailyzach"
+      "bundleIdentifier": "io.zachhuxford.dailyzach",
+      "associatedDomains": ["applinks:dailyzach.zachhuxford.io"]
     },
     "android": {
       "adaptiveIcon": {
