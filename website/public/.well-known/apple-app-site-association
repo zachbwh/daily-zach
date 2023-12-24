@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "77P6332DNN.io.zachhuxford.dailyzach",
+        "paths": ["/password-reset", "/home/posts", "/home/posts/*"]
+      }
+    ]
+  }
+}
