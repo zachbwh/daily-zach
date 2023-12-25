@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
-import CustomButton, { buttonStyles } from "../../components/CustomButton";
+import CustomButton, { buttonStyles } from "@components/CustomButton";
 
 const CreateRequest: FC<{
   headerText: string;
@@ -15,21 +15,21 @@ const CreateRequest: FC<{
       <Text style={styles.header}>{headerText}</Text>
       <Text style={styles.subtitle}>{subtitleText}</Text>
       <View style={styles.ctaWrapper}>
-          <CustomButton
-            disabled={loading}
-            loading={loading}
-            onPress={() => {
-              setLoading(true);
-              try {
-                void onMakeRequest();
-              } catch (error) {
-                console.log("error creating a post request");
-                setLoading(false)
-              }
-            }}
-          >
-            <Text style={buttonStyles.primaryButtonText}>{ctaText}</Text>
-          </CustomButton>
+        <CustomButton
+          disabled={loading}
+          loading={loading}
+          onPress={() => {
+            setLoading(true);
+            try {
+              void onMakeRequest();
+            } catch (error) {
+              console.log("error creating a post request");
+              setLoading(false);
+            }
+          }}
+        >
+          <Text style={buttonStyles.primaryButtonText}>{ctaText}</Text>
+        </CustomButton>
       </View>
     </View>
   );
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   ctaWrapper: {
     flexGrow: 1,
     justifyContent: "flex-end",
-    paddingBottom: 48
+    paddingBottom: 48,
   },
 });
 

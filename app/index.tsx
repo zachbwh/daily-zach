@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react";
-import { supabase } from "../lib/supabase";
+import { supabase } from "@lib/supabase";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 

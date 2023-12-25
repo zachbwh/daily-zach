@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
 import { Camera, GalleryHorizontalEnd, User } from "lucide-react-native";
-import { usePushNotifications } from "../../lib/usePushNotifications";
+import { usePushNotifications } from "@lib/usePushNotifications";
 
 const Layout: React.FC = () => {
   const pn = usePushNotifications();

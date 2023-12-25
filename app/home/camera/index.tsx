@@ -1,10 +1,10 @@
-import { supabase } from "../../../lib/supabase";
+import { supabase } from "@lib/supabase";
 import * as FileSystem from "expo-file-system";
 import { decode } from "base64-arraybuffer";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import React from "react";
-import ViewFinder from "../../../components/Viewfinder";
+import ViewFinder from "@components/Viewfinder";
 import { ImageResult } from "expo-image-manipulator";
 
 const Camera: React.FC = () => {

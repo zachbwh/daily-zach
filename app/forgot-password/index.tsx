@@ -1,11 +1,11 @@
 import { MailIcon } from "lucide-react-native";
 import { FC, useCallback, useState } from "react";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "@lib/supabase";
 import { Alert, View, StyleSheet, Text } from "react-native";
 import { useRouter } from "expo-router";
-import SafeAndroidView from "../../components/SafeAndroidView";
-import CustomTextInput from "../../components/CustomTextInput";
-import CustomButton, { buttonStyles } from "../../components/CustomButton";
+import SafeAndroidView from "@components/SafeAndroidView";
+import CustomTextInput from "@components/CustomTextInput";
+import CustomButton, { buttonStyles } from "@components/CustomButton";
 
 const Login: FC = () => {
   const [email, setEmail] = useState("");

@@ -1,5 +1,5 @@
 import { FC, useEffect, useMemo, useState } from "react";
-import { supabase } from "../../../lib/supabase";
+import { supabase } from "@lib/supabase";
 import { StyleSheet, SectionList, TouchableOpacity, Image } from "react-native";
 import { Heading, Pressable, View } from "@gluestack-ui/themed";
 import { Link } from "expo-router";
@@ -81,7 +81,10 @@ const PostGrid: FC = () => {
               {item.posts.map((post) => {
                 return (
                   <Link
-                    href={{ pathname: "/home/posts/[id]", params: { id: post.id } }}
+                    href={{
+                      pathname: "/home/posts/[id]",
+                      params: { id: post.id },
+                    }}
                     asChild
                     style={styles.imageContainer}
                     key={post.id}

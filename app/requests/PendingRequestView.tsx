@@ -2,7 +2,7 @@ import { FC } from "react";
 import { View, StyleSheet, Text, ActivityIndicator } from "react-native";
 import { RequestStatus } from "./types";
 import RequestProgress from "./RequestProgress";
-import CustomButton, { buttonStyles } from "../../components/CustomButton";
+import CustomButton, { buttonStyles } from "@components/CustomButton";
 
 const PendingRequest: FC<{
   headerText: string;

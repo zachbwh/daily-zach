@@ -1,12 +1,10 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, View, Text } from "react-native";
-import { supabase } from "../../../../lib/supabase";
-import CustomTextInput from "../../../../components/CustomTextInput";
-import CustomButton, {
-  buttonStyles,
-} from "../../../../components/CustomButton";
-import ProfileImage from "../../../../components/ProfileImage";
-import ViewFinder from "../../../../components/Viewfinder";
+import { supabase } from "@lib/supabase";
+import CustomTextInput from "@components/CustomTextInput";
+import CustomButton, { buttonStyles } from "@components/CustomButton";
+import ProfileImage from "@components/ProfileImage";
+import ViewFinder from "@components/Viewfinder";
 import { ImageResult } from "expo-image-manipulator";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";

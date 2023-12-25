@@ -1,11 +1,11 @@
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "lucide-react-native";
 import { FC, useCallback, useEffect, useState } from "react";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "@lib/supabase";
 import { Alert, TouchableOpacity, View, StyleSheet, Text } from "react-native";
 import { useRouter } from "expo-router";
-import SafeAndroidView from "../../components/SafeAndroidView";
-import CustomTextInput from "../../components/CustomTextInput";
-import CustomButton, { buttonStyles } from "../../components/CustomButton";
+import SafeAndroidView from "@components/SafeAndroidView";
+import CustomTextInput from "@components/CustomTextInput";
+import CustomButton, { buttonStyles } from "@components/CustomButton";
 
 const Signup: FC = () => {
   const [email, setEmail] = useState("");
@@ -80,9 +80,7 @@ const Signup: FC = () => {
               router.replace("/login");
             }}
           >
-            <Text style={[buttonStyles.secondaryButtonText]}>
-              Log in
-            </Text>
+            <Text style={[buttonStyles.secondaryButtonText]}>Log in</Text>
           </CustomButton>
         </View>
       </View>
@@ -110,7 +108,7 @@ const styles = StyleSheet.create({
   },
   secondaryActionsWrapper: {
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
   },
   secondaryButton: {
     alignItems: "flex-start",

@@ -7,7 +7,7 @@ import {
   ImageSourcePropType,
   Text,
 } from "react-native";
-import CustomButton, { buttonStyles } from "../../components/CustomButton";
+import CustomButton, { buttonStyles } from "@components/CustomButton";
 import { router } from "expo-router";
 
 const RequestComplete: FC<{

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { supabase } from "../../../lib/supabase";
+import { supabase } from "@lib/supabase";
 import { Alert, StyleSheet, View } from "react-native";
 import Button from "./Button";
 import { LogOut, Trash, User } from "lucide-react-native";

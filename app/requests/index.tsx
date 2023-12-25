@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
-import SafeAndroidView from "../../components/SafeAndroidView";
+import SafeAndroidView from "@components/SafeAndroidView";
 import PendingRequest from "./PendingRequestView";
 import CreateRequest from "./CreateRequestView";
 import { RequestStatus } from "./types";

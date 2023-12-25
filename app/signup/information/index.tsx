@@ -1,11 +1,11 @@
 import { FC, useCallback, useEffect, useState } from "react";
-import { supabase } from "../../../lib/supabase";
+import { supabase } from "@lib/supabase";
 import { View, StyleSheet, Text, Keyboard } from "react-native";
 import { useRouter } from "expo-router";
-import SafeAndroidView from "../../../components/SafeAndroidView";
-import CustomTextInput from "../../../components/CustomTextInput";
-import CustomButton, { buttonStyles } from "../../../components/CustomButton";
-import PillSelector from "../../../components/PillSelector";
+import SafeAndroidView from "@components/SafeAndroidView";
+import CustomTextInput from "@components/CustomTextInput";
+import CustomButton, { buttonStyles } from "@components/CustomButton";
+import PillSelector from "@components/PillSelector";
 
 enum Vertical {
   Friend = "Friend",
@@ -31,32 +31,33 @@ const Information: FC = () => {
   }, [name, vertical]);
 
   useEffect(() => {
-    Keyboard.dismiss()
-  }, [vertical])
+    Keyboard.dismiss();
+  }, [vertical]);
 
   const submit = useCallback(async () => {
     if (!nameComplete) {
       if (name) {
         setNameComplete(true);
-        Keyboard.dismiss()
+        Keyboard.dismiss();
       } else {
         setError("Please enter a name");
       }
     } else {
       if (vertical) {
-        setLoading(true)
-        console.log("submitting information")
+        setLoading(true);
+        console.log("submitting information");
         const { error: upsertError } = await supabase
           .from("users")
           .upsert({ display_name: name, vertical, is_zach: false });
-        setLoading(false)
+        setLoading(false);
         if (upsertError) {
-          console.log(upsertError)
-          setError("A problem ocurred, please try again later or contact customer support (Zach).")
+          console.log(upsertError);
+          setError(
+            "A problem ocurred, please try again later or contact customer support (Zach)."
+          );
         } else {
-          router.replace("/signup/profileimage")
+          router.replace("/signup/profileimage");
         }
-
       } else {
         setError("Please tell me how you know me");
       }
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "#CCCCCC",
-    paddingTop: 8
+    paddingTop: 8,
   },
 });
 

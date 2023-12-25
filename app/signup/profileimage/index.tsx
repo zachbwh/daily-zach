@@ -1,10 +1,10 @@
 import { FC, useState } from "react";
-import { supabase } from "../../../lib/supabase";
+import { supabase } from "@lib/supabase";
 import { View, StyleSheet, Text } from "react-native";
 import { useRouter } from "expo-router";
-import SafeAndroidView from "../../../components/SafeAndroidView";
-import CustomButton, { buttonStyles } from "../../../components/CustomButton";
-import ViewFinder from "../../../components/Viewfinder";
+import SafeAndroidView from "@components/SafeAndroidView";
+import CustomButton, { buttonStyles } from "@components/CustomButton";
+import ViewFinder from "@components/Viewfinder";
 import { ImageResult } from "expo-image-manipulator";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
