@@ -47,15 +47,17 @@ const Login: FC = () => {
           >
             <Text style={buttonStyles.secondaryButtonText}>Try again</Text>
           </CustomButton>
-          <CustomButton
-            type="secondary"
-            wrapperStyle={styles.secondaryButton}
-            onPress={() => {
-              router.replace("/login");
-            }}
-          >
-            <Text style={buttonStyles.secondaryButtonText}>Back to Login</Text>
-          </CustomButton>
+          {router.canGoBack() && (
+            <CustomButton
+              type="secondary"
+              wrapperStyle={styles.secondaryButton}
+              onPress={() => {
+                router.back();
+              }}
+            >
+              <Text style={buttonStyles.secondaryButtonText}>Back</Text>
+            </CustomButton>
+          )}
         </View>
       </View>
     </SafeAndroidView>;
@@ -85,7 +87,7 @@ const Login: FC = () => {
             type="secondary"
             wrapperStyle={styles.secondaryButton}
             onPress={() => {
-              router.replace("/login");
+              router.push("/login");
             }}
           >
             <Text style={buttonStyles.secondaryButtonText}>Back to Login</Text>

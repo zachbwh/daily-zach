@@ -71,13 +71,23 @@ const Login: FC = () => {
             type="secondary"
             wrapperStyle={styles.secondaryButton}
             onPress={() => {
-              router.replace("/signup");
+              router.push("/signup");
             }}
           >
-            <Text style={buttonStyles.secondaryButtonText}>Create an Account</Text>
+            <Text style={buttonStyles.secondaryButtonText}>
+              Create an Account
+            </Text>
           </CustomButton>
-          <CustomButton type="secondary" wrapperStyle={styles.secondaryButton}>
-            <Text style={buttonStyles.secondaryButtonText}>Forgot Password?</Text>
+          <CustomButton
+            type="secondary"
+            wrapperStyle={styles.secondaryButton}
+            onPress={() => {
+              router.push("/forgot-password");
+            }}
+          >
+            <Text style={buttonStyles.secondaryButtonText}>
+              Forgot Password?
+            </Text>
           </CustomButton>
         </View>
       </View>
