@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect, useRef, useState } from "react";
-import { supabase } from "@lib/supabase";
 import {
+  ActivityIndicator,
   Keyboard,
   LayoutAnimation,
   NativeModules,
@@ -10,15 +10,14 @@ import {
 } from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
 import ImagePreview from "./ImagePreview";
-import { default as Comments, Comment } from "./Comments";
+import { default as Comments } from "./Comments";
 import CommentInput from "./CommentInput";
 import { usePost } from "@lib/react-query/posts";
-
-type Post = {
-  id: string;
-  image_url: string;
-  inserted_at: string;
-};
+import {
+  Comment,
+  useInsertComment,
+  usePostComments,
+} from "@lib/react-query/comments";
 
 const { UIManager } = NativeModules;
 
@@ -27,8 +26,9 @@ UIManager.setLayoutAnimationEnabledExperimental &&
 
 const Post: FC = () => {
   const { id: postId } = useLocalSearchParams();
-  const [comments, setComments] = useState<Comment[]>([]);
+  const { data: comments } = usePostComments(postId as string);
   const { data: post } = usePost(postId as string);
+  const { mutate } = useInsertComment();
 
   const submitComment = useCallback(
     async (text: string) => {
@@ -37,27 +37,7 @@ const Post: FC = () => {
         parent_id: null,
         text,
       };
-      setComments([
-        ...comments,
-        {
-          id: "temp",
-          user_id: "temp",
-          created_at: new Date().toISOString(),
-          ...commentData,
-        },
-      ]);
-      const { error: insertError, data: insertData } = await supabase
-        .from("comments")
-        .insert(commentData);
-      if (insertError) {
-        console.error("failed to upload comment data", {
-          insertError,
-          commentData,
-        });
-        // Handle error
-        return;
-      }
-      console.log("inserted comment into db", insertData);
+      mutate(commentData);
     },
     [comments]
   );
@@ -89,7 +69,11 @@ const Post: FC = () => {
       {post && (
         <ImagePreview keyboardOpen={keyboardOpen} imageUrl={post.image_url} />
       )}
-      <Comments scrollRef={scrollRef} comments={comments} />
+      {comments ? (
+        <Comments scrollRef={scrollRef} comments={comments} />
+      ) : (
+        <ActivityIndicator color="white" />
+      )}
       <CommentInput submitComment={submitComment} />
     </View>
   );

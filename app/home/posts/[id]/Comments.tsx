@@ -1,18 +1,10 @@
 import { FC } from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";
+import { Comment } from "@lib/react-query/comments";
 
 type CommentsProps = {
   scrollRef: React.RefObject<ScrollView>;
   comments: Comment[];
-};
-
-export type Comment = {
-  id: string;
-  post_id: string;
-  user_id: string;
-  parent_id: string | null;
-  created_at: string;
-  text: string;
 };
 
 const Comments: FC<CommentsProps> = ({ scrollRef, comments }) => {
