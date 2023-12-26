@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";
-import { Comment } from "@lib/react-query/comments";
+import { Comment } from "@lib/react-query/comment";
 
 type CommentsProps = {
   scrollRef: React.RefObject<ScrollView>;

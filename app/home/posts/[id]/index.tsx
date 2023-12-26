@@ -17,7 +17,7 @@ import {
   Comment,
   useInsertComment,
   usePostComments,
-} from "@lib/react-query/comments";
+} from "@lib/react-query/comment";
 
 const { UIManager } = NativeModules;
 
