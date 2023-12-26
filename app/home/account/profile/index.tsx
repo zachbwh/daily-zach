@@ -6,10 +6,7 @@ import CustomButton, { buttonStyles } from "@components/CustomButton";
 import ProfileImage from "@components/ProfileImage";
 import ViewFinder from "@components/Viewfinder";
 import { ImageResult } from "expo-image-manipulator";
-import "react-native-get-random-values";
-import { v4 as uuidv4 } from "uuid";
-import { decode } from "base64-arraybuffer";
-import * as FileSystem from "expo-file-system";
+import { updateProfileImage } from "@lib/updateProfileImage";
 
 type User = {
   id: string;
@@ -37,54 +34,14 @@ const Profile: FC = () => {
 
   const submitProfileImage = async (picture: ImageResult) => {
     setLoading(true);
-    const url = picture.uri;
-    console.log(url);
-
-    const postId = uuidv4();
-    const fileName = `${postId}.jpeg`;
-    const base64 = await FileSystem.readAsStringAsync(picture.uri, {
-      encoding: "base64",
-    });
-
-    const arrayBuffer = decode(base64 || "");
-
-    const { data, error } = await supabase.storage
-      .from("users")
-      .upload(fileName, arrayBuffer, {
-        contentType: "image/jpeg",
-      });
-    if (error) {
-      console.error("failed to upload image", error);
-      // Handle error
-      return;
-    }
-    console.log("uploaded image", data);
-
-    const { data: publicUrlData } = supabase.storage
-      .from("users")
-      .getPublicUrl(fileName);
-
-    const sessionResp = await supabase.auth.getSession();
-    if (sessionResp.error) {
-      console.log("failed to get session ", sessionResp.error);
-    }
-    const session = sessionResp.data.session;
-    if (session === null) {
-      console.log("session is null");
-      return;
-    }
-    console.log("submitting information");
-    const { error: upsertError } = await supabase
-      .from("users")
-      .update({ profile_image_url: publicUrlData.publicUrl })
-      .eq("user_id", session.user.id);
-    setLoading(false);
-    if (upsertError) {
-      console.log(upsertError);
-    }
-    setViewfinderOn(false);
-    if (user) {
-      setUser({ ...user, profile_image_url: publicUrlData.publicUrl });
+    try {
+      const publicUrl = await updateProfileImage(picture);
+      setViewfinderOn(false);
+      if (user) {
+        setUser({ ...user, profile_image_url: publicUrl });
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
