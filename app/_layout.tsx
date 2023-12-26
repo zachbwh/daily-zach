@@ -3,9 +3,8 @@ import { config } from "@gluestack-ui/config";
 import { View, StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Stack } from "expo-router";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-const queryClient = new QueryClient();
+import { QueryClientProvider } from "@tanstack/react-query";
+import queryClient from "@lib/react-query/client";
 
 const Layout: React.FC = () => {
   return (
