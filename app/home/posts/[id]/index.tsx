@@ -12,6 +12,7 @@ import { Stack, useLocalSearchParams } from "expo-router";
 import ImagePreview from "./ImagePreview";
 import { default as Comments, Comment } from "./Comments";
 import CommentInput from "./CommentInput";
+import { usePost } from "@lib/react-query/posts";
 
 type Post = {
   id: string;
@@ -25,34 +26,9 @@ UIManager.setLayoutAnimationEnabledExperimental &&
   UIManager.setLayoutAnimationEnabledExperimental(true);
 
 const Post: FC = () => {
-  const [post, setPost] = useState<Post>();
   const { id: postId } = useLocalSearchParams();
-  useEffect(() => {
-    supabase
-      .from("posts")
-      .select("id, image_url, inserted_at")
-      .eq("id", postId)
-      .limit(1)
-      .then((data) => {
-        if (data.data) {
-          setPost(data.data[0] as Post);
-        }
-      });
-  }, []);
-
   const [comments, setComments] = useState<Comment[]>([]);
-  useEffect(() => {
-    supabase
-      .from("comments")
-      .select("id, post_id, user_id, parent_id, created_at, text")
-      .eq("post_id", postId)
-      .order("created_at", { ascending: false })
-      .then((data) => {
-        if (data.data) {
-          setComments(data.data as Comment[]);
-        }
-      });
-  }, []);
+  const { data: post } = usePost(postId as string);
 
   const submitComment = useCallback(
     async (text: string) => {

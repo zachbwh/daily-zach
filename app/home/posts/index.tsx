@@ -1,16 +1,11 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useMemo } from "react";
 import { supabase } from "@lib/supabase";
 import { StyleSheet, SectionList, TouchableOpacity, Image } from "react-native";
 import { Heading, Pressable, View } from "@gluestack-ui/themed";
 import { Link } from "expo-router";
 import { format } from "date-fns";
 import { AlarmClock } from "lucide-react-native";
-
-type Post = {
-  id: string;
-  image_url: string;
-  inserted_at: string;
-};
+import { Post, usePosts } from "@lib/react-query/posts";
 
 type SectionPost = {
   posts: Post[];
@@ -19,17 +14,7 @@ type SectionPost = {
 const PostSectionList = SectionList<SectionPost>;
 
 const PostGrid: FC = () => {
-  const [posts, setPosts] = useState<Post[]>();
-
-  useEffect(() => {
-    supabase
-      .from("posts")
-      .select("id, image_url, inserted_at")
-      .order("inserted_at", { ascending: false })
-      .then((data) => {
-        setPosts(data.data as Post[]);
-      });
-  }, []);
+  const { data: posts } = usePosts();
 
   const groupedPosts = useMemo(() => {
     if (posts) {
