@@ -1,5 +1,5 @@
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "lucide-react-native";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import { supabase } from "@lib/supabase";
 import { Alert, TouchableOpacity, View, StyleSheet, Text } from "react-native";
 import { useRouter } from "expo-router";
