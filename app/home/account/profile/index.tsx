@@ -1,35 +1,34 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, View, Text } from "react-native";
-import { supabase } from "@lib/supabase";
 import CustomTextInput from "@components/CustomTextInput";
 import CustomButton, { buttonStyles } from "@components/CustomButton";
 import ProfileImage from "@components/ProfileImage";
 import ViewFinder from "@components/Viewfinder";
 import { ImageResult } from "expo-image-manipulator";
 import { updateProfileImage } from "@lib/updateProfileImage";
-
-type User = {
-  id: string;
-  user_id: string;
-  display_name: string;
-  profile_image_url?: string;
-};
+import { useUpdateUser, useUser } from "@lib/react-query/user";
 
 const Profile: FC = () => {
   const [name, setName] = useState<string>("");
-  const [user, setUser] = useState<User>();
   const [viewfinderOn, setViewfinderOn] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const { data: user, isLoading } = useUser();
+  useEffect(() => {
+    if (user) {
+      setName(user.display_name);
+    }
+  }, [user]);
+  const { mutate: updateUser } = useUpdateUser();
+
   const submit = useCallback(async () => {
     setLoading(true);
-    console.log("submitting information");
-    const { data: upsertData, error: upsertError } = await supabase
-      .from("users")
-      .update({ display_name: name })
-      .eq("id", user?.id);
+    try {
+      await updateUser({ user: { display_name: name }, userId: user?.id });
+    } catch (error) {
+      console.error(error);
+    }
     setLoading(false);
-    console.log(upsertData, upsertError);
   }, [name]);
 
   const submitProfileImage = async (picture: ImageResult) => {
@@ -37,29 +36,12 @@ const Profile: FC = () => {
     try {
       const publicUrl = await updateProfileImage(picture);
       setViewfinderOn(false);
-      if (user) {
-        setUser({ ...user, profile_image_url: publicUrl });
-      }
     } catch (error) {
       console.error(error);
     }
   };
 
-  useEffect(() => {
-    supabase
-      .from("users")
-      .select("id, user_id, display_name, profile_image_url")
-      .limit(1)
-      .then((data) => {
-        console.log(data);
-        if (data.data) {
-          const user = data.data[0];
-          setUser(user);
-          setName(user.display_name || "");
-        }
-      });
-  }, []);
-  if (!user) {
+  if (!isLoading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator color="white" />

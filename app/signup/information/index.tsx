@@ -1,11 +1,11 @@
 import { FC, useCallback, useEffect, useState } from "react";
-import { supabase } from "@lib/supabase";
 import { View, StyleSheet, Text, Keyboard } from "react-native";
 import { useRouter } from "expo-router";
 import SafeAndroidView from "@components/SafeAndroidView";
 import CustomTextInput from "@components/CustomTextInput";
 import CustomButton, { buttonStyles } from "@components/CustomButton";
 import PillSelector from "@components/PillSelector";
+import { useCreateUser } from "@lib/react-query/user";
 
 enum Vertical {
   Friend = "Friend",
@@ -34,6 +34,8 @@ const Information: FC = () => {
     Keyboard.dismiss();
   }, [vertical]);
 
+  const { mutate: createUser } = useCreateUser();
+
   const submit = useCallback(async () => {
     if (!nameComplete) {
       if (name) {
@@ -46,18 +48,16 @@ const Information: FC = () => {
       if (vertical) {
         setLoading(true);
         console.log("submitting information");
-        const { error: upsertError } = await supabase
-          .from("users")
-          .upsert({ display_name: name, vertical, is_zach: false });
-        setLoading(false);
-        if (upsertError) {
-          console.log(upsertError);
+        try {
+          await createUser({ display_name: name, vertical, is_zach: false });
+          router.replace("/signup/profileimage");
+        } catch (error) {
+          console.error(error);
           setError(
             "A problem ocurred, please try again later or contact customer support (Zach)."
           );
-        } else {
-          router.replace("/signup/profileimage");
         }
+        setLoading(false);
       } else {
         setError("Please tell me how you know me");
       }
