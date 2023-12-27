@@ -55,10 +55,11 @@ export const usePostRequest = (requestId: string) => {
 
 export const useInsertPostRequest = () => {
   return useMutation({
-    mutationFn: async (
-      postRequest: Omit<PostRequest, "id" | "created_at" | "requestor_id">
-    ) => {
-      return supabase.from("post_requests").insert(postRequest);
+    mutationFn: async () => {
+      return supabase
+        .from("post_requests")
+        .insert({})
+        .select("id, created_at, requestor_id, status, post_id");
     },
   });
 };

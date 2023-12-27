@@ -1,11 +1,11 @@
 import { FC, useMemo } from "react";
-import { supabase } from "@lib/supabase";
 import { StyleSheet, SectionList, TouchableOpacity, Image } from "react-native";
 import { Heading, Pressable, View } from "@gluestack-ui/themed";
 import { Link } from "expo-router";
 import { format } from "date-fns";
 import { AlarmClock } from "lucide-react-native";
 import { Post, usePosts } from "@lib/react-query/posts";
+import { useInsertPostRequest } from "@lib/react-query/post-request";
 
 type SectionPost = {
   posts: Post[];
@@ -15,6 +15,7 @@ const PostSectionList = SectionList<SectionPost>;
 
 const PostGrid: FC = () => {
   const { data: posts } = usePosts();
+  const { mutate: requestPost } = useInsertPostRequest();
 
   const groupedPosts = useMemo(() => {
     if (posts) {
@@ -38,21 +39,6 @@ const PostGrid: FC = () => {
       return { title: index, data: [{ posts }] };
     });
   }, [groupedPosts]);
-
-  async function requestPost() {
-    const { error: insertError, data: insertData } = await supabase
-      .from("post_requests")
-      .insert({});
-    if (insertError) {
-      console.error("failed to insert post request data", {
-        insertError,
-        insertData,
-      });
-      // Handle error
-      return;
-    }
-    console.log("inserted post request into db", insertData);
-  }
 
   return (
     <View style={styles.container}>
@@ -93,7 +79,7 @@ const PostGrid: FC = () => {
         )}
       />
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={requestPost}>
+        <TouchableOpacity style={styles.button} onPress={() => requestPost()}>
           <AlarmClock style={styles.button} />
         </TouchableOpacity>
       </View>
