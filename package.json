@@ -12,6 +12,7 @@
     "@gluestack-style/react": "^1.0.1",
     "@gluestack-ui/themed": "^1.0.1",
     "@react-native-async-storage/async-storage": "1.18.2",
+    "@sentry/react-native": "^5.15.2",
     "@supabase/supabase-js": "^2.38.0",
     "@tanstack/react-query": "^5.14.6",
     "base64-arraybuffer": "^1.0.2",
