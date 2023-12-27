@@ -1,8 +1,6 @@
 import { supabase } from "@lib/supabase";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import queryClient from "./client";
-import "react-native-get-random-values";
-import { v4 as uuidv4 } from "uuid";
 
 export type User = {
   id: string;
