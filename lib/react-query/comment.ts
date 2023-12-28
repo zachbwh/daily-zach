@@ -20,6 +20,7 @@ export const usePostComments = (postId: string) => {
       const { data } = await supabase
         .from("comments")
         .select("id, post_id, user_id, parent_id, created_at, text")
+        .eq("post_id", postId)
         .order("created_at", { ascending: false });
       return data;
     },
