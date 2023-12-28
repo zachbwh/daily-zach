@@ -66,4 +66,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Layout;
+export default Sentry.wrap(Layout);
