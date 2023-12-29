@@ -6,14 +6,14 @@ import ProfileImage from "@components/ProfileImage";
 import ViewFinder from "@components/Viewfinder";
 import { ImageResult } from "expo-image-manipulator";
 import { updateProfileImage } from "@lib/updateProfileImage";
-import { useUpdateUser, useUser } from "@lib/react-query/user";
+import { useUpdateUser, useCurrentUser } from "@lib/react-query/user";
 
 const Profile: FC = () => {
   const [name, setName] = useState<string>("");
   const [viewfinderOn, setViewfinderOn] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { data: user, isLoading } = useUser();
+  const { data: user, isLoading } = useCurrentUser();
   useEffect(() => {
     if (user) {
       setName(user.display_name);
