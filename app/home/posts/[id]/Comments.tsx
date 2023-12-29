@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Comment } from "@lib/react-query/comment";
 import ProfileImage from "@components/ProfileImage";
 import { useUser } from "@lib/react-query/user";
-import { formatDistanceToNow } from "date-fns";
+import useFormatDistanceToNow from "@lib/useFormatDistanceToNow";
 
 type CommentsProps = {
   scrollRef: React.RefObject<ScrollView>;
@@ -13,15 +13,13 @@ type CommentsProps = {
 const CommentView: FC<{ comment: Comment }> = ({ comment }) => {
   const { data: user, refetch } = useUser(comment.user_id);
   const date = new Date(comment.created_at);
-  const formattedDate = `${formatDistanceToNow(date, {
-    includeSeconds: true,
-  })} ago`;
+  const formattedDate = useFormatDistanceToNow(date);
+
   useEffect(() => {
     refetch();
   }, []);
   const profileImage = user?.profile_image_url;
   const displayName = user?.display_name || "";
-  console.log(profileImage);
   return (
     <View style={styles.commentContainer}>
       <View>
