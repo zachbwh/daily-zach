@@ -2,7 +2,7 @@ import { FC, useMemo } from "react";
 import { StyleSheet, SectionList, TouchableOpacity, Image } from "react-native";
 import { Heading, Pressable, View } from "@gluestack-ui/themed";
 import { Link } from "expo-router";
-import { format } from "date-fns";
+import format from "date-fns/format";
 import { AlarmClock } from "lucide-react-native";
 import { Post, usePosts } from "@lib/react-query/posts";
 import { useInsertPostRequest } from "@lib/react-query/post-request";
