@@ -13,15 +13,17 @@ export type Comment = {
   text: string;
 };
 
+const SELECT_COMMENTS = "id, post_id, user_id, parent_id, created_at, text";
+
 export const usePostComments = (postId: string) => {
   return useQuery({
     queryKey: ["comments", postId],
     queryFn: async () => {
       const { data } = await supabase
         .from("comments")
-        .select("id, post_id, user_id, parent_id, created_at, text")
+        .select(SELECT_COMMENTS)
         .eq("post_id", postId)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: true });
       return data;
     },
   });
@@ -30,15 +32,14 @@ export const usePostComments = (postId: string) => {
 export const useInsertComment = () => {
   return useMutation({
     mutationFn: async (
-      comment: Omit<Comment, "id" | "user_id" | "created_at">
+      comment: Omit<Comment, "id" | "user_id" | "created_at" | "users">
     ) => {
-      return supabase
-        .from("comments")
-        .insert(comment)
-        .select("id, post_id, user_id, parent_id, created_at, text");
+      return supabase.from("comments").insert(comment).select(SELECT_COMMENTS);
     },
     onMutate: async (variables) => {
-      await queryClient.cancelQueries({ queryKey: ["comments"] });
+      await queryClient.cancelQueries({
+        queryKey: ["comments", variables.post_id],
+      });
       const userId = (await supabase.auth.getSession()).data.session?.user.id!;
 
       const optimisticComment: Comment = {
@@ -50,25 +51,31 @@ export const useInsertComment = () => {
         text: variables.text,
       };
       console.log("Optimistic Comment", optimisticComment);
-      queryClient.setQueryData(["comments"], (old: Comment[]) => [
-        optimisticComment,
-        ...old,
-      ]);
+      queryClient.setQueryData(
+        ["comments", variables.post_id],
+        (old: Comment[]) => [...old, optimisticComment]
+      );
 
       return { optimisticCommentId: optimisticComment.id };
     },
     onSuccess: (result, variables, context) => {
-      console.log("Sucess Response", result.data);
-      queryClient.setQueryData(["comments"], (old: Comment[]) =>
-        old.map((comment) =>
-          comment.id === context.optimisticCommentId ? result.data![0] : comment
-        )
+      console.log("Sucess Response", result);
+      queryClient.setQueryData(
+        ["comments", variables.post_id],
+        (old: Comment[]) =>
+          old.map((comment) =>
+            comment.id === context.optimisticCommentId
+              ? result.data![0]
+              : comment
+          )
       );
     },
     onError: (error, variables, context) => {
       // Remove optimistic todo from the todos list
-      queryClient.setQueryData(["comments"], (old: Comment[]) =>
-        old.filter((comment) => comment.id !== context?.optimisticCommentId)
+      queryClient.setQueryData(
+        ["comments", variables.post_id],
+        (old: Comment[]) =>
+          old.filter((comment) => comment.id !== context?.optimisticCommentId)
       );
     },
   });

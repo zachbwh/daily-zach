@@ -4,18 +4,21 @@ import {
   View,
   Image,
   ImageSourcePropType,
+  ViewStyle,
 } from "react-native";
 import { User } from "lucide-react-native";
 import React from "react";
 
 type ProfileImageProps = {
   imageSource: ImageSourcePropType | null;
+  style?: ViewStyle;
   onPress?: () => void;
 };
 
 const ProfileImage: React.FC<ProfileImageProps> = ({
   imageSource,
   onPress,
+  style,
 }) => {
   let profileImage = (
     <View style={styles.logoContainer}>
@@ -23,14 +26,20 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
     </View>
   );
   if (imageSource) {
-    profileImage = <Image style={styles.image} source={imageSource} />;
+    profileImage = (
+      <Image style={styles.image} source={imageSource} resizeMethod="resize" />
+    );
   }
 
-  return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
-      {profileImage}
-    </TouchableOpacity>
-  );
+  if (onPress) {
+    return (
+      <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
+        {profileImage}
+      </TouchableOpacity>
+    );
+  }
+
+  return <View style={[styles.container, style]}>{profileImage}</View>;
 };
 
 export default ProfileImage;
