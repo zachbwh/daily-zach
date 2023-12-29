@@ -6,18 +6,21 @@ import {
   NativeModules,
   ScrollView,
   StyleSheet,
+  TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
 import ImagePreview from "./ImagePreview";
 import { default as Comments } from "./Comments";
-import CommentInput from "./CommentInput";
 import { usePost } from "@lib/react-query/posts";
 import {
   Comment,
   useInsertComment,
   usePostComments,
 } from "@lib/react-query/comment";
+import CustomTextInput from "@components/CustomTextInput";
+import { SendHorizontal } from "lucide-react-native";
 
 const { UIManager } = NativeModules;
 
@@ -29,18 +32,20 @@ const Post: FC = () => {
   const { data: comments } = usePostComments(postId as string);
   const { data: post } = usePost(postId as string);
   const { mutate } = useInsertComment();
+  const [inputText, setInputText] = useState("");
+  const inputRef = useRef<TextInput>(null);
 
-  const submitComment = useCallback(
-    async (text: string) => {
+  const submitComment = useCallback(async () => {
+    if (inputText) {
       const commentData: Omit<Comment, "id" | "user_id" | "created_at"> = {
         post_id: postId as string,
         parent_id: null,
-        text,
+        text: inputText,
       };
+      inputRef.current?.clear();
       mutate(commentData);
-    },
-    [comments]
-  );
+    }
+  }, [comments, inputText]);
 
   const scrollRef = useRef<ScrollView>(null);
   const [keyboardOpen, setKeyboardOpen] = useState(false);
@@ -74,7 +79,16 @@ const Post: FC = () => {
       ) : (
         <ActivityIndicator color="white" />
       )}
-      <CommentInput submitComment={submitComment} />
+      <CustomTextInput
+        value={inputText}
+        onChangeText={setInputText}
+        ref={inputRef}
+        iconRight={
+          <TouchableOpacity onPress={submitComment}>
+            <SendHorizontal color="white" />
+          </TouchableOpacity>
+        }
+      />
     </View>
   );
 };

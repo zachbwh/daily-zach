@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import {
   StyleProp,
   StyleSheet,
@@ -7,13 +8,14 @@ import {
   ViewStyle,
 } from "react-native";
 
-const CustomTextInput: React.FC<
+const CustomTextInput = forwardRef<
+  TextInput,
   TextInputProps & {
     icon?: JSX.Element;
     iconRight?: JSX.Element;
     wrapperStyle?: StyleProp<ViewStyle>;
   }
-> = (props) => {
+>((props, ref) => {
   return (
     <View style={styles.inputWrapper}>
       {props.icon && <View style={styles.iconWrapper}>{props.icon}</View>}
@@ -22,13 +24,14 @@ const CustomTextInput: React.FC<
         style={styles.input}
         underlineColorAndroid="transparent"
         placeholderTextColor="#AAAAAA"
+        ref={ref}
       />
       {props.iconRight && (
         <View style={styles.iconWrapper}>{props.iconRight}</View>
       )}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   inputWrapper: {
