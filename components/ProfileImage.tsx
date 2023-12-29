@@ -22,7 +22,7 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
 }) => {
   let profileImage = (
     <View style={styles.logoContainer}>
-      <User style={styles.image} size="80%" />
+      <User style={{ ...styles.image, color: "white" }} size="80%" />
     </View>
   );
   if (imageSource) {
@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
-    color: "white",
     backgroundColor: "#222222",
     borderRadius: 50,
     overflow: "hidden",
