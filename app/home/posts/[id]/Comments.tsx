@@ -37,7 +37,7 @@ const CommentView: FC<{ comment: Comment }> = ({ comment }) => {
           <Text style={styles.name}>{displayName}</Text>
           <Text style={styles.time}>{formattedDate}</Text>
         </View>
-        <Text>{comment.text}</Text>
+        <Text style={styles.text}>{comment.text}</Text>
       </View>
     </View>
   );
@@ -72,8 +72,14 @@ const styles = StyleSheet.create({
   name: {
     fontWeight: "600",
     paddingRight: 8,
+    color: "#FFFFFF",
   },
-  time: {},
+  time: {
+    color: "#AAAAAA",
+  },
+  text: {
+    color: "#FFFFFF",
+  },
   image: {
     width: 56,
     height: 56,

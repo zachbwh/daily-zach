@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
 import ImagePreview from "./ImagePreview";
-import { default as Comments } from "./Comments";
+import Comments from "./Comments";
 import { usePost } from "@lib/react-query/posts";
 import {
   Comment,
@@ -95,9 +95,10 @@ const Post: FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 12,
-    marginTop: 32,
+    padding: 8,
+    paddingTop: 32,
     flex: 1,
+    backgroundColor: "#000000",
   },
 });
 
