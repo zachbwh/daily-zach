@@ -62,7 +62,7 @@ const Account: FC = () => {
       <View style={styles.tile}>
         <Button
           onPress={() => {
-            router.push("/home/account/profile");
+            router.push("/account/profile");
           }}
           label="Manage Profile"
           icon={<User style={styles.icon} />}

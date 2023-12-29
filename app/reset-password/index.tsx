@@ -27,7 +27,7 @@ const Login: FC = () => {
     if (error) Alert.alert(error.message);
     setLoading(false);
 
-    if (!error) router.replace("/home/posts");
+    if (!error) router.replace("/posts");
   }
 
   const submit = useCallback(() => {

@@ -55,7 +55,7 @@ const RequestDemo: FC = () => {
         <RequestComplete
           image={demoImage}
           onNext={() => {
-            router.replace("/home/posts");
+            router.replace("/posts");
           }}
         />
       </SafeAndroidView>

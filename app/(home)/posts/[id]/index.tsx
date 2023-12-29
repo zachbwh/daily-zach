@@ -2,8 +2,10 @@ import { FC, useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Keyboard,
+  KeyboardAvoidingView,
   LayoutAnimation,
   NativeModules,
+  Platform,
   ScrollView,
   StyleSheet,
   TextInput,
@@ -21,7 +23,7 @@ import {
 } from "@lib/react-query/comment";
 import CustomTextInput from "@components/CustomTextInput";
 import { SendHorizontal } from "lucide-react-native";
-
+import { useHeaderHeight } from "@react-navigation/elements";
 const { UIManager } = NativeModules;
 
 UIManager.setLayoutAnimationEnabledExperimental &&
@@ -34,23 +36,26 @@ const Post: FC = () => {
   const { mutate } = useInsertComment();
   const [inputText, setInputText] = useState("");
   const inputRef = useRef<TextInput>(null);
+  const height = useHeaderHeight();
 
-  const submitComment = useCallback(async () => {
-    if (inputText) {
-      const commentData: Omit<Comment, "id" | "user_id" | "created_at"> = {
-        post_id: postId as string,
-        parent_id: null,
-        text: inputText,
-      };
-      inputRef.current?.clear();
-      mutate(commentData);
-    }
-  }, [comments, inputText]);
+  const submitComment = useCallback(
+    async (text: string) => {
+      if (inputText) {
+        const commentData: Omit<Comment, "id" | "user_id" | "created_at"> = {
+          post_id: postId as string,
+          parent_id: null,
+          text,
+        };
+        inputRef.current?.clear();
+        mutate(commentData);
+      }
+    },
+    [comments, inputText]
+  );
 
   const scrollRef = useRef<ScrollView>(null);
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   useEffect(() => {
-    LayoutAnimation.easeInEaseOut();
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
       LayoutAnimation.easeInEaseOut();
       setKeyboardOpen(true);
@@ -69,27 +74,36 @@ const Post: FC = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Stack.Screen options={{ headerTitle: "Zach" }}></Stack.Screen>
-      {post && (
-        <ImagePreview keyboardOpen={keyboardOpen} imageUrl={post.image_url} />
-      )}
-      {comments ? (
-        <Comments scrollRef={scrollRef} comments={comments} />
-      ) : (
-        <ActivityIndicator color="white" />
-      )}
-      <CustomTextInput
-        value={inputText}
-        onChangeText={setInputText}
-        ref={inputRef}
-        iconRight={
-          <TouchableOpacity onPress={submitComment}>
-            <SendHorizontal color="white" />
-          </TouchableOpacity>
-        }
-      />
-    </View>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      keyboardVerticalOffset={height - 16}
+    >
+      <View style={styles.innerContainer}>
+        <Stack.Screen options={{ headerTitle: "Zach" }} />
+        {post && (
+          <ImagePreview keyboardOpen={keyboardOpen} imageUrl={post.image_url} />
+        )}
+        {comments ? (
+          <Comments scrollRef={scrollRef} comments={comments} />
+        ) : (
+          <ActivityIndicator color="white" />
+        )}
+        <CustomTextInput
+          value={inputText}
+          onChangeText={setInputText}
+          ref={inputRef}
+          onSubmitEditing={({ nativeEvent: { text } }) => {
+            submitComment(text);
+          }}
+          iconRight={
+            <TouchableOpacity onPress={() => submitComment(inputText)}>
+              <SendHorizontal color="white" />
+            </TouchableOpacity>
+          }
+        />
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -97,8 +111,16 @@ const styles = StyleSheet.create({
   container: {
     padding: 8,
     paddingTop: 32,
-    flex: 1,
+    // paddingBottom: 16,
+    height: "100%",
+    // flex
+    // flex: 1,
     backgroundColor: "#000000",
+    // position: "relative",
+  },
+  innerContainer: {
+    flexGrow: 1,
+    paddingBottom: Platform.OS === "ios" ? 24 : 0,
   },
 });
 

@@ -53,7 +53,7 @@ const PostGrid: FC = () => {
                 return (
                   <Link
                     href={{
-                      pathname: "/home/posts/[id]",
+                      pathname: "/posts/[id]",
                       params: { id: post.id },
                     }}
                     asChild

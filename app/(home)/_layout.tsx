@@ -1,55 +1,55 @@
 import { StyleSheet } from "react-native";
 import React from "react";
-import { Tabs } from "expo-router";
+import { Stack, Tabs } from "expo-router";
 import { Camera, GalleryHorizontalEnd, User } from "lucide-react-native";
 import { usePushNotifications } from "@lib/usePushNotifications";
 
 const Layout: React.FC = () => {
   const pn = usePushNotifications();
   return (
-    <Tabs
+    <Stack
       initialRouteName="/posts"
       screenOptions={{
         headerStyle: {
           backgroundColor: "#000000",
         },
         headerTintColor: "#fff",
-        tabBarActiveBackgroundColor: "#000",
-        tabBarInactiveBackgroundColor: "#000",
-        tabBarActiveTintColor: "#fff",
-        tabBarInactiveTintColor: "#fff",
+        // tabBarActiveBackgroundColor: "#000",
+        // tabBarInactiveBackgroundColor: "#000",
+        // tabBarActiveTintColor: "#fff",
+        // tabBarInactiveTintColor: "#fff",
       }}
-      sceneContainerStyle={{ backgroundColor: "black" }}
+      // sceneContainerStyle={{ backgroundColor: "black" }}
     >
-      <Tabs.Screen
+      <Stack.Screen
         name="posts"
         options={{
-          tabBarLabel: "Zachs",
-          tabBarIcon: () => <GalleryHorizontalEnd style={styles.tabBarIcon} />,
+          // tabBarLabel: "Zachs",
+          // tabBarIcon: () => <GalleryHorizontalEnd style={styles.tabBarIcon} />,
           headerShown: false,
         }}
       />
 
-      <Tabs.Screen
+      <Stack.Screen
         name="camera"
         options={{
-          tabBarLabel: "Camera",
+          // tabBarLabel: "Camera",
           title: "Camera",
-          tabBarIcon: () => <Camera style={styles.tabBarIcon} />,
-          unmountOnBlur: true,
+          // tabBarIcon: () => <Camera style={styles.tabBarIcon} />,
+          // unmountOnBlur: true,
           headerShown: false,
         }}
       />
-      <Tabs.Screen
+      <Stack.Screen
         name="account"
         options={{
-          tabBarLabel: "Account",
+          // tabBarLabel: "Account",
           title: "Account",
-          tabBarIcon: () => <User style={styles.tabBarIcon} />,
+          // tabBarIcon: () => <User style={styles.tabBarIcon} />,
           headerShown: false,
         }}
       />
-    </Tabs>
+    </Stack>
   );
 };
 

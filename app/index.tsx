@@ -9,8 +9,8 @@ const Index: FC = () => {
   useEffect(() => {
     supabase.auth.getSession().then((response) => {
       if (response.data.session) {
-        console.log("found session, directing to /home!");
-        router.replace("/home/posts");
+        console.log("found session, directing to /posts!");
+        router.replace("/posts");
       } else {
         router.replace("/signup");
       }

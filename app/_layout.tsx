@@ -28,7 +28,7 @@ const Layout: React.FC = () => {
             }}
           >
             <Stack.Screen
-              name="home"
+              name="(home)"
               options={{
                 headerShown: false,
               }}
@@ -42,15 +42,13 @@ const Layout: React.FC = () => {
             <Stack.Screen
               name="login"
               options={{
-                // Set the presentation mode to modal for our modal route.
-                presentation: "modal",
+                headerShown: false,
               }}
             />
             <Stack.Screen
               name="signup"
               options={{
-                // Set the presentation mode to modal for our modal route.
-                presentation: "modal",
+                headerShown: false,
               }}
             />
           </Stack>
