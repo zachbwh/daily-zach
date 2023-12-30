@@ -10,7 +10,12 @@ const Account: FC<{ children: React.ReactElement }> = ({ children }) => {
         headerTintColor: "#fff",
         headerTitle: "Account",
       }}
-    />
+    >
+      <Stack.Screen
+        name="profile"
+        options={{ headerTitle: "Manage Profile" }}
+      />
+    </Stack>
   );
 };
 
