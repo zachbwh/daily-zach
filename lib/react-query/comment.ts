@@ -80,3 +80,17 @@ export const useInsertComment = () => {
     },
   });
 };
+
+export const useDeleteComment = (postId: string) => {
+  return useMutation({
+    mutationFn: async (commentId: string) => {
+      return supabase.from("comments").delete().eq("id", commentId);
+    },
+    onSuccess: (result, commentId) => {
+      console.log("Sucess Response", result);
+      queryClient.setQueryData(["comments", postId], (old: Comment[]) =>
+        old.filter((comment) => comment.id !== commentId)
+      );
+    },
+  });
+};

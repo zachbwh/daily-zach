@@ -1,8 +1,15 @@
 import { FC, useEffect } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Comment } from "@lib/react-query/comment";
+import {
+  Alert,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { Comment, useDeleteComment } from "@lib/react-query/comment";
 import ProfileImage from "@components/ProfileImage";
-import { useUser } from "@lib/react-query/user";
+import { useCurrentUser, useUser } from "@lib/react-query/user";
 import useFormatDistanceToNow from "@lib/useFormatDistanceToNow";
 
 type CommentsProps = {
@@ -12,8 +19,10 @@ type CommentsProps = {
 
 const CommentView: FC<{ comment: Comment }> = ({ comment }) => {
   const { data: user, refetch } = useUser(comment.user_id);
+  const { data: currentUser } = useCurrentUser();
   const date = new Date(comment.created_at);
   const formattedDate = useFormatDistanceToNow(date);
+  const { mutate: deleteComment } = useDeleteComment(comment.post_id);
 
   useEffect(() => {
     refetch();
@@ -21,7 +30,26 @@ const CommentView: FC<{ comment: Comment }> = ({ comment }) => {
   const profileImage = user?.profile_image_url;
   const displayName = user?.display_name || "";
   return (
-    <View style={styles.commentContainer}>
+    <Pressable
+      style={styles.commentContainer}
+      onLongPress={() => {
+        if (comment.user_id === currentUser?.user_id) {
+          Alert.alert(
+            "Delete",
+            "Are you sure you want to delete this comment?",
+            [
+              { text: "Cancel" },
+              {
+                text: "Delete",
+                onPress: () => {
+                  deleteComment(comment.id);
+                },
+              },
+            ]
+          );
+        }
+      }}
+    >
       <View>
         {profileImage ? (
           <ProfileImage
@@ -39,7 +67,7 @@ const CommentView: FC<{ comment: Comment }> = ({ comment }) => {
         </View>
         <Text style={styles.text}>{comment.text}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
