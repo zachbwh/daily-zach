@@ -34,14 +34,14 @@ const Profile: FC = () => {
   const submitProfileImage = async (picture: ImageResult) => {
     setLoading(true);
     try {
-      const publicUrl = await updateProfileImage(picture);
+      await updateProfileImage(picture);
       setViewfinderOn(false);
     } catch (error) {
       console.error(error);
     }
   };
 
-  if (!isLoading) {
+  if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator color="white" />
