@@ -1,11 +1,18 @@
 import { FC, useMemo } from "react";
-import { StyleSheet, SectionList, TouchableOpacity, Image } from "react-native";
+import {
+  StyleSheet,
+  SectionList,
+  TouchableOpacity,
+  Image,
+  Platform,
+  Text,
+} from "react-native";
 import { Heading, Pressable, View } from "@gluestack-ui/themed";
 import { Link } from "expo-router";
 import format from "date-fns/format";
-import { AlarmClock } from "lucide-react-native";
 import { Post, usePosts } from "@lib/react-query/posts";
 import { useInsertPostRequest } from "@lib/react-query/post-request";
+import LottieView from "lottie-react-native";
 
 type SectionPost = {
   posts: Post[];
@@ -79,9 +86,17 @@ const PostGrid: FC = () => {
         )}
       />
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => requestPost()}>
-          <AlarmClock style={styles.button} />
+        <TouchableOpacity onPress={() => requestPost()}>
+          <LottieView
+            loop={true}
+            autoPlay={true}
+            source={require("@components/animations/Bell.json")}
+            resizeMode="cover"
+            colorFilters={[{ keypath: "*", color: "#fcfcfc" }]}
+            style={styles.button}
+          />
         </TouchableOpacity>
+        <Text style={styles.buttonText}>Request Selfie</Text>
       </View>
     </View>
   );
@@ -89,13 +104,13 @@ const PostGrid: FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 0,
-    padding: 12,
     backgroundColor: "#000000",
     flex: 1,
   },
   listContainer: {
     backgroundColor: "#000000",
+    paddingRight: 8,
+    paddingLeft: 8,
   },
   heading: {
     paddingHorizontal: 4,
@@ -123,18 +138,19 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   buttonContainer: {
-    flex: 1,
-    flexGrow: 0,
-    margin: 24,
-    width: "100%",
-    height: 100,
+    paddingBottom: Platform.OS === "ios" ? 24 : 0,
     backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
   },
   button: {
-    flex: 1,
-    alignItems: "center",
-    color: "white",
-    height: 50,
+    height: 72,
+    width: 72,
+  },
+  buttonText: {
+    color: "#ffffff",
+    fontSize: 20,
+    fontWeight: "500",
   },
 });
 

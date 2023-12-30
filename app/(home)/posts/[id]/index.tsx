@@ -111,12 +111,8 @@ const styles = StyleSheet.create({
   container: {
     padding: 8,
     paddingTop: 32,
-    // paddingBottom: 16,
     height: "100%",
-    // flex
-    // flex: 1,
     backgroundColor: "#000000",
-    // position: "relative",
   },
   innerContainer: {
     flexGrow: 1,
