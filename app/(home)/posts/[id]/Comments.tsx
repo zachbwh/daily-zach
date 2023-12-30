@@ -46,10 +46,18 @@ const CommentView: FC<{ comment: Comment }> = ({ comment }) => {
 const Comments: FC<CommentsProps> = ({ scrollRef, comments }) => {
   return (
     <ScrollView style={styles.commentsContainer} ref={scrollRef}>
-      {comments &&
+      {comments && comments.length > 0 ? (
         comments.map((comment, index) => {
           return <CommentView key={index} comment={comment} />;
-        })}
+        })
+      ) : (
+        <View style={styles.noCommentsContainer}>
+          <Text style={styles.noCommentsText}>No comments</Text>
+          <Text style={styles.noCommentsText}>
+            Leave a comment to let Zach know he looks good
+          </Text>
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -60,6 +68,14 @@ const styles = StyleSheet.create({
   },
   commentContainer: {
     flexDirection: "row",
+  },
+  noCommentsContainer: {
+    padding: 16,
+  },
+  noCommentsText: {
+    color: "#EEEEEE",
+    textAlign: "center",
+    paddingBottom: 4,
   },
   commentBodyContainer: {
     flexGrow: 1,

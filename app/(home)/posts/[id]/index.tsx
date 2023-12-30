@@ -93,6 +93,7 @@ const Post: FC = () => {
           value={inputText}
           onChangeText={setInputText}
           ref={inputRef}
+          placeholder="Add a comment..."
           onSubmitEditing={({ nativeEvent: { text } }) => {
             submitComment(text);
           }}
