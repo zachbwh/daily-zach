@@ -14,18 +14,11 @@ const Layout: React.FC = () => {
           backgroundColor: "#000000",
         },
         headerTintColor: "#fff",
-        // tabBarActiveBackgroundColor: "#000",
-        // tabBarInactiveBackgroundColor: "#000",
-        // tabBarActiveTintColor: "#fff",
-        // tabBarInactiveTintColor: "#fff",
       }}
-      // sceneContainerStyle={{ backgroundColor: "black" }}
     >
       <Stack.Screen
         name="posts"
         options={{
-          // tabBarLabel: "Zachs",
-          // tabBarIcon: () => <GalleryHorizontalEnd style={styles.tabBarIcon} />,
           headerShown: false,
         }}
       />
@@ -33,19 +26,14 @@ const Layout: React.FC = () => {
       <Stack.Screen
         name="camera"
         options={{
-          // tabBarLabel: "Camera",
           title: "Camera",
-          // tabBarIcon: () => <Camera style={styles.tabBarIcon} />,
-          // unmountOnBlur: true,
           headerShown: false,
         }}
       />
       <Stack.Screen
         name="account"
         options={{
-          // tabBarLabel: "Account",
           title: "Account",
-          // tabBarIcon: () => <User style={styles.tabBarIcon} />,
           headerShown: false,
         }}
       />
