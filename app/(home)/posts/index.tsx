@@ -13,6 +13,7 @@ import format from "date-fns/format";
 import { Post, usePosts } from "@lib/react-query/posts";
 import { useInsertPostRequest } from "@lib/react-query/post-request";
 import LottieView from "lottie-react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 type SectionPost = {
   posts: Post[];
@@ -53,6 +54,7 @@ const PostGrid: FC = () => {
         style={styles.listContainer}
         sections={sectionedData}
         stickySectionHeadersEnabled={true}
+        contentContainerStyle={{ paddingBottom: 64 }}
         renderItem={({ item }) => {
           return (
             <View style={styles.imageGrid}>
@@ -85,8 +87,16 @@ const PostGrid: FC = () => {
           <Heading style={styles.heading}>{title}</Heading>
         )}
       />
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={() => requestPost()}>
+      <LinearGradient
+        colors={["#00000055", "#000000CC", "#000000CC", "#00000055"]}
+        start={[0, 1]}
+        end={[1, 0]}
+        style={styles.buttonContainerContainer}
+      >
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={() => requestPost()}
+        >
           <LottieView
             loop={true}
             autoPlay={true}
@@ -95,9 +105,9 @@ const PostGrid: FC = () => {
             colorFilters={[{ keypath: "*", color: "#fcfcfc" }]}
             style={styles.button}
           />
+          <Text style={styles.buttonText}>Ring Zach</Text>
         </TouchableOpacity>
-        <Text style={styles.buttonText}>Request Selfie</Text>
-      </View>
+      </LinearGradient>
     </View>
   );
 };
@@ -129,27 +139,35 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   imageContainer: {
-    width: "25%",
+    width: "50%",
     aspectRatio: 3 / 4,
-    padding: 4,
+    padding: 8,
   },
   imagePreview: {
     height: "100%",
     borderRadius: 16,
   },
-  buttonContainer: {
-    paddingBottom: Platform.OS === "ios" ? 24 : 0,
-    backgroundColor: "black",
-    justifyContent: "center",
+  buttonContainerContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
     alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonContainer: {
+    paddingBottom: Platform.OS === "ios" ? 24 : 4,
+    alignItems: "center",
+    padding: 16,
+    paddingTop: 8,
   },
   button: {
-    height: 72,
-    width: 72,
+    height: 42,
+    width: 64,
   },
   buttonText: {
     color: "#ffffff",
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "500",
   },
 });
