@@ -8,10 +8,9 @@ import {
   Text,
 } from "react-native";
 import { Heading, Pressable, View } from "@gluestack-ui/themed";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import format from "date-fns/format";
 import { Post, usePosts } from "@lib/react-query/posts";
-import { useInsertPostRequest } from "@lib/react-query/post-request";
 import LottieView from "lottie-react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -23,7 +22,6 @@ const PostSectionList = SectionList<SectionPost>;
 
 const PostGrid: FC = () => {
   const { data: posts } = usePosts();
-  const { mutate: requestPost } = useInsertPostRequest();
 
   const groupedPosts = useMemo(() => {
     if (posts) {
@@ -95,7 +93,7 @@ const PostGrid: FC = () => {
       >
         <TouchableOpacity
           style={styles.buttonContainer}
-          onPress={() => requestPost()}
+          onPress={() => router.push("/requests/new")}
         >
           <LottieView
             loop={true}
