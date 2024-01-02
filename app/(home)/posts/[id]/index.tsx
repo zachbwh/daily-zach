@@ -26,6 +26,7 @@ import CustomTextInput from "@components/CustomTextInput";
 import { SendHorizontal, Trash2Icon } from "lucide-react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useCurrentUser } from "@lib/react-query/user";
+
 const { UIManager } = NativeModules;
 
 UIManager.setLayoutAnimationEnabledExperimental &&

@@ -12,8 +12,6 @@ type PostRequest = {
 };
 
 Deno.serve(async (req) => {
-  console.log("hello");
-
   const body = await req.json();
   const postRequest = body.record as PostRequest;
   console.log("post request", postRequest);

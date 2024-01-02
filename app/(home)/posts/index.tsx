@@ -13,6 +13,7 @@ import format from "date-fns/format";
 import { Post, usePosts } from "@lib/react-query/posts";
 import LottieView from "lottie-react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { MessageSquare } from "lucide-react-native";
 
 type SectionPost = {
   posts: Post[];
@@ -57,25 +58,51 @@ const PostGrid: FC = () => {
           return (
             <View style={styles.imageGrid}>
               {item.posts.map((post) => {
+                const commentCount = post.comments[0].count;
+                const postDate = new Date(post.inserted_at);
+                const postTime = format(postDate, "hh:mm");
                 return (
-                  <Link
-                    href={{
-                      pathname: "/posts/[id]",
-                      params: { id: post.id },
-                    }}
-                    asChild
-                    style={styles.imageContainer}
-                    key={post.id}
-                  >
-                    <Pressable>
-                      <Image
-                        source={{ uri: post.image_url }}
-                        style={styles.imagePreview}
-                        alt=""
-                        resizeMethod="resize"
-                      />
-                    </Pressable>
-                  </Link>
+                  <View style={{ width: "50%" }}>
+                    <Link
+                      href={{
+                        pathname: "/posts/[id]",
+                        params: { id: post.id },
+                      }}
+                      asChild
+                      style={styles.imageContainer}
+                      key={post.id}
+                    >
+                      <Pressable>
+                        <Image
+                          source={{ uri: post.image_url }}
+                          style={styles.imagePreview}
+                          alt=""
+                          resizeMethod="resize"
+                        />
+                      </Pressable>
+                    </Link>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        paddingLeft: 8,
+                        paddingRight: 8,
+                        paddingBottom: 8,
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Text style={{ color: "#AAAAAA" }}>{postTime}</Text>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "flex-end",
+                          gap: 8,
+                        }}
+                      >
+                        <Text style={{ color: "#AAAAAA" }}>{commentCount}</Text>
+                        <MessageSquare color="#AAAAAA" />
+                      </View>
+                    </View>
+                  </View>
                 );
               })}
             </View>
@@ -137,7 +164,7 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   imageContainer: {
-    width: "50%",
+    width: "100%",
     aspectRatio: 3 / 4,
     padding: 8,
   },
