@@ -26,7 +26,7 @@ const RequestProgressEntry: FC<{
 }> = ({ emoji, name, inProgress, completed }) => {
   const completeAnimatedValue = useRef(new Animated.Value(0)).current;
   useEffect(() => {
-    console.log("completed ", { name, completed })
+    console.log("completed ", { name, completed });
     if (completed) {
       Animated.timing(completeAnimatedValue, {
         toValue: 1.0,
