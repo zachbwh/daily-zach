@@ -79,3 +79,17 @@ export const useInsertPost = () => {
     },
   });
 };
+
+export const useDeletePost = () => {
+  return useMutation({
+    mutationFn: async (postId: string) => {
+      return supabase.from("posts").delete().eq("id", postId);
+    },
+    onSuccess: (result, postId, context) => {
+      console.log("Sucess Response", result.data);
+      queryClient.setQueryData(["posts"], (old: Post[]) =>
+        old.filter((post) => post.id !== postId)
+      );
+    },
+  });
+};
