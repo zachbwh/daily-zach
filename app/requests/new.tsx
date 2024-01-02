@@ -4,7 +4,6 @@ import PendingRequest from "./PendingRequestView";
 import CreateRequest from "./CreateRequestView";
 import { router } from "expo-router";
 import { StyleSheet, View } from "react-native";
-import RequestComplete from "./RequestComplete";
 import {
   useInsertPostRequest,
   usePostRequest,
@@ -14,26 +13,12 @@ const demoImage = require("../signup/requestdemo/demo-selfie.jpg");
 
 const Request: FC = () => {
   const [selfiePending, setSelfiePending] = useState(false);
-  const [showSelfie, setShowSelfie] = useState(false);
   const { mutate: insertPostRequest, data: newPostRequest } =
     useInsertPostRequest();
   const requestId = newPostRequest?.data
     ? newPostRequest?.data[0].id
     : undefined;
   const { data: postRequest } = usePostRequest(requestId || "");
-
-  if (showSelfie) {
-    return (
-      <SafeAndroidView>
-        <RequestComplete
-          image={demoImage}
-          onNext={() => {
-            router.replace("/posts");
-          }}
-        />
-      </SafeAndroidView>
-    );
-  }
 
   if (selfiePending && postRequest) {
     return (
@@ -43,7 +28,7 @@ const Request: FC = () => {
             headerText="Selfie Request"
             requestStatus={postRequest.status}
             viewPost={async () => {
-              setShowSelfie(true);
+              router.replace(`/posts/${postRequest.post_id}`);
             }}
           />
         </View>
