@@ -29,12 +29,14 @@ export const usePostRequest = (requestId: string) => {
           },
           (payload) => {
             const newStatus = payload.new.status as RequestStatus;
+            const postId = payload.new.post_id || null;
             queryClient.setQueryData(
               ["post_requests", requestId],
               (old: PostRequest) => {
                 return {
                   ...old,
                   status: newStatus,
+                  post_id: postId,
                 };
               }
             );
@@ -75,11 +77,11 @@ export const useUpdatePostRequest = () => {
   return useMutation({
     mutationFn: async (params: {
       requestId: string;
-      status: RequestStatus;
+      data: Partial<Omit<PostRequest, "id" | "created_at" | "requestor_id">>;
     }) => {
       return supabase
         .from("post_requests")
-        .update({ status: params.status })
+        .update(params.data)
         .eq("id", params.requestId)
         .select("id, created_at, requestor_id, status, post_id");
     },
