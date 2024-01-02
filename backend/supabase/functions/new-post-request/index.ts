@@ -49,6 +49,7 @@ Deno.serve(async (req) => {
           data: {
             type: "POST_REQUEST",
             request_id: postRequest.id,
+            url: `/camera?postRequestId=${postRequest.id}`,
           },
         }),
         headers: {
