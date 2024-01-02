@@ -3,6 +3,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import queryClient from "./client";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
+import { useEffect } from "react";
+import { RealtimeChannel } from "@supabase/supabase-js";
 
 export type Comment = {
   id: string;
@@ -16,6 +18,40 @@ export type Comment = {
 const SELECT_COMMENTS = "id, post_id, user_id, parent_id, created_at, text";
 
 export const usePostComments = (postId: string) => {
+  useEffect(() => {
+    let channel: RealtimeChannel | undefined;
+    if (postId) {
+      channel = supabase
+        .channel("post_comments_added")
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "comments",
+            filter: `post_id=eq.${postId}`,
+          },
+          (payload) => {
+            const newComment = payload.new as Comment;
+            console.log("new comment", newComment);
+            queryClient.setQueryData(["comments", postId], (old: Comment[]) => {
+              if (
+                !old.some(
+                  (oldComment: Comment) => oldComment.id === newComment.id
+                )
+              ) {
+                return [...old, newComment];
+              }
+              return old;
+            });
+          }
+        )
+        .subscribe();
+    }
+    return () => {
+      channel?.unsubscribe();
+    };
+  }, [postId]);
   return useQuery({
     queryKey: ["comments", postId],
     queryFn: async () => {
