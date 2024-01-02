@@ -7,6 +7,8 @@ import {
   useInsertPushNotificationSubscriber,
   usePushNotificationSubscriptions,
 } from "@lib/react-query/push_notification_subscribers";
+import handlePostRequest from "@lib/notifications/handlers/post-request";
+import { router } from "expo-router";
 
 export interface PushNotificationsState {
   expoPushToken?: Notifications.ExpoPushToken;
@@ -55,11 +57,17 @@ export const usePushNotifications = (): PushNotificationsState => {
       console.log(token);
 
       Notifications.setNotificationHandler({
-        handleNotification: async () => ({
-          shouldShowAlert: true,
-          shouldPlaySound: false,
-          shouldSetBadge: false,
-        }),
+        handleNotification: async (notification) => {
+          const { type } = notification.request.content.data;
+          if (type === "POST_REQUEST") {
+            return await handlePostRequest(notification);
+          }
+          return {
+            shouldShowAlert: true,
+            shouldPlaySound: false,
+            shouldSetBadge: false,
+          };
+        },
       });
     } else {
       alert("Must use physical device for Push Notifications");
@@ -83,7 +91,10 @@ export const usePushNotifications = (): PushNotificationsState => {
 
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
+        const url = response.notification.request.content.data["url"];
+        if (url) {
+          router.push(url);
+        }
       });
 
     return () => {
@@ -108,7 +119,7 @@ export const usePushNotifications = (): PushNotificationsState => {
       expoPushToken &&
       !pushNotifications
         .map((pushNotifications) => pushNotifications.subscription_token)
-        .includes(expoPushToken as unknown as string)
+        .includes(expoPushToken.data as unknown as string)
     ) {
       try {
         void insertPushNotificationToken({
