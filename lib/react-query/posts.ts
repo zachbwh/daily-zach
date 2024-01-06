@@ -11,6 +11,8 @@ export type Post = {
   inserted_at: string;
   user_id: string;
   comments: { count: number }[];
+  location: string | null;
+  caption: string | null;
 };
 
 export const usePosts = () => {
@@ -20,7 +22,7 @@ export const usePosts = () => {
       const { data } = await supabase
         .from("posts")
         .select(
-          "id, image_url, inserted_at, user_id, comments!comments_post_id_fkey(count)"
+          "id, image_url, inserted_at, user_id, comments!comments_post_id_fkey(count), location, caption"
         )
         .order("inserted_at", { ascending: false });
       return data;
@@ -35,7 +37,7 @@ export const usePost = (postId: string) => {
       const { data } = await supabase
         .from("posts")
         .select(
-          "id, image_url, inserted_at, user_id, comments!comments_post_id_fkey(count)"
+          "id, image_url, inserted_at, user_id, comments!comments_post_id_fkey(count), location, caption"
         )
         .eq("id", postId)
         .limit(1);
@@ -52,7 +54,7 @@ export const useInsertPost = () => {
         .from("posts")
         .insert(post)
         .select(
-          "id, image_url, inserted_at, user_id, comments!comments_post_id_fkey(count)"
+          "id, image_url, inserted_at, user_id, comments!comments_post_id_fkey(count), location, caption"
         );
     },
     onMutate: async (variables) => {
@@ -64,6 +66,8 @@ export const useInsertPost = () => {
         inserted_at: new Date().toISOString(),
         user_id: "",
         comments: [{ count: 0 }],
+        location: variables.location,
+        caption: variables.caption,
       };
       console.log("Optimistic Post", optimisticPost);
       queryClient.setQueryData(["posts"], (old: Post[]) => [

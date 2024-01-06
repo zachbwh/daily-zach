@@ -9,6 +9,8 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  View,
+  Text,
 } from "react-native";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import ImagePreview from "./ImagePreview";
@@ -23,6 +25,7 @@ import CustomTextInput from "@components/CustomTextInput";
 import { SendHorizontal, Trash2Icon } from "lucide-react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useCurrentUser } from "@lib/react-query/user";
+import format from "date-fns/format";
 
 const Post: FC = () => {
   const { id: postId } = useLocalSearchParams();
@@ -65,6 +68,9 @@ const Post: FC = () => {
       hideSubscription.remove();
     };
   }, []);
+
+  const postDate = new Date(post?.inserted_at || Date.now());
+  const postTime = format(postDate, "h:mm aaa");
 
   return (
     <KeyboardAvoidingView
@@ -113,7 +119,19 @@ const Post: FC = () => {
         ref={scrollRef}
         keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "none"}
       >
+        {post && (
+          <View style={styles.postHeader}>
+            <Text style={styles.postHeaderText}>
+              {post?.location ? `${post.location} · ${postTime}` : postTime}
+            </Text>
+          </View>
+        )}
         <ImagePreview imageUrl={post?.image_url} />
+        {post?.caption && (
+          <View style={styles.postFooter}>
+            <Text style={styles.postFooterText}>{post.caption}</Text>
+          </View>
+        )}
         {comments ? (
           <Comments comments={comments} />
         ) : (
@@ -146,7 +164,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#000000",
   },
   innerContainer: {
-    paddingTop: 24,
     paddingBottom: Platform.OS === "ios" ? 24 : 0,
     height: "100%",
   },
@@ -156,6 +173,25 @@ const styles = StyleSheet.create({
     bottom: Platform.OS === "ios" ? 24 : 16,
     left: 8,
     right: 8,
+  },
+  postHeader: {
+    flexDirection: "row",
+    padding: 16,
+  },
+  postHeaderText: {
+    color: "#AAAAAA",
+    fontSize: 16,
+    fontWeight: "500",
+  },
+  postFooter: {
+    flexDirection: "row",
+    padding: 16,
+    justifyContent: "center",
+  },
+  postFooterText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
 

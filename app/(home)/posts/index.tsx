@@ -60,7 +60,7 @@ const PostGrid: FC = () => {
               {item.posts.map((post) => {
                 const commentCount = post.comments[0].count;
                 const postDate = new Date(post.inserted_at);
-                const postTime = format(postDate, "hh:mm");
+                const postTime = format(postDate, "h:mm aaa");
                 return (
                   <View style={{ width: "50%" }} key={post.id}>
                     <Link
