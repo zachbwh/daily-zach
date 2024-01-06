@@ -62,7 +62,7 @@ const PostGrid: FC = () => {
                 const postDate = new Date(post.inserted_at);
                 const postTime = format(postDate, "hh:mm");
                 return (
-                  <View style={{ width: "50%" }}>
+                  <View style={{ width: "50%" }} key={post.id}>
                     <Link
                       href={{
                         pathname: "/posts/[id]",
@@ -70,7 +70,6 @@ const PostGrid: FC = () => {
                       }}
                       asChild
                       style={styles.imageContainer}
-                      key={post.id}
                     >
                       <Pressable>
                         <Image
