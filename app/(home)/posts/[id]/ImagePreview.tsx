@@ -1,26 +1,13 @@
 import { FC } from "react";
-import { Image, NativeModules, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 
 type ImagePreviewProps = {
-  keyboardOpen: boolean;
   imageUrl: string;
 };
 
-const { UIManager } = NativeModules;
-
-UIManager.setLayoutAnimationEnabledExperimental &&
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-
-const ImagePreview: FC<ImagePreviewProps> = ({ keyboardOpen, imageUrl }) => {
+const ImagePreview: FC<ImagePreviewProps> = ({ imageUrl }) => {
   return (
-    <View
-      style={[
-        styles.imageContainer,
-        {
-          height: (keyboardOpen ? 0.7 : 1) * styles.imageContainer.height,
-        },
-      ]}
-    >
+    <View style={styles.imageContainer}>
       <Image source={{ uri: imageUrl }} style={styles.imagePreview} />
     </View>
   );
@@ -31,11 +18,12 @@ const styles = StyleSheet.create({
     width: "100%",
     margin: "auto",
     alignItems: "center",
-    height: 300,
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   imagePreview: {
     aspectRatio: 3 / 4,
-    height: "100%",
+    width: "100%",
     borderRadius: 16,
   },
 });

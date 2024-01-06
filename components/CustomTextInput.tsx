@@ -17,7 +17,7 @@ const CustomTextInput = forwardRef<
   }
 >((props, ref) => {
   return (
-    <View style={styles.inputWrapper}>
+    <View style={[styles.inputWrapper, props.wrapperStyle]}>
       {props.icon && <View style={styles.iconWrapper}>{props.icon}</View>}
       <TextInput
         {...props}

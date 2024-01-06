@@ -1,19 +1,11 @@
 import { FC, useEffect } from "react";
-import {
-  Alert,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import { Comment, useDeleteComment } from "@lib/react-query/comment";
 import ProfileImage from "@components/ProfileImage";
 import { useCurrentUser, useUser } from "@lib/react-query/user";
 import useFormatDistanceToNow from "@lib/useFormatDistanceToNow";
 
 type CommentsProps = {
-  scrollRef: React.RefObject<ScrollView>;
   comments: Comment[];
 };
 
@@ -71,9 +63,9 @@ const CommentView: FC<{ comment: Comment }> = ({ comment }) => {
   );
 };
 
-const Comments: FC<CommentsProps> = ({ scrollRef, comments }) => {
+const Comments: FC<CommentsProps> = ({ comments }) => {
   return (
-    <ScrollView style={styles.commentsContainer} ref={scrollRef}>
+    <View style={styles.commentsContainer}>
       {comments && comments.length > 0 ? (
         comments.map((comment, index) => {
           return <CommentView key={index} comment={comment} />;
@@ -86,13 +78,15 @@ const Comments: FC<CommentsProps> = ({ scrollRef, comments }) => {
           </Text>
         </View>
       )}
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   commentsContainer: {
     flex: 1,
+    paddingTop: 24,
+    paddingBottom: 120,
   },
   commentContainer: {
     flexDirection: "row",

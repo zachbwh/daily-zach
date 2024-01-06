@@ -4,14 +4,11 @@ import {
   Alert,
   Keyboard,
   KeyboardAvoidingView,
-  LayoutAnimation,
-  NativeModules,
   Platform,
   ScrollView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  View,
 } from "react-native";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import ImagePreview from "./ImagePreview";
@@ -26,11 +23,6 @@ import CustomTextInput from "@components/CustomTextInput";
 import { SendHorizontal, Trash2Icon } from "lucide-react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useCurrentUser } from "@lib/react-query/user";
-
-const { UIManager } = NativeModules;
-
-UIManager.setLayoutAnimationEnabledExperimental &&
-  UIManager.setLayoutAnimationEnabledExperimental(true);
 
 const Post: FC = () => {
   const { id: postId } = useLocalSearchParams();
@@ -60,16 +52,11 @@ const Post: FC = () => {
   );
 
   const scrollRef = useRef<ScrollView>(null);
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-      LayoutAnimation.easeInEaseOut();
-      setKeyboardOpen(true);
       scrollRef.current?.scrollToEnd();
     });
     const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-      LayoutAnimation.easeInEaseOut();
-      setKeyboardOpen(false);
       scrollRef.current?.scrollToEnd();
     });
 
@@ -82,7 +69,7 @@ const Post: FC = () => {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      behavior={Platform.OS === "ios" ? "position" : undefined}
       keyboardVerticalOffset={height - 16}
     >
       <Stack.Screen
@@ -121,30 +108,33 @@ const Post: FC = () => {
           },
         }}
       />
-      <View style={styles.innerContainer}>
-        {post && (
-          <ImagePreview keyboardOpen={keyboardOpen} imageUrl={post.image_url} />
-        )}
+      <ScrollView
+        style={styles.innerContainer}
+        ref={scrollRef}
+        keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "none"}
+      >
+        {post && <ImagePreview imageUrl={post.image_url} />}
         {comments ? (
-          <Comments scrollRef={scrollRef} comments={comments} />
+          <Comments comments={comments} />
         ) : (
           <ActivityIndicator color="white" />
         )}
-        <CustomTextInput
-          value={inputText}
-          onChangeText={setInputText}
-          ref={inputRef}
-          placeholder="Add a comment..."
-          onSubmitEditing={({ nativeEvent: { text } }) => {
-            submitComment(text);
-          }}
-          iconRight={
-            <TouchableOpacity onPress={() => submitComment(inputText)}>
-              <SendHorizontal color="white" />
-            </TouchableOpacity>
-          }
-        />
-      </View>
+      </ScrollView>
+      <CustomTextInput
+        value={inputText}
+        onChangeText={setInputText}
+        ref={inputRef}
+        placeholder="Add a comment..."
+        onSubmitEditing={({ nativeEvent: { text } }) => {
+          submitComment(text);
+        }}
+        iconRight={
+          <TouchableOpacity onPress={() => submitComment(inputText)}>
+            <SendHorizontal color="white" />
+          </TouchableOpacity>
+        }
+        wrapperStyle={styles.commentInputContainer}
+      />
     </KeyboardAvoidingView>
   );
 };
@@ -152,15 +142,21 @@ const Post: FC = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 8,
-    paddingTop: 32,
-    height: "100%",
+    flexGrow: 1,
     backgroundColor: "#000000",
   },
   innerContainer: {
-    flexGrow: 1,
+    paddingTop: 24,
     paddingBottom: Platform.OS === "ios" ? 24 : 0,
+    height: "100%",
   },
   deleteIconWrapper: { height: 32, width: 32 },
+  commentInputContainer: {
+    position: "absolute",
+    bottom: Platform.OS === "ios" ? 24 : 16,
+    left: 8,
+    right: 8,
+  },
 });
 
 export default Post;
