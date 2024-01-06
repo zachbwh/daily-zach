@@ -121,6 +121,8 @@ const styles = StyleSheet.create({
   image: {
     width: 56,
     height: 56,
+    maxHeight: 56,
+    maxWidth: 56,
     padding: 4,
   },
 });
