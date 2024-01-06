@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   View,
   Text,
+  Share,
 } from "react-native";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import ImagePreview from "./ImagePreview";
@@ -22,7 +23,12 @@ import {
   usePostComments,
 } from "@lib/react-query/comment";
 import CustomTextInput from "@components/CustomTextInput";
-import { SendHorizontal, Trash2Icon } from "lucide-react-native";
+import {
+  SendHorizontal,
+  Share2Icon,
+  ShareIcon,
+  Trash2Icon,
+} from "lucide-react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useCurrentUser } from "@lib/react-query/user";
 import format from "date-fns/format";
@@ -124,6 +130,21 @@ const Post: FC = () => {
             <Text style={styles.postHeaderText}>
               {post?.location ? `${post.location} · ${postTime}` : postTime}
             </Text>
+            <TouchableOpacity
+              onPress={() => {
+                Share.share({
+                  title: "Daily Zach",
+                  message: `Check out this awesome new Zach selfie!
+https://dailyzach.zachhuxford.io/posts/${postId}?utm-source=dailyzach-share`,
+                });
+              }}
+            >
+              {Platform.OS === "ios" ? (
+                <ShareIcon color="white" />
+              ) : (
+                <Share2Icon color="white" />
+              )}
+            </TouchableOpacity>
           </View>
         )}
         <ImagePreview imageUrl={post?.image_url} />
@@ -177,6 +198,9 @@ const styles = StyleSheet.create({
   postHeader: {
     flexDirection: "row",
     padding: 16,
+    paddingLeft: 24,
+    paddingRight: 24,
+    justifyContent: "space-between",
   },
   postHeaderText: {
     color: "#AAAAAA",
