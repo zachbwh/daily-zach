@@ -113,7 +113,7 @@ const Post: FC = () => {
         ref={scrollRef}
         keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "none"}
       >
-        {post && <ImagePreview imageUrl={post.image_url} />}
+        <ImagePreview imageUrl={post?.image_url} />
         {comments ? (
           <Comments comments={comments} />
         ) : (
