@@ -24,14 +24,17 @@ import {
 } from "@lib/react-query/comment";
 import CustomTextInput from "@components/CustomTextInput";
 import {
+  MoreVertical,
   SendHorizontal,
   Share2Icon,
   ShareIcon,
   Trash2Icon,
+  X,
 } from "lucide-react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useCurrentUser } from "@lib/react-query/user";
 import format from "date-fns/format";
+import { useActionSheet } from "@expo/react-native-action-sheet";
 
 const Post: FC = () => {
   const { id: postId } = useLocalSearchParams();
@@ -43,7 +46,6 @@ const Post: FC = () => {
   const [inputText, setInputText] = useState("");
   const inputRef = useRef<TextInput>(null);
   const height = useHeaderHeight();
-  const { mutate: deletePost } = useDeletePost();
 
   const submitComment = useCallback(
     async (text: string) => {
@@ -78,6 +80,27 @@ const Post: FC = () => {
   const postDate = new Date(post?.inserted_at || Date.now());
   const postTime = format(postDate, "h:mm aaa");
 
+  const { mutate: deletePostMutation } = useDeletePost();
+  const canDeletePost = currentUser?.user_id === post?.user_id;
+  const deletePost = useCallback(() => {
+    Alert.alert("Delete", "Are you sure you want to delete this post?", [
+      { text: "Cancel" },
+      {
+        text: "Delete",
+        onPress: () => {
+          deletePostMutation(post?.id);
+          if (router.canGoBack()) {
+            router.back();
+          } else {
+            router.replace("/posts");
+          }
+        },
+      },
+    ]);
+  }, [post?.id]);
+
+  const { showActionSheetWithOptions } = useActionSheet();
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -88,35 +111,66 @@ const Post: FC = () => {
         options={{
           headerTitle: "Zach",
           headerRight: (props) => {
-            if (currentUser?.user_id === post?.user_id) {
-              return (
-                <TouchableOpacity
-                  onPress={() => {
-                    Alert.alert(
-                      "Delete",
-                      "Are you sure you want to delete this post?",
-                      [
-                        { text: "Cancel" },
-                        {
-                          text: "Delete",
-                          onPress: () => {
-                            deletePost(post?.id);
-                            if (router.canGoBack()) {
-                              router.back();
-                            } else {
-                              router.replace("/posts");
-                            }
-                          },
-                        },
-                      ]
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  const options = canDeletePost
+                    ? ["Share Post", "Delete Post", "Cancel"]
+                    : ["Share Post", "Cancel"];
+                  const shareIcon =
+                    Platform.OS === "ios" ? (
+                      <ShareIcon color="white" />
+                    ) : (
+                      <Share2Icon color="white" />
                     );
-                  }}
-                  style={styles.deleteIconWrapper}
-                >
-                  <Trash2Icon color="#AA0000" size={32} strokeWidth={1.5} />
-                </TouchableOpacity>
-              );
-            }
+                  const cancelIcon = <X color="white" />;
+                  const icons = canDeletePost
+                    ? [shareIcon, <Trash2Icon color="white" />, cancelIcon]
+                    : [shareIcon, cancelIcon];
+                  const destructiveButtonIndex = canDeletePost ? 1 : undefined;
+                  const cancelButtonIndex = options.length;
+
+                  showActionSheetWithOptions(
+                    {
+                      options,
+                      useModal: true,
+                      icons,
+                      // showSeparators: true,
+                      containerStyle: {
+                        borderTopLeftRadius: 16,
+                        borderTopRightRadius: 16,
+                        backgroundColor: "#333333",
+                        paddingBottom: Platform.OS === "ios" ? 16 : 0,
+                      },
+                      textStyle: {
+                        color: "#EEEEEE",
+                        fontWeight: "500",
+                      },
+                    },
+                    (selectedIndex) => {
+                      switch (selectedIndex) {
+                        case 0:
+                          console.log(selectedIndex);
+                          Share.share({
+                            title: "Daily Zach",
+                            message: `Check out this awesome new Zach selfie!
+https://dailyzach.zachhuxford.io/posts/${postId}?utm-source=dailyzach-share`,
+                          });
+                          break;
+                        case destructiveButtonIndex:
+                          deletePost();
+                          break;
+                        case cancelButtonIndex:
+                          break;
+                      }
+                    }
+                  );
+                }}
+                style={styles.deleteIconWrapper}
+              >
+                <MoreVertical size={24} color="white" />
+              </TouchableOpacity>
+            );
           },
         }}
       />
@@ -130,21 +184,7 @@ const Post: FC = () => {
             <Text style={styles.postHeaderText}>
               {post?.location ? `${post.location} · ${postTime}` : postTime}
             </Text>
-            <TouchableOpacity
-              onPress={() => {
-                Share.share({
-                  title: "Daily Zach",
-                  message: `Check out this awesome new Zach selfie!
-https://dailyzach.zachhuxford.io/posts/${postId}?utm-source=dailyzach-share`,
-                });
-              }}
-            >
-              {Platform.OS === "ios" ? (
-                <ShareIcon color="white" />
-              ) : (
-                <Share2Icon color="white" />
-              )}
-            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {}}>{}</TouchableOpacity>
           </View>
         )}
         <ImagePreview imageUrl={post?.image_url} />
