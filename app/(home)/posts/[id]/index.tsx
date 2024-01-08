@@ -184,7 +184,6 @@ https://dailyzach.zachhuxford.io/posts/${postId}?utm-source=dailyzach-share`,
             <Text style={styles.postHeaderText}>
               {post?.location ? `${post.location} · ${postTime}` : postTime}
             </Text>
-            <TouchableOpacity onPress={() => {}}>{}</TouchableOpacity>
           </View>
         )}
         <ImagePreview imageUrl={post?.image_url} />
