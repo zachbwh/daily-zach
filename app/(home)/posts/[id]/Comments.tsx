@@ -4,6 +4,7 @@ import { Comment, useDeleteComment } from "@lib/react-query/comment";
 import ProfileImage from "@components/ProfileImage";
 import { useCurrentUser, useUser } from "@lib/react-query/user";
 import useFormatDistanceToNow from "@lib/useFormatDistanceToNow";
+import { quickVibration } from "@lib/vibes";
 
 type CommentsProps = {
   comments: Comment[];
@@ -26,6 +27,7 @@ const CommentView: FC<{ comment: Comment }> = ({ comment }) => {
       style={styles.commentContainer}
       onLongPress={() => {
         if (comment.user_id === currentUser?.user_id) {
+          quickVibration();
           Alert.alert(
             "Delete",
             "Are you sure you want to delete this comment?",
