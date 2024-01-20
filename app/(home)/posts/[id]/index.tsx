@@ -128,7 +128,6 @@ const Post: FC = () => {
                     ? [shareIcon, <Trash2Icon color="white" />, cancelIcon]
                     : [shareIcon, cancelIcon];
                   const destructiveButtonIndex = canDeletePost ? 1 : undefined;
-                  const cancelButtonIndex = options.length;
 
                   showActionSheetWithOptions(
                     {
@@ -150,17 +149,16 @@ const Post: FC = () => {
                     (selectedIndex) => {
                       switch (selectedIndex) {
                         case 0:
-                          console.log(selectedIndex);
-                          Share.share({
-                            title: "Daily Zach",
-                            message: `Check out this awesome new Zach selfie!
+                          setTimeout(() => {
+                            Share.share({
+                              title: "Daily Zach",
+                              message: `Check out this awesome new Zach selfie!
 https://dailyzach.zachhuxford.io/posts/${postId}?utm-source=dailyzach-share`,
-                          });
+                            });
+                          }, 1);
                           break;
                         case destructiveButtonIndex:
                           deletePost();
-                          break;
-                        case cancelButtonIndex:
                           break;
                       }
                     }
