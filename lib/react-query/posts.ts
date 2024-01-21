@@ -49,7 +49,9 @@ export const usePost = (postId: string) => {
 
 export const useInsertPost = () => {
   return useMutation({
-    mutationFn: async (post: Omit<Post, "id" | "inserted_at">) => {
+    mutationFn: async (
+      post: Omit<Post, "id" | "inserted_at" | "user_id" | "comments">
+    ) => {
       return supabase
         .from("posts")
         .insert(post)

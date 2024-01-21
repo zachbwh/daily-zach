@@ -6,6 +6,7 @@ import { useInsertPost } from "@lib/react-query/posts";
 import { router, useLocalSearchParams } from "expo-router";
 import { useUpdatePostRequest } from "@lib/react-query/post-request";
 import { RequestStatus } from "@app/requests/types";
+import * as Location from "expo-location";
 
 const Camera: React.FC = () => {
   const data = useLocalSearchParams();
@@ -46,8 +47,34 @@ const Camera: React.FC = () => {
         });
       }
       const publicUrl = await uploadPictureToBucket(picture, "posts");
+      let location;
+
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status === "granted") {
+          const loc = await Location.getLastKnownPositionAsync();
+          if (loc) {
+            const {
+              coords: { longitude, latitude },
+            } = loc;
+            console.log({ longitude, latitude });
+            const address = await Location.reverseGeocodeAsync({
+              longitude,
+              latitude,
+            });
+            console.log("address", address);
+          }
+        } else {
+          console.error("no location access while uploading post");
+        }
+      } catch (e) {
+        console.error("failed to get location", e);
+      }
+
       await insertPost({
         image_url: publicUrl,
+        location: location || "",
+        caption: "",
       });
     } catch (e) {
       console.error("error uploading a new post", e);
