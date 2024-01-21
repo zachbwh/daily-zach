@@ -40,7 +40,6 @@ const Post: FC = () => {
   const { id: postId } = useLocalSearchParams();
   const { data: comments } = usePostComments(postId as string);
   const { data: post } = usePost(postId as string);
-  console.log("post!", post);
   const { data: currentUser } = useCurrentUser();
   const { mutate } = useInsertComment();
   const [inputText, setInputText] = useState("");
