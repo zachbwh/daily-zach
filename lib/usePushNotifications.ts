@@ -119,11 +119,11 @@ export const usePushNotifications = (): PushNotificationsState => {
       expoPushToken &&
       !pushNotifications
         .map((pushNotifications) => pushNotifications.subscription_token)
-        .includes(expoPushToken.data as unknown as string)
+        .includes(expoPushToken as unknown as string)
     ) {
       try {
         void insertPushNotificationToken({
-          subscription_token: expoPushToken.data,
+          subscription_token: expoPushToken as unknown as string,
         });
       } catch (error) {
         console.error(error);
