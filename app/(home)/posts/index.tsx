@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC, useMemo, useState } from "react";
 import {
   StyleSheet,
   SectionList,
@@ -6,6 +6,7 @@ import {
   Image,
   Platform,
   Text,
+  RefreshControl,
 } from "react-native";
 import { Heading, Pressable, View } from "@gluestack-ui/themed";
 import { Link, router } from "expo-router";
@@ -22,7 +23,8 @@ type SectionPost = {
 const PostSectionList = SectionList<SectionPost>;
 
 const PostGrid: FC = () => {
-  const { data: posts } = usePosts();
+  const { data: posts, refetch } = usePosts();
+  const [refreshing, setRefreshing] = useState(false);
 
   const groupedPosts = useMemo(() => {
     if (posts) {
@@ -50,6 +52,16 @@ const PostGrid: FC = () => {
   return (
     <View style={styles.container}>
       <PostSectionList
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={async () => {
+              setRefreshing(true);
+              await refetch();
+              setRefreshing(false);
+            }}
+          />
+        }
         style={styles.listContainer}
         sections={sectionedData}
         stickySectionHeadersEnabled={true}

@@ -12,6 +12,7 @@ import {
   View,
   Text,
   Share,
+  RefreshControl,
 } from "react-native";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import ImagePreview from "./ImagePreview";
@@ -38,7 +39,10 @@ import { useActionSheet } from "@expo/react-native-action-sheet";
 
 const Post: FC = () => {
   const { id: postId } = useLocalSearchParams();
-  const { data: comments } = usePostComments(postId as string);
+  const { data: comments, refetch: refetchComments } = usePostComments(
+    postId as string
+  );
+  const [refreshingComments, setRefreshingComments] = useState(false);
   const { data: post } = usePost(postId as string);
   const { data: currentUser } = useCurrentUser();
   const { mutate } = useInsertComment();
@@ -175,6 +179,16 @@ https://dailyzach.zachhuxford.io/posts/${postId}?utm-source=dailyzach-share`,
         style={styles.innerContainer}
         ref={scrollRef}
         keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "none"}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshingComments}
+            onRefresh={async () => {
+              setRefreshingComments(true);
+              await refetchComments();
+              setRefreshingComments(false);
+            }}
+          />
+        }
       >
         {post && (
           <View style={styles.postHeader}>
