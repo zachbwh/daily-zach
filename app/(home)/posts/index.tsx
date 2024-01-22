@@ -7,8 +7,9 @@ import {
   Platform,
   Text,
   RefreshControl,
+  Pressable,
+  View,
 } from "react-native";
-import { Heading, Pressable, View } from "@gluestack-ui/themed";
 import { Link, router } from "expo-router";
 import format from "date-fns/format";
 import { Post, usePosts } from "@lib/react-query/posts";
@@ -120,7 +121,7 @@ const PostGrid: FC = () => {
           );
         }}
         renderSectionHeader={({ section: { title } }) => (
-          <Heading style={styles.heading}>{title}</Heading>
+          <Text style={styles.heading}>{title}</Text>
         )}
       />
       <LinearGradient
@@ -162,7 +163,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     fontSize: 35,
     lineHeight: 40,
-    backgroundColor: "black",
+    fontWeight: "600",
+    backgroundColor: "#000000",
+    color: "#FFFFFF",
   },
   imageGrid: {
     flex: 1,
