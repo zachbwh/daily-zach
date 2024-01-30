@@ -8,6 +8,16 @@ import { useUpdatePostRequest } from "@lib/react-query/post-request";
 import { RequestStatus } from "@app/requests/types";
 import * as Location from "expo-location";
 
+/**
+ * Don't even think about using this, it's so locked down it won't be useful anyone else
+ */
+const GOOGLE_MAPS_REVERSE_GEOCODE_API =
+  "AIzaSyD3euxTd5aRJOhHYI9K66aJQZ1WVrr6yKw";
+type AddressComponent = {
+  long_name: string;
+  types: string[];
+};
+
 const Camera: React.FC = () => {
   const data = useLocalSearchParams();
   const postRequestId = data["postRequestId"];
@@ -58,11 +68,43 @@ const Camera: React.FC = () => {
               coords: { longitude, latitude },
             } = loc;
             console.log({ longitude, latitude });
-            const address = await Location.reverseGeocodeAsync({
-              longitude,
-              latitude,
-            });
-            console.log("address", address);
+            const address = await fetch(
+              `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_MAPS_REVERSE_GEOCODE_API}`
+            ).then((response) => response.json());
+            const addressComponents: AddressComponent[] =
+              address.results[0]["address_components"];
+            const neighborhood = addressComponents.find((component) =>
+              component.types.includes("neighborhood")
+            )?.long_name;
+            const subLocality = addressComponents.find((component) =>
+              component.types.includes("sub_locality")
+            )?.long_name;
+            const locality = addressComponents.find((component) =>
+              component.types.includes("locality")
+            )?.long_name;
+            const administrativeAreaLevel2 = addressComponents.find(
+              (component) =>
+                component.types.includes("administrative_area_level_2")
+            )?.long_name;
+            const administrativeAreaLevel1 = addressComponents.find(
+              (component) =>
+                component.types.includes("administrative_area_level_1")
+            )?.long_name;
+            const country = addressComponents.find((component) =>
+              component.types.includes("country")
+            )?.long_name;
+
+            const subArea =
+              neighborhood ||
+              subLocality ||
+              locality ||
+              administrativeAreaLevel2 ||
+              administrativeAreaLevel1;
+            if (subArea) {
+              location = `${subArea}, ${country}`;
+            } else {
+              location = country;
+            }
           }
         } else {
           console.error("no location access while uploading post");
