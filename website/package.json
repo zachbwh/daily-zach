@@ -9,7 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mdx-js/loader": "^3.0.0",
+    "@mdx-js/react": "^3.0.0",
+    "@next/mdx": "^14.1.0",
     "@supabase/supabase-js": "^2.39.3",
+    "@types/mdx": "^2.0.11",
     "date-fns": "^3.3.1",
     "next": "14.1.0",
     "react": "^18",

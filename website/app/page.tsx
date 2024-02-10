@@ -23,21 +23,14 @@ export default function Home() {
       <div className="grid text-center lg:max-w-5xl lg:w-full grid-cols-2 lg:text-left">
         <a
           href="/privacy-policy"
-          className="group rounded-lg border border-transparent"
-          target="_blank"
-          rel="noopener noreferrer"
+          className="rounded-lg border border-transparent"
         >
           <h2 className="mb-3 text-2xl font-semibold text-center text-slate-300">
             Privacy Policy
           </h2>
         </a>
 
-        <a
-          href="/terms"
-          className="group rounded-lg border border-transparent"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a href="/terms" className="rounded-lg border border-transparent">
           <h2 className="mb-3 text-2xl font-semibold text-center text-slate-300">
             Terms of Service
           </h2>

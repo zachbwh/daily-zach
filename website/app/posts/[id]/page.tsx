@@ -71,7 +71,7 @@ export default async function Post({
         <Image
           className="relative mb-20"
           src={post?.image_url}
-          alt="Daily Zach Logo"
+          alt="Selfie of Zach Huxford"
           width={180}
           height={180}
           priority
