@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { supabaseMachineClient } from "../../lib/supabase";
 import { cache } from "react";
-import format from "date-fns/format";
+import { format } from "date-fns/format";
 import { notFound } from "next/navigation";
 
 type Post = {
@@ -16,7 +16,7 @@ type Post = {
   caption: string;
 };
 
-export const getPost = cache(async (postId: string) => {
+const getPost = cache(async (postId: string) => {
   const { data: posts } = await supabaseMachineClient
     .from("posts")
     .select(
