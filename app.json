@@ -2,7 +2,7 @@
   "expo": {
     "name": "Daily Zach",
     "slug": "daily-zach",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
@@ -14,7 +14,7 @@
     "scheme": "daily-zach",
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "io.zachhuxford.dailyzach",
       "associatedDomains": ["applinks:dailyzach.zachhuxford.io"]
     },
