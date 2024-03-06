@@ -43,8 +43,8 @@ const Post: FC = () => {
   const { data: comments, refetch: refetchComments } = usePostComments(
     postId as string
   );
-  const [refreshingComments, setRefreshingComments] = useState(false);
-  const { data: post } = usePost(postId as string);
+  const [refreshingComments, setRefreshing] = useState(false);
+  const { data: post, refetch: refetchPost } = usePost(postId as string);
   const { data: currentUser } = useCurrentUser();
   const { mutate } = useInsertComment();
   const [inputText, setInputText] = useState("");
@@ -185,9 +185,9 @@ https://dailyzach.zachhuxford.io/posts/${postId}?utm-source=dailyzach-share`,
           <RefreshControl
             refreshing={refreshingComments}
             onRefresh={async () => {
-              setRefreshingComments(true);
-              await refetchComments();
-              setRefreshingComments(false);
+              setRefreshing(true);
+              await Promise.all([refetchPost(), refetchComments()]);
+              setRefreshing(false);
             }}
           />
         }
