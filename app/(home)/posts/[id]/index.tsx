@@ -104,7 +104,7 @@ const Post: FC = () => {
   }, [post?.id]);
 
   const { showActionSheetWithOptions } = useActionSheet();
-  const requestor = post?.post_requests.users;
+  const requestor = post?.post_requests?.users;
 
   return (
     <KeyboardAvoidingView
