@@ -75,7 +75,7 @@ export const useInsertPost = () => {
         .from("posts")
         .insert(post)
         .select(
-          "id, image_url, inserted_at, user_id, comments!comments_post_id_fkey(count), location, caption"
+          "id, image_url, inserted_at, user_id, comments!comments_post_id_fkey(count), post_requests(status, users(display_name, profile_image_url)), location, caption"
         );
     },
     onMutate: async (variables) => {
