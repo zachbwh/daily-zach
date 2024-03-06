@@ -9,8 +9,6 @@ import {
   usePostRequest,
 } from "@lib/react-query/post-request";
 
-const demoImage = require("../signup/requestdemo/demo-selfie.jpg");
-
 const Request: FC = () => {
   const [selfiePending, setSelfiePending] = useState(false);
   const { mutate: insertPostRequest, data: newPostRequest } =
