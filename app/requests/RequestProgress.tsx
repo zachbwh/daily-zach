@@ -77,6 +77,7 @@ const RequestProgress: FC<{
                     styles.rectangle,
                     { backgroundColor: stepCompleted ? "#CCCCCC" : "#999999" },
                   ]}
+                  key={index}
                 ></View>
               )}
               <RequestProgressEntry
