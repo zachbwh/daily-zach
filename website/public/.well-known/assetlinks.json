@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.zachhuxford.dailyzach",
+      "sha256_cert_fingerprints": [
+        "47:79:08:CE:6E:1D:DE:B3:2E:EA:9C:63:18:C6:B8:B6:98:23:3F:B9:30:50:DE:6F:81:E6:F2:91:82:1F:E7:67"
+      ]
+    }
+  }
+]
