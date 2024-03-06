@@ -13,6 +13,39 @@ export type PostRequest = {
   status: RequestStatus;
 };
 
+export const usePendingPostRequestsIsZach = () => {
+  return useQuery({
+    queryKey: ["post_requests"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("post_requests")
+        .select(
+          "id, created_at, post_id, status, users(display_name, profile_image_url)"
+        )
+        .neq("status", "COMPLETED")
+        .order("created_at", { ascending: false });
+      return data;
+    },
+  });
+};
+
+export const usePendingPostRequestsCurrentUser = (userId: string) => {
+  return useQuery({
+    queryKey: ["post_requests", userId],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("post_requests")
+        .select(
+          "id, created_at, requestor_id, post_id, status, users(display_name, profile_image_url)"
+        )
+        .eq("requestor_id", userId)
+        .neq("status", "COMPLETED")
+        .order("created_at", { ascending: false });
+      return data;
+    },
+  });
+};
+
 export const usePostRequest = (requestId: string) => {
   useEffect(() => {
     let channel: RealtimeChannel | undefined;
@@ -49,7 +82,7 @@ export const usePostRequest = (requestId: string) => {
     };
   }, [requestId]);
   return useQuery({
-    queryKey: ["post_requests", requestId],
+    queryKey: ["post_request", requestId],
     queryFn: async () => {
       const { data } = await supabase
         .from("post_requests")

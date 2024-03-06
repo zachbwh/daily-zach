@@ -16,6 +16,11 @@ import { Post, usePosts } from "@lib/react-query/posts";
 import LottieView from "lottie-react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { MessageSquare } from "lucide-react-native";
+import {
+  usePendingPostRequestsCurrentUser,
+  usePendingPostRequestsIsZach,
+} from "@lib/react-query/post-request";
+import { useCurrentUser } from "@lib/react-query/user";
 
 type SectionPost = {
   posts: Post[];
@@ -25,6 +30,13 @@ const PostSectionList = SectionList<SectionPost>;
 
 const PostGrid: FC = () => {
   const { data: posts, refetch } = usePosts();
+  const { data: postRequestsZach, refetch: refetchPostRequestsZach } =
+    usePendingPostRequestsIsZach();
+  const { data } = useCurrentUser();
+  const isZach = data?.is_zach;
+  const { data: postRequestsNormal, refetch: refetchPostRequests } =
+    usePendingPostRequestsCurrentUser(data?.user_id);
+  const relevantPostRequests = isZach ? postRequestsZach : postRequestsNormal;
   const [refreshing, setRefreshing] = useState(false);
 
   const groupedPosts = useMemo(() => {
@@ -52,13 +64,22 @@ const PostGrid: FC = () => {
 
   return (
     <View style={styles.container}>
+      {relevantPostRequests && relevantPostRequests?.length > 0 && (
+        <Link href="/requests" style={styles.pendingPostsContainer}>
+          <Text style={styles.pendingPostsText}>Pending Requests</Text>
+        </Link>
+      )}
       <PostSectionList
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
             onRefresh={async () => {
               setRefreshing(true);
-              await refetch();
+              await Promise.all([
+                refetch(),
+                refetchPostRequestsZach(),
+                refetchPostRequests(),
+              ]);
               setRefreshing(false);
             }}
           />
@@ -208,6 +229,18 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontSize: 16,
     fontWeight: "500",
+  },
+  pendingPostsContainer: {
+    padding: 16,
+    marginBottom: 16,
+    backgroundColor: "#666666",
+    width: "100%",
+    textAlign: "center",
+  },
+  pendingPostsText: {
+    fontWeight: "600",
+    fontSize: 16,
+    color: "#FFFFFF",
   },
 });
 

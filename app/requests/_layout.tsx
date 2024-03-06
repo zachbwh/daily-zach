@@ -3,8 +3,8 @@ import { Slot } from "expo-router";
 
 const Layout: React.FC = () => {
   return (
-    <View style={styles.container} >
-        <Slot />
+    <View style={styles.container}>
+      <Slot />
     </View>
   );
 };
@@ -12,7 +12,7 @@ const Layout: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "black"
+    backgroundColor: "black",
   },
 });
 
