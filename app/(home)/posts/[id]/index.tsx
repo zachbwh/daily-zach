@@ -36,6 +36,7 @@ import { useHeaderHeight } from "@react-navigation/elements";
 import { useCurrentUser } from "@lib/react-query/user";
 import format from "date-fns/format";
 import { useActionSheet } from "@expo/react-native-action-sheet";
+import ProfileImage from "@components/ProfileImage";
 
 const Post: FC = () => {
   const { id: postId } = useLocalSearchParams();
@@ -103,6 +104,7 @@ const Post: FC = () => {
   }, [post?.id]);
 
   const { showActionSheetWithOptions } = useActionSheet();
+  const requestor = post?.post_requests.users;
 
   return (
     <KeyboardAvoidingView
@@ -191,18 +193,36 @@ https://dailyzach.zachhuxford.io/posts/${postId}?utm-source=dailyzach-share`,
         }
       >
         {post && (
-          <View style={styles.postHeader}>
-            <Text style={styles.postHeaderText}>
-              {post?.location ? `${post.location} · ${postTime}` : postTime}
-            </Text>
-          </View>
+          <>
+            <View style={styles.postRequestor}>
+              {requestor ? (
+                <ProfileImage
+                  style={styles.image}
+                  imageSource={{ uri: requestor.profile_image_url }}
+                />
+              ) : (
+                <ProfileImage style={styles.image} imageSource={null} />
+              )}
+              <View>
+                <Text style={styles.postHeaderText}>Requested By</Text>
+                <Text style={styles.postHeaderText}>
+                  {requestor?.display_name}
+                </Text>
+              </View>
+            </View>
+          </>
         )}
         <ImagePreview imageUrl={post?.image_url} />
-        {post?.caption && (
-          <View style={styles.postFooter}>
+        <View style={styles.postHeader}>
+          <Text style={styles.postHeaderText}>
+            {post?.location ? `${post.location} · ${postTime}` : postTime}
+          </Text>
+        </View>
+        <View style={styles.postFooter}>
+          {post?.caption && (
             <Text style={styles.postFooterText}>{post.caption}</Text>
-          </View>
-        )}
+          )}
+        </View>
         {comments ? (
           <Comments comments={comments} />
         ) : (
@@ -266,6 +286,21 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "600",
+  },
+  image: {
+    width: 48,
+    height: 48,
+    maxHeight: 48,
+    maxWidth: 48,
+    padding: 4,
+  },
+  postRequestor: {
+    flexDirection: "row",
+    padding: 8,
+    paddingLeft: 16,
+    gap: 8,
+    justifyContent: "flex-start",
+    alignItems: "center",
   },
 });
 
