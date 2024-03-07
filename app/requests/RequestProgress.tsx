@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { RequestStatus } from "./types";
 import {
@@ -39,7 +39,7 @@ const RequestProgressEntry: FC<{
   status: RequestStatus;
   inProgress: boolean;
   completed: boolean;
-}> = ({ status, inProgress, completed }) => {
+}> = ({ status, completed }) => {
   const icon = getStatusEmoji(status, completed);
   return (
     <View
@@ -70,23 +70,21 @@ const RequestProgress: FC<{
         {Object.values(RequestStatus).map((statusValue, index) => {
           const stepCompleted = statusIndex >= index;
           return (
-            <>
+            <Fragment key={statusValue}>
               {index !== 0 && (
                 <View
                   style={[
                     styles.rectangle,
                     { backgroundColor: stepCompleted ? "#CCCCCC" : "#999999" },
                   ]}
-                  key={index}
                 ></View>
               )}
               <RequestProgressEntry
                 status={statusValue}
                 inProgress={false}
                 completed={stepCompleted}
-                key={statusValue}
               />
-            </>
+            </Fragment>
           );
         })}
       </View>
