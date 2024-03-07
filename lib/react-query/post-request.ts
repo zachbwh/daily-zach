@@ -64,7 +64,7 @@ export const usePostRequest = (requestId: string) => {
             const newStatus = payload.new.status as RequestStatus;
             const postId = payload.new.post_id || null;
             queryClient.setQueryData(
-              ["post_requests", requestId],
+              ["post_request", requestId],
               (old: PostRequest) => {
                 return {
                   ...old,
