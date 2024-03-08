@@ -28,6 +28,10 @@ Deno.serve(async (req) => {
     console.log(
       "Post request update does not meet the push notification criteria, return early"
     );
+    return new Response(JSON.stringify({ postRequest }), {
+      headers: { "Content-Type": "application/json" },
+      status: 200,
+    });
   }
 
   const supabaseMachineClient = createClient(
@@ -50,7 +54,6 @@ Deno.serve(async (req) => {
           title: "You asked, Zach responded",
           body: "Check out your latest Zach selfie here!",
           data: {
-            type: "POST_REQUEST",
             request_id: postRequest.id,
             url: `/posts/${postRequest.post_id}`,
           },
@@ -61,7 +64,6 @@ Deno.serve(async (req) => {
           title: "Zach Update:",
           body: "Zach is responding to your request, tap here to track his progress",
           data: {
-            type: "POST_REQUEST",
             request_id: postRequest.id,
             url: `/post-requests/${postRequest.id}`,
           },
