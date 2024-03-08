@@ -4,6 +4,7 @@ import { Alert, StyleSheet, View } from "react-native";
 import Button from "./Button";
 import { LogOut, Trash, User } from "lucide-react-native";
 import { router } from "expo-router";
+import { useLogoutPushNotificationSubscriber } from "@lib/react-query/push_notification_subscribers";
 
 const logout = () => {
   Alert.alert("Logout", "Are you sure you want to logout?", [
@@ -57,6 +58,8 @@ const deleteAccount = () => {
 };
 
 const Account: FC = () => {
+  const { mutate: logoutPushNotifications } =
+    useLogoutPushNotificationSubscriber();
   return (
     <View style={styles.container}>
       <View style={styles.tile}>
@@ -68,7 +71,12 @@ const Account: FC = () => {
           icon={<User style={styles.icon} />}
         />
         <Button
-          onPress={() => {
+          onPress={async () => {
+            try {
+              await logoutPushNotifications();
+            } catch (error) {
+              console.error("error logging out push notifications", error);
+            }
             logout();
           }}
           label="Logout"

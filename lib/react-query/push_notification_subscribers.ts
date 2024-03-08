@@ -1,6 +1,8 @@
 import { supabase } from "@lib/supabase";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import queryClient from "./client";
+import Constants from "expo-constants";
+import * as Notifications from "expo-notifications";
 
 export type PushNotification = {
   subscription_token: string;
@@ -31,6 +33,22 @@ export const useInsertPushNotificationSubscriber = () => {
         ["push_notification_subscriber"],
         (old: PushNotification[]) => [...old, ...(result.data || [])]
       );
+    },
+  });
+};
+
+export const useLogoutPushNotificationSubscriber = () => {
+  return useMutation({
+    mutationFn: async () => {
+      const token = (
+        await Notifications.getExpoPushTokenAsync({
+          projectId: Constants.expoConfig?.extra?.eas.projectId,
+        })
+      ).data;
+      return supabase
+        .from("push_notification_subscribers")
+        .delete()
+        .eq("subscription_token", token);
     },
   });
 };
