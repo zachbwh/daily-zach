@@ -34,17 +34,18 @@ Deno.serve(async (req) => {
     // .neq("user_id", comment.user_id);
     console.log({ subscribersWithPushTokens, subscriberError });
     const subscriptionTokens: string[] = [];
-    subscribersWithPushTokens.forEach((subscriber) => {
-      subscriber?.users
-        ?.filter((user) => user.user_id !== comment.user_id)
-        .push_notification_subscribers.forEach(({ subscription_token }) => {
-          subscriptionTokens.push(subscription_token);
-        });
-    });
+    subscribersWithPushTokens
+      .filter(({ users }) => users.user_id !== comment.user_id)
+      .forEach((subscriber) => {
+        subscriber?.users.push_notification_subscribers.forEach(
+          (subscriber) => {
+            subscriptionTokens.push(subscriber.subscription_token);
+          }
+        );
+      });
 
     const shouldAddPostSubscriber = !subscribersWithPushTokens.some(
-      (subscriber) =>
-        subscriber?.users?.some((user) => user.user_id === comment.user_id)
+      ({ users }) => users.user_id === comment.user_id
     );
     if (shouldAddPostSubscriber) {
       await supabaseMachineClient.from("post_subscribers").insert({
@@ -54,11 +55,11 @@ Deno.serve(async (req) => {
       });
     }
 
-    subscriptionTokens.forEach((token) => {
+    subscriptionTokens.forEach((subscription_token) => {
       fetch("https://exp.host/--/api/v2/push/send", {
         method: "POST",
         body: JSON.stringify({
-          to: token.subscription_token,
+          to: subscription_token,
           title: "New comment",
           body: "Someone has replied to a Zach selfie you're following",
           data: {
@@ -76,11 +77,12 @@ Deno.serve(async (req) => {
       });
     });
 
-    return new Response(JSON.stringify({ data, error }), {
+    return new Response("New comment handled sucessfully", {
       headers: { "Content-Type": "application/json" },
       status: 200,
     });
   } catch (error) {
+    console.error("Error handling new comment", error);
     return new Response(JSON.stringify({ error: error.message }), {
       headers: { "Content-Type": "application/json" },
       status: 400,
