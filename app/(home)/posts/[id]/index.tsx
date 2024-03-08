@@ -25,6 +25,8 @@ import {
 } from "@lib/react-query/comment";
 import CustomTextInput from "@components/CustomTextInput";
 import {
+  BellOff,
+  BellPlus,
   MoreVertical,
   SendHorizontal,
   Share2Icon,
@@ -37,6 +39,10 @@ import { useCurrentUser } from "@lib/react-query/user";
 import format from "date-fns/format";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import ProfileImage from "@components/ProfileImage";
+import {
+  useIsSubscribedToPost,
+  useUpdatePostSubscription,
+} from "@lib/react-query/post-subscribers";
 
 const Post: FC = () => {
   const { id: postId } = useLocalSearchParams();
@@ -86,6 +92,9 @@ const Post: FC = () => {
 
   const { mutate: deletePostMutation } = useDeletePost();
   const canDeletePost = currentUser?.user_id === post?.user_id;
+  const { data: postSubscriptions } = useIsSubscribedToPost(postId as string);
+  const hasSubscription = postSubscriptions && postSubscriptions.length > 0;
+  const { mutate: updatePostSubscription } = useUpdatePostSubscription();
   const deletePost = useCallback(() => {
     Alert.alert("Delete", "Are you sure you want to delete this post?", [
       { text: "Cancel" },
@@ -119,20 +128,41 @@ const Post: FC = () => {
             return (
               <TouchableOpacity
                 onPress={() => {
-                  const options = canDeletePost
-                    ? ["Share Post", "Delete Post", "Cancel"]
-                    : ["Share Post", "Cancel"];
+                  const options = ["Share Post"];
                   const shareIcon =
                     Platform.OS === "ios" ? (
                       <ShareIcon color="white" />
                     ) : (
                       <Share2Icon color="white" />
                     );
-                  const cancelIcon = <X color="white" />;
-                  const icons = canDeletePost
-                    ? [shareIcon, <Trash2Icon color="white" />, cancelIcon]
-                    : [shareIcon, cancelIcon];
-                  const destructiveButtonIndex = canDeletePost ? 1 : undefined;
+                  const icons = [shareIcon];
+                  const isSubscribed =
+                    postSubscriptions && postSubscriptions[0].is_subscribed;
+                  if (hasSubscription) {
+                    options.push(
+                      isSubscribed
+                        ? "Unsubscribe Notifications"
+                        : "Resubscribe Notifications"
+                    );
+                    icons.push(
+                      isSubscribed ? (
+                        <BellOff color="white" />
+                      ) : (
+                        <BellPlus color="white" />
+                      )
+                    );
+                  }
+                  if (canDeletePost) {
+                    options.push("Delete Post");
+                    icons.push(<Trash2Icon color="white" />);
+                  }
+                  options.push("Cancel");
+                  icons.push(<X color="white" />);
+
+                  const toggleSubscriptionButtonIndex = hasSubscription
+                    ? 1
+                    : undefined;
+                  const destructiveButtonIndex = options.indexOf("Delete Post");
 
                   showActionSheetWithOptions(
                     {
@@ -161,6 +191,12 @@ const Post: FC = () => {
 https://dailyzach.zachhuxford.io/posts/${postId}?utm-source=dailyzach-share`,
                             });
                           }, 1);
+                          break;
+                        case toggleSubscriptionButtonIndex:
+                          updatePostSubscription({
+                            post_id: postId as string,
+                            is_subscribed: !isSubscribed,
+                          });
                           break;
                         case destructiveButtonIndex:
                           deletePost();
