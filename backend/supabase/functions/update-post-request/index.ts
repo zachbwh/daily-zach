@@ -42,6 +42,15 @@ Deno.serve(async (req) => {
   );
 
   try {
+    if (postRequest.post_id) {
+      // Add post subscriber so requestor gets notified of comments
+      await supabaseMachineClient.from("post_subscribers").insert({
+        user_id: postRequest.requestor_id,
+        post_id: postRequest.post_id,
+        is_subscribed: true,
+      });
+    }
+
     const { data: pushNotificationTokens, error } = await supabaseMachineClient
       .from("push_notification_subscribers")
       .select("subscription_token")
