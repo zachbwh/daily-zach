@@ -17,19 +17,17 @@ const Posts: FC<{ children: React.ReactElement }> = ({ children }) => {
         },
         headerTintColor: "#fff",
         headerTitle: "Zachs",
-        headerRight: (props) => {
-          if (!props.canGoBack) {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  router.push("/account");
-                }}
-                style={styles.profileImageWrapper}
-              >
-                <ProfileImage imageSource={imageSource} />
-              </TouchableOpacity>
-            );
-          }
+        headerRight: () => {
+          return (
+            <TouchableOpacity
+              onPress={() => {
+                router.push("/account");
+              }}
+              style={styles.profileImageWrapper}
+            >
+              <ProfileImage imageSource={imageSource} />
+            </TouchableOpacity>
+          );
         },
       }}
     />
