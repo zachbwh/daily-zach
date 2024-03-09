@@ -256,11 +256,6 @@ https://dailyzach.zachhuxford.io/posts/${postId}?utm-source=dailyzach-share`,
             {post?.location ? `${post.location} · ${postTime}` : postTime}
           </Text>
         </View>
-        <View style={styles.postFooter}>
-          {post?.caption && (
-            <Text style={styles.postFooterText}>{post.caption}</Text>
-          )}
-        </View>
         {comments ? (
           <Comments comments={comments} />
         ) : (
@@ -305,7 +300,7 @@ const styles = StyleSheet.create({
   },
   postHeader: {
     flexDirection: "row",
-    padding: 16,
+    paddingTop: 16,
     paddingLeft: 24,
     paddingRight: 24,
     justifyContent: "space-between",
@@ -317,7 +312,8 @@ const styles = StyleSheet.create({
   },
   postFooter: {
     flexDirection: "row",
-    padding: 16,
+    paddingLeft: 16,
+    paddingRight: 16,
     justifyContent: "center",
   },
   postFooterText: {
