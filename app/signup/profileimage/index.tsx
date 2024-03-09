@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { useRouter } from "expo-router";
 import SafeAndroidView from "@components/SafeAndroidView";
@@ -6,11 +6,22 @@ import CustomButton, { buttonStyles } from "@components/CustomButton";
 import ViewFinder from "@components/Viewfinder";
 import { ImageResult } from "expo-image-manipulator";
 import { updateProfileImage } from "@lib/updateProfileImage";
+import { Camera as ExpoCamera } from "expo-camera";
 
 const ProfileImage: FC = () => {
   const [viewfinderOn, setViewfinderOn] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  const [permission, requestPermission] = ExpoCamera.useCameraPermissions();
+  const [permissionRequested, setPermissionRequested] = useState(false);
+
+  useEffect(() => {
+    if (!permission?.granted && !permissionRequested) {
+      setPermissionRequested(true);
+      void requestPermission();
+    }
+  }, [permission]);
 
   const submit = async (picture: ImageResult) => {
     setLoading(true);
