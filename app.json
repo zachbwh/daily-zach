@@ -25,7 +25,7 @@
         "backgroundColor": "#000000"
       },
       "package": "io.zachhuxford.dailyzach",
-      "googleServicesJson": "./google-services.json",
+      "googleServicesFile": "./google-services.json",
       "intentFilters": [
         {
           "action": "VIEW",
