@@ -74,7 +74,7 @@ Deno.serve(async (req) => {
           body: "Zach is responding to your request, tap here to track his progress",
           data: {
             request_id: postRequest.id,
-            url: `/post-requests/${postRequest.id}`,
+            url: `/requests/${postRequest.id}`,
           },
         };
       }
