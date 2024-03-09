@@ -79,7 +79,7 @@ export const useInsertComment = () => {
       const userId = (await supabase.auth.getSession()).data.session?.user.id!;
 
       const optimisticComment: Comment = {
-        id: uuidv4(),
+        id: "",
         created_at: new Date().toISOString(),
         post_id: variables.post_id,
         user_id: userId,
@@ -99,11 +99,7 @@ export const useInsertComment = () => {
       queryClient.setQueryData(
         ["comments", variables.post_id],
         (old: Comment[]) =>
-          old.map((comment) =>
-            comment.id === context.optimisticCommentId
-              ? result.data![0]
-              : comment
-          )
+          old.map((comment) => (comment.id === "" ? result.data![0] : comment))
       );
     },
     onError: (error, variables, context) => {
