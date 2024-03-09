@@ -137,7 +137,9 @@ const Post: FC = () => {
                     );
                   const icons = [shareIcon];
                   const isSubscribed =
-                    postSubscriptions && postSubscriptions[0].is_subscribed;
+                    postSubscriptions &&
+                    postSubscriptions.length &&
+                    postSubscriptions[0].is_subscribed;
                   if (hasSubscription) {
                     options.push(
                       isSubscribed
