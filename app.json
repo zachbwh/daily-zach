@@ -62,6 +62,13 @@
             "deploymentTarget": "17.0"
           }
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/adaptive-icon.png",
+          "color": "#ffffff"
+        }
       ]
     ],
     "extra": {
