@@ -85,8 +85,11 @@ export default async function Post({
           {post?.location ? `${post.location} · ${postTime}` : postTime}
           <br />
           <br />
-          View in App
         </h1>
+        <p className="text-white">
+          If you already have Daily Zach installed, open this page in your
+          browser to view in the app and add comments.
+        </p>
       </div>
     </main>
   );
