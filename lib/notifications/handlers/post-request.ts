@@ -11,7 +11,7 @@ const handlePostRequest = async (
     shouldShowAlert: true,
     shouldPlaySound: true,
     shouldSetBadge: false,
-    priority: AndroidNotificationPriority.MAX,
+    priority: AndroidNotificationPriority.HIGH,
   };
 };
 
