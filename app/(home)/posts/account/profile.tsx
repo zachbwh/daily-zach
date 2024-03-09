@@ -7,6 +7,7 @@ import ViewFinder from "@components/Viewfinder";
 import { ImageResult } from "expo-image-manipulator";
 import { updateProfileImage } from "@lib/updateProfileImage";
 import { useUpdateUser, useCurrentUser } from "@lib/react-query/user";
+import { Stack } from "expo-router";
 
 const Profile: FC = () => {
   const [name, setName] = useState<string>("");
@@ -41,10 +42,19 @@ const Profile: FC = () => {
     }
   };
 
+  const stackScreen = (
+    <Stack.Screen
+      options={{
+        headerTitle: "Profile",
+      }}
+    />
+  );
+
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator color="white" />
+        {stackScreen}
       </View>
     );
   }
@@ -60,6 +70,7 @@ const Profile: FC = () => {
             width: 900,
           }}
         />
+        {stackScreen}
       </View>
     );
   }
@@ -85,6 +96,7 @@ const Profile: FC = () => {
       <CustomButton disabled={loading} loading={loading} onPress={submit}>
         <Text style={buttonStyles.primaryButtonText}>Update Details</Text>
       </CustomButton>
+      {stackScreen}
     </View>
   );
 };

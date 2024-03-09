@@ -3,7 +3,7 @@ import { supabase } from "@lib/supabase";
 import { Alert, StyleSheet, View } from "react-native";
 import Button from "./Button";
 import { LogOut, Trash, User } from "lucide-react-native";
-import { router } from "expo-router";
+import { Stack, router } from "expo-router";
 import { useLogoutPushNotificationSubscriber } from "@lib/react-query/push_notification_subscribers";
 
 const logout = () => {
@@ -62,10 +62,15 @@ const Account: FC = () => {
     useLogoutPushNotificationSubscriber();
   return (
     <View style={styles.container}>
+      <Stack.Screen
+        options={{
+          headerTitle: "Account",
+        }}
+      />
       <View style={styles.tile}>
         <Button
           onPress={() => {
-            router.push("/account/profile");
+            router.push("/posts/account/profile");
           }}
           label="Manage Profile"
           icon={<User style={styles.icon} />}

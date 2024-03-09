@@ -21,7 +21,7 @@ const Posts: FC<{ children: React.ReactElement }> = ({ children }) => {
           return (
             <TouchableOpacity
               onPress={() => {
-                router.push("/account");
+                router.push("/posts/account");
               }}
               style={styles.profileImageWrapper}
             >

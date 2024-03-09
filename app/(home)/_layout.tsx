@@ -22,18 +22,10 @@ const Layout: React.FC = () => {
           headerShown: false,
         }}
       />
-
       <Stack.Screen
         name="camera"
         options={{
           title: "Camera",
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="account"
-        options={{
-          title: "Account",
           headerShown: false,
         }}
       />
