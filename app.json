@@ -16,7 +16,10 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "io.zachhuxford.dailyzach",
-      "associatedDomains": ["applinks:dailyzach.zachhuxford.io"]
+      "associatedDomains": ["applinks:dailyzach.zachhuxford.io"],
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "supportsTablet": false,
