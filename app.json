@@ -37,7 +37,12 @@
             {
               "scheme": "https",
               "host": "dailyzach.zachhuxford.io",
-              "pathPrefix": "/"
+              "pathPrefix": "/posts"
+            },
+            {
+              "scheme": "https",
+              "host": "dailyzach.zachhuxford.io",
+              "pathPrefix": "/password-reset"
             }
           ],
           "category": ["BROWSABLE", "DEFAULT"]
