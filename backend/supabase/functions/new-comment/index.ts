@@ -23,6 +23,14 @@ Deno.serve(async (req) => {
   );
 
   try {
+    const { data: userData, error: userError } = await supabaseMachineClient
+      .from("users")
+      .select("is_tester")
+      .eq("user_id", comment.user_id);
+
+    const commentor = userData[0];
+    const isCommentorTester = commentor.is_tester;
+
     const { data: subscribersWithPushTokens, error: subscriberError } =
       await supabaseMachineClient
         .from("post_subscribers")
@@ -30,11 +38,14 @@ Deno.serve(async (req) => {
           "users(user_id, push_notification_subscribers(subscription_token))"
         )
         .eq("post_id", comment.post_id)
-        .eq("is_subscribed", true);
+        .eq("is_subscribed", true)
+        .eq("users.is_tester", isCommentorTester)
+        .neq("users.user_id", comment.user_id);
     // .neq("user_id", comment.user_id);
     console.log({ subscribersWithPushTokens, subscriberError });
     const subscriptionTokens: string[] = [];
     subscribersWithPushTokens
+      .filter(({ users }) => users)
       .filter(({ users }) => users.user_id !== comment.user_id)
       .forEach((subscriber) => {
         subscriber?.users.push_notification_subscribers.forEach(
@@ -45,7 +56,7 @@ Deno.serve(async (req) => {
       });
 
     const shouldAddPostSubscriber = !subscribersWithPushTokens.some(
-      ({ users }) => users.user_id === comment.user_id
+      ({ users }) => users?.user_id === comment.user_id
     );
     if (shouldAddPostSubscriber) {
       await supabaseMachineClient.from("post_subscribers").insert({
