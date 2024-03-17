@@ -35,8 +35,8 @@ const ViewFinder: React.FC<ViewFinderProps> = ({
   onPictureCaptured,
   dimensionsConfig = {
     aspectRatio: "4:3",
-    height: 1200,
-    width: 900,
+    height: 1600,
+    width: 1200,
   },
   cameraWrapperStyle = styles.cameraContainer,
 }) => {
@@ -57,7 +57,10 @@ const ViewFinder: React.FC<ViewFinderProps> = ({
   const animatedFadeValue = new Animated.Value(0);
   useEffect(() => {
     if (pictureConfirmed && picture) {
-      console.log("restart animation for some reason", {pictureConfirmed, picture})
+      console.log("restart animation for some reason", {
+        pictureConfirmed,
+        picture,
+      });
       Animated.sequence([
         Animated.timing(animatedFadeValue, {
           toValue: 1.0,
