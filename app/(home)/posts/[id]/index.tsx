@@ -89,6 +89,8 @@ const Post: FC = () => {
 
   const postDate = new Date(post?.inserted_at || Date.now());
   const postTime = format(postDate, "h:mm aaa");
+  const requestDate = new Date(post?.post_requests?.created_at || Date.now());
+  const requestTime = format(requestDate, "h:mm aaa");
 
   const { mutate: deletePostMutation } = useDeletePost();
   const canDeletePost = currentUser?.user_id === post?.user_id;
@@ -242,9 +244,11 @@ https://dailyzach.zachhuxford.io/posts/${postId}?utm-source=dailyzach-share`,
                 <ProfileImage style={styles.image} imageSource={null} />
               )}
               <View>
-                <Text style={styles.postHeaderText}>Requested By</Text>
                 <Text style={styles.postHeaderText}>
-                  {requestor?.display_name}
+                  Requested at {requestTime}
+                </Text>
+                <Text style={styles.postHeaderText}>
+                  by {requestor?.display_name}
                 </Text>
               </View>
             </View>

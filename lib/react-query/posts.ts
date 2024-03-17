@@ -31,22 +31,23 @@ export const usePosts = () => {
 };
 
 type SinglePost = {
-  id: any;
-  image_url: any;
-  inserted_at: any;
-  user_id: any;
+  id: string;
+  image_url: string;
+  inserted_at: string;
+  user_id: string;
   comments: {
-    count: any;
+    count: number;
   }[];
   post_requests: {
-    status: any;
+    status: string;
+    created_at: string;
     users: {
-      display_name: any;
-      profile_image_url: any;
+      display_name: string;
+      profile_image_url: string;
     };
   };
-  location: any;
-  caption: any;
+  location?: string;
+  caption?: string;
 };
 
 export const usePost = (postId: string) => {
@@ -56,7 +57,7 @@ export const usePost = (postId: string) => {
       const { data } = await supabase
         .from("posts")
         .select(
-          "id, image_url, inserted_at, user_id, comments!comments_post_id_fkey(count), post_requests(status, users(display_name, profile_image_url)), location, caption"
+          "id, image_url, inserted_at, user_id, comments!comments_post_id_fkey(count), post_requests(status, created_at, users(display_name, profile_image_url)), location, caption"
         )
         .eq("id", postId)
         .limit(1);
