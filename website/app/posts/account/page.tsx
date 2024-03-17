@@ -1,6 +1,6 @@
 "use client";
 
-export default async function AccountDeletionForm() {
+export default function AccountDeletionForm() {
   return (
     <main className="min-h-screen w-full bg-[#000000] h-screen">
       <div
