@@ -45,10 +45,7 @@ const deleteAccount = () => {
             return;
           }
           supabase.auth.signOut().then((response) => {
-            Alert.alert(
-              "Deletion Pending",
-              "Please reach out to customer support if you wish to prevent deletion."
-            );
+            Alert.alert("Account Deleted");
             router.replace("/signup");
           });
         },
