@@ -103,7 +103,8 @@ const styles = StyleSheet.create({
   },
   commentBodyContainer: {
     flexGrow: 1,
-    justifyContent: "space-between",
+    flex: 1,
+    justifyContent: "flex-start",
     padding: 8,
   },
   commentHeaderContainer: {
