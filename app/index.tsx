@@ -1,16 +1,23 @@
 import { FC, useEffect } from "react";
 import { supabase } from "@lib/supabase";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
-import { useRouter } from "expo-router";
+import { usePathname, useRouter } from "expo-router";
 
 const Index: FC = () => {
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     supabase.auth.getSession().then((response) => {
       if (response.data.session) {
-        console.log("found session, directing to /posts!");
-        router.replace("/posts");
+        if (["/", ""].includes(pathname)) {
+          console.log("found session, directing to /posts!");
+          router.replace("/posts");
+        } else {
+          console.log(
+            "Non initial route found, not redirecting so deep linking works"
+          );
+        }
       } else {
         router.replace("/signup");
       }
